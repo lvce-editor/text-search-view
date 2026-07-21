@@ -44,6 +44,7 @@ export default [
       'unicorn/prefer-single-call': 'off',
       'virtual-dom/hoist-static-nodes': 'off',
       'virtual-dom/prefer-merge-class-names': 'off',
+      '@typescript-eslint/prefer-readonly-parameter-types': 'off',
     },
   },
   {
