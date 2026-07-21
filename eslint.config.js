@@ -42,7 +42,8 @@ export default [
       'unicorn/prefer-minimal-ternary': 'off',
       'unicorn/prefer-https': 'off',
       'unicorn/prefer-single-call': 'off',
-      'virtual-dom/hoist-static-nodes': 'off'
+      'virtual-dom/hoist-static-nodes': 'off',
+      'virtual-dom/prefer-merge-class-names': 'off',
     },
   },
   {
