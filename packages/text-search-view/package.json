@@ -1,7 +1,7 @@
 {
   "name": "@lvce-editor/text-search-view",
   "version": "0.0.0-dev",
-  "description": "Text Search Worker",
+  "description": "Text Search View",
   "keywords": [
     "text-search"
   ],
