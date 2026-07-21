@@ -1,0 +1,64 @@
+{
+  "name": "@lvce-editor/text-search-view",
+  "version": "0.0.0-dev",
+  "description": "Text Search View",
+  "keywords": [
+    "text-search"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lvce-editor/text-search-view.git"
+  },
+  "license": "MIT",
+  "author": "Lvce Editor",
+  "type": "module",
+  "main": "src/textSearchViewMain.ts",
+  "scripts": {
+    "dev": "cd ../../ && npm run dev",
+    "test": "node --unhandled-rejections=warn --experimental-vm-modules ../../node_modules/jest/bin/jest.js --detectOpenHandles --forceExit",
+    "test:watch": "node --unhandled-rejections=warn --experimental-vm-modules ../../node_modules/jest/bin/jest.js --watch"
+  },
+  "jest": {
+    "injectGlobals": false,
+    "extensionsToTreatAsEsm": [
+      ".ts"
+    ],
+    "moduleNameMapper": {
+      "^(\\.{1,2}/.*)\\.js$": "$1"
+    },
+    "transform": {
+      "^.+\\.tsx?$": [
+        "ts-jest",
+        {
+          "useESM": true
+        }
+      ]
+    },
+    "testMatch": [
+      "**/test/**"
+    ],
+    "collectCoverage": true,
+    "coverageThreshold": {
+      "global": {
+        "branches": 95,
+        "functions": 75,
+        "lines": 80
+      }
+    }
+  },
+  "devDependencies": {
+    "@jest/globals": "^30.4.1",
+    "@lvce-editor/assert": "^1.7.0",
+    "@lvce-editor/constants": "^5.19.0",
+    "@lvce-editor/i18n": "^2.4.0",
+    "@lvce-editor/list": "^1.11.0",
+    "@lvce-editor/rpc": "^6.8.0",
+    "@lvce-editor/rpc-registry": "^9.37.0",
+    "@lvce-editor/verror": "^1.7.0",
+    "@lvce-editor/viewlet-registry": "^5.5.0",
+    "@lvce-editor/virtual-dom-worker": "^11.8.0",
+    "@types/node": "^26.1.1",
+    "jest": "^30.4.2",
+    "ts-jest": "^29.4.11"
+  }
+}

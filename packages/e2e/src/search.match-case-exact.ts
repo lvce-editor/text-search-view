@@ -1,0 +1,21 @@
+import type { Test } from '@lvce-editor/test-with-playwright'
+
+export const name = 'search.match-case-exact'
+
+export const test: Test = async ({ expect, FileSystem, Locator, Search, SideBar, Workspace }) => {
+  // arrange
+  const tmpDir = await FileSystem.getTmpDir()
+  await FileSystem.writeFile(`${tmpDir}/test.txt`, `Alpha\nalpha`)
+  await Workspace.setPath(tmpDir)
+  await SideBar.open('Search')
+  await Search.setValue('alpha')
+  const viewletSearch = Locator('.Search')
+  const message = viewletSearch.locator('[role="status"]')
+  await expect(message).toHaveText('2 results in 1 file')
+
+  // act
+  await Search.toggleMatchCase()
+
+  // assert
+  await expect(message).toHaveText('1 result in 1 file')
+}
