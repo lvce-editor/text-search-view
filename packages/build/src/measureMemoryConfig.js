@@ -5,7 +5,7 @@ export const threshold = 590_000
 
 export const instantiations = 200_000
 
-export const instantiationsPath = join(root, 'packages', 'text-search-worker')
+export const instantiationsPath = join(root, 'packages', 'text-search-view')
 
 export const workerPath = join(root, '.tmp', 'dist', 'dist', 'textSearchWorkerMain.js')
 

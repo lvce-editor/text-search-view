@@ -1,5 +1,5 @@
 {
-  "name": "@lvce-editor/text-search-worker-monorepo",
+  "name": "@lvce-editor/text-search-view-monorepo",
   "version": "0.0.0-dev",
   "license": "MIT",
   "author": "Lvce Editor",
@@ -10,7 +10,7 @@
   "scripts": {
     "build": "node packages/build/src/build.js",
     "build:static": "node packages/build/src/build-static.js",
-    "build:watch": "npm exec --workspace=packages/build -- esbuild --format=esm --bundle --external:node:buffer --external:electron --external:ws --external:node:worker_threads --watch packages/text-search-worker/src/textSearchWorkerMain.ts --outfile=.tmp/dist/dist/textSearchWorkerMain.js",
+    "build:watch": "npm exec --workspace=packages/build -- esbuild --format=esm --bundle --external:node:buffer --external:electron --external:ws --external:node:worker_threads --watch packages/text-search-view/src/textSearchWorkerMain.ts --outfile=.tmp/dist/dist/textSearchWorkerMain.js",
     "dev": "node packages/build/src/dev.js",
     "format": "prettier --write .",
     "lint": "eslint . && prettier --check .",

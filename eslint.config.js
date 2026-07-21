@@ -6,16 +6,16 @@ export default [
   ...config.recommendedTsconfig,
   ...config.recommendedVirtualDom,
   {
-    ignores: ['packages/text-search-worker/src/textSearchWorkerMain.ts'],
+    ignores: ['packages/text-search-view/src/textSearchWorkerMain.ts'],
   },
   {
-    files: ['packages/text-search-worker/src/parts/LaunchSearchProcessNode/LaunchSearchProcessNode.ts'],
+    files: ['packages/text-search-view/src/parts/LaunchSearchProcessNode/LaunchSearchProcessNode.ts'],
     rules: {
       'virtual-dom/no-object-attribute-values': 'off',
     },
   },
   {
-    files: ['packages/text-search-worker/test/**/*.ts'],
+    files: ['packages/text-search-view/test/**/*.ts'],
     rules: {
       'virtual-dom/no-empty-aria': 'off',
       'virtual-dom/no-inline-event-handlers': 'off',

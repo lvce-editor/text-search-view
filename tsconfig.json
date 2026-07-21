@@ -3,7 +3,7 @@
   "include": [],
   "references": [
     {
-      "path": "./packages/text-search-worker"
+      "path": "./packages/text-search-view"
     },
     {
       "path": "./packages/build"

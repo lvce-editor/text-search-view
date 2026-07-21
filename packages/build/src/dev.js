@@ -13,7 +13,7 @@ const watchArgs = [
   '--external:ws',
   '--external:node:worker_threads',
   '--watch',
-  '../text-search-worker/src/textSearchWorkerMain.ts',
+  '../text-search-view/src/textSearchWorkerMain.ts',
   '--outfile=../../.tmp/dist/dist/textSearchWorkerMain.js',
 ]
 

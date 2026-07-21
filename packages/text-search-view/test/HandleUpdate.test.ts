@@ -99,7 +99,7 @@ test('handleUpdate - handles search error', async () => {
       message: 'Error: Search failed',
       minLineY: 0,
     })
-    expect(consoleErrorSpy).toHaveBeenCalledWith('[text-search-worker] Error: Search failed')
+    expect(consoleErrorSpy).toHaveBeenCalledWith('[text-search-view] Error: Search failed')
   } finally {
     consoleErrorSpy.mockRestore()
   }

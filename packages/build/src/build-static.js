@@ -10,7 +10,7 @@ const sharedProcessUrl = pathToFileURL(sharedProcessPath).toString()
 
 const sharedProcess = await import(sharedProcessUrl)
 
-process.env.PATH_PREFIX = '/text-search-worker'
+process.env.PATH_PREFIX = '/text-search-view'
 const { commitHash } = await sharedProcess.exportStatic({
   root,
   extensionPath: '',
@@ -18,11 +18,11 @@ const { commitHash } = await sharedProcess.exportStatic({
 })
 
 const rendererWorkerPath = join(root, 'dist', commitHash, 'packages', 'renderer-worker', 'dist', 'rendererWorkerMain.js')
-const textSearchWorkerPath = join(root, 'dist', commitHash, 'packages', 'text-search-worker', 'dist', 'textSearchWorkerMain.js')
+const textSearchWorkerPath = join(root, 'dist', commitHash, 'packages', 'text-search-view', 'dist', 'textSearchWorkerMain.js')
 const extensionHostWorkerTestsPath = join(root, 'dist', commitHash, 'packages', 'extension-host-worker-tests')
 const serverStaticPath = join(root, 'node_modules', '@lvce-editor', 'static-server', 'static', commitHash)
 const serverRendererWorkerPath = join(serverStaticPath, 'packages', 'renderer-worker', 'dist', 'rendererWorkerMain.js')
-const serverTextSearchWorkerPath = join(serverStaticPath, 'packages', 'text-search-worker', 'dist', 'textSearchWorkerMain.js')
+const serverTextSearchWorkerPath = join(serverStaticPath, 'packages', 'text-search-view', 'dist', 'textSearchWorkerMain.js')
 const serverExtensionHostWorkerTestsPath = join(serverStaticPath, 'packages', 'extension-host-worker-tests')
 
 export const getRemoteUrl = (path) => {
@@ -50,7 +50,7 @@ await cp(workerPath, serverTextSearchWorkerPath)
 await cp(extensionHostWorkerTestsPath, serverExtensionHostWorkerTestsPath, { recursive: true })
 
 const staticPath = join(root, '.tmp', 'static')
-const staticPrefixPath = join(staticPath, 'text-search-worker')
+const staticPrefixPath = join(staticPath, 'text-search-view')
 const serverMainPath = join(root, 'node_modules', '@lvce-editor', 'server', 'src', 'server.js')
 
 const patchServerStaticPrefix = async () => {
@@ -61,10 +61,10 @@ const patchServerStaticPrefix = async () => {
   const replacement = `  if (url.startsWith('/995dbd2')) {
     return true
   }
-  if (url.startsWith('/text-search-worker')) {
+  if (url.startsWith('/text-search-view')) {
     return true
   }`
-  const newContent = content.includes("url.startsWith('/text-search-worker')") ? content : content.replace(occurrence, replacement)
+  const newContent = content.includes("url.startsWith('/text-search-view')") ? content : content.replace(occurrence, replacement)
 
   if (newContent !== content) {
     await writeFile(serverMainPath, newContent)

@@ -43,10 +43,10 @@ const staticPrefixSnippet = `  if (url.startsWith('/995dbd2')) {
 const staticPrefixReplacement = `  if (url.startsWith('/995dbd2')) {
     return true
   }
-  if (url.startsWith('/text-search-worker')) {
+  if (url.startsWith('/text-search-view')) {
     return true
   }`
-const newServerContent = serverContent.includes("url.startsWith('/text-search-worker')")
+const newServerContent = serverContent.includes("url.startsWith('/text-search-view')")
   ? serverContent
   : serverContent.replace(staticPrefixSnippet, staticPrefixReplacement)
 

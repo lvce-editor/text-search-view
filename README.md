@@ -5,8 +5,8 @@ Web Worker for the text search functionality in LVCE Editor.
 ## Contributing
 
 ```sh
-git clone git@github.com:lvce-editor/text-search-worker.git &&
-cd text-search-worker &&
+git clone git@github.com:lvce-editor/text-search-view.git &&
+cd text-search-view &&
 npm ci &&
 npm test
 ```

@@ -4,17 +4,17 @@ export const patchRendererWorker = (content, remoteUrl = '', useRemoteUrl = true
   newContent = newContent.replaceAll('http://localhost:3001/tests/', '/tests/')
 
   if (useRemoteUrl && remoteUrl && !newContent.includes('// const textSearchWorkerUrl = ')) {
-    const occurrence = `const textSearchWorkerUrl = \`\${assetDir}/packages/text-search-worker/dist/textSearchWorkerMain.js\``
-    const replacement = `// const textSearchWorkerUrl = \`\${assetDir}/packages/text-search-worker/dist/textSearchWorkerMain.js\`
+    const occurrence = `const textSearchWorkerUrl = \`\${assetDir}/packages/text-search-view/dist/textSearchWorkerMain.js\``
+    const replacement = `// const textSearchWorkerUrl = \`\${assetDir}/packages/text-search-view/dist/textSearchWorkerMain.js\`
 const textSearchWorkerUrl = \`${remoteUrl}\``
 
     newContent = newContent.replace(occurrence, replacement)
   }
 
   if (!useRemoteUrl && remoteUrl && newContent.includes('// const textSearchWorkerUrl = ')) {
-    const occurrence = `// const textSearchWorkerUrl = \`\${assetDir}/packages/text-search-worker/dist/textSearchWorkerMain.js\`
+    const occurrence = `// const textSearchWorkerUrl = \`\${assetDir}/packages/text-search-view/dist/textSearchWorkerMain.js\`
 const textSearchWorkerUrl = \`${remoteUrl}\``
-    const replacement = `const textSearchWorkerUrl = \`\${assetDir}/packages/text-search-worker/dist/textSearchWorkerMain.js\``
+    const replacement = `const textSearchWorkerUrl = \`\${assetDir}/packages/text-search-view/dist/textSearchWorkerMain.js\``
     newContent = newContent.replace(occurrence, replacement)
   }
 
