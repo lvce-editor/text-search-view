@@ -14,7 +14,7 @@ export const getRemoteUrl = (path) => {
 
 const nodeModulesPath = join(root, 'node_modules')
 
-const textSearchWorkerPath = join(root, '.tmp', 'dist', 'dist', 'textsearchViewMain.js')
+const textSearchWorkerPath = join(root, '.tmp', 'dist', 'dist', 'textSearchViewMain.js')
 
 const serverStaticPath = join(nodeModulesPath, '@lvce-editor', 'static-server', 'static')
 const serverMainPath = join(nodeModulesPath, '@lvce-editor', 'server', 'src', 'server.js')

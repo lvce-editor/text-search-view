@@ -9,13 +9,13 @@ import { root } from './root.js'
  * @type {import('rollup').RollupOptions}
  */
 const options = {
-  input: join(root, 'packages/text-search-view/src/textsearchViewMain.ts'),
+  input: join(root, 'packages/text-search-view/src/textSearchViewMain.ts'),
   preserveEntrySignatures: 'strict',
   treeshake: {
     propertyReadSideEffects: false,
   },
   output: {
-    file: join(root, '.tmp/dist/dist/textsearchViewMain.js'),
+    file: join(root, '.tmp/dist/dist/textSearchViewMain.js'),
     format: 'es',
     freeze: false,
     generatedCode: {

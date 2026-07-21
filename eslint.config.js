@@ -6,7 +6,7 @@ export default [
   ...config.recommendedTsconfig,
   ...config.recommendedVirtualDom,
   {
-    ignores: ['packages/text-search-view/src/textsearchViewMain.ts'],
+    ignores: ['packages/text-search-view/src/textSearchViewMain.ts'],
   },
   {
     files: ['packages/text-search-view/src/parts/LaunchSearchProcessNode/LaunchSearchProcessNode.ts'],
