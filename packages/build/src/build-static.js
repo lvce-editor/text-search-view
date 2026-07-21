@@ -18,11 +18,11 @@ const { commitHash } = await sharedProcess.exportStatic({
 })
 
 const rendererWorkerPath = join(root, 'dist', commitHash, 'packages', 'renderer-worker', 'dist', 'rendererWorkerMain.js')
-const textSearchWorkerPath = join(root, 'dist', commitHash, 'packages', 'text-search-view', 'dist', 'textSearchWorkerMain.js')
+const textSearchWorkerPath = join(root, 'dist', commitHash, 'packages', 'text-search-view', 'dist', 'textsearchViewMain.js')
 const extensionHostWorkerTestsPath = join(root, 'dist', commitHash, 'packages', 'extension-host-worker-tests')
 const serverStaticPath = join(root, 'node_modules', '@lvce-editor', 'static-server', 'static', commitHash)
 const serverRendererWorkerPath = join(serverStaticPath, 'packages', 'renderer-worker', 'dist', 'rendererWorkerMain.js')
-const serverTextSearchWorkerPath = join(serverStaticPath, 'packages', 'text-search-view', 'dist', 'textSearchWorkerMain.js')
+const serverTextSearchWorkerPath = join(serverStaticPath, 'packages', 'text-search-view', 'dist', 'textsearchViewMain.js')
 const serverExtensionHostWorkerTestsPath = join(serverStaticPath, 'packages', 'extension-host-worker-tests')
 
 export const getRemoteUrl = (path) => {
@@ -30,7 +30,7 @@ export const getRemoteUrl = (path) => {
   return `/remote/${url}`
 }
 
-const workerPath = join(root, '.tmp', 'dist', 'dist', 'textSearchWorkerMain.js')
+const workerPath = join(root, '.tmp', 'dist', 'dist', 'textsearchViewMain.js')
 const remoteUrl = getRemoteUrl(workerPath)
 
 const patchRendererWorkerPath = async (path, useRemoteUrl) => {

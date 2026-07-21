@@ -13,8 +13,8 @@ const watchArgs = [
   '--external:ws',
   '--external:node:worker_threads',
   '--watch',
-  '../text-search-view/src/textSearchWorkerMain.ts',
-  '--outfile=../../.tmp/dist/dist/textSearchWorkerMain.js',
+  '../text-search-view/src/textsearchViewMain.ts',
+  '--outfile=../../.tmp/dist/dist/textsearchViewMain.js',
 ]
 
 const main = async () => {
