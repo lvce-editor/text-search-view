@@ -1,0 +1,9 @@
+import * as ApplyRender from '../ApplyRender/ApplyRender.ts'
+import * as SearchViewStates from '../SearchViewStates/SearchViewStates.ts'
+
+export const render2 = (uid: number, diffResult: readonly number[]): readonly any[] => {
+  const { newState, oldState } = SearchViewStates.get(uid)
+  SearchViewStates.set(uid, newState, newState)
+  const commands = ApplyRender.applyRender(oldState, newState, diffResult)
+  return commands
+}

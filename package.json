@@ -1,0 +1,33 @@
+{
+  "name": "@lvce-editor/text-search-worker-monorepo",
+  "version": "0.0.0-dev",
+  "license": "MIT",
+  "author": "Lvce Editor",
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "node packages/build/src/build.js",
+    "build:static": "node packages/build/src/build-static.js",
+    "build:watch": "npm exec --workspace=packages/build -- esbuild --format=esm --bundle --external:node:buffer --external:electron --external:ws --external:node:worker_threads --watch packages/text-search-worker/src/textSearchWorkerMain.ts --outfile=.tmp/dist/dist/textSearchWorkerMain.js",
+    "dev": "node packages/build/src/dev.js",
+    "format": "prettier --write .",
+    "lint": "eslint . && prettier --check .",
+    "measure": "npm run measure --workspace=packages/build",
+    "test": "npm test --workspaces --if-present",
+    "test-integration": "npm run test-integration --workspaces --if-present",
+    "type-check": "tsc -b"
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "printWidth": 150
+  },
+  "devDependencies": {
+    "@lvce-editor/eslint-config": "^16.5.0",
+    "eslint": "^10.7.0",
+    "prettier": "^3.5.3",
+    "typescript": "^6.0.3"
+  }
+}
