@@ -1,9 +1,7 @@
-import { RendererWorker, SearchProcess } from '@lvce-editor/rpc-registry'
+import { RendererWorker, TextSearchWorker } from '@lvce-editor/rpc-registry'
 import type { SearchState } from '../SearchState/SearchState.ts'
 import type { TextSearchOptions } from '../TextSearchOptions/TextSearchOptions.ts'
-import * as Assert from '../Assert/Assert.ts'
 import * as GetNumberOfVisibleItems from '../GetNumberOfVisibleItems/GetNumberOfVisibleItems.ts'
-import * as GetTextSearchRipGrepArgs from '../GetTextSearchRipGrepArgs/GetTextSearchRipGrepArgs.ts'
 import * as SearchViewStates from '../SearchViewStates/SearchViewStates.ts'
 import { waitForNextFrame } from '../WaitForNextFrame/WaitForNextFrame.ts'
 
@@ -16,26 +14,14 @@ export const textSearchIncremental = async (
   searchId: string,
   uid: number,
 ): Promise<void> => {
-  Assert.string(root)
-  Assert.string(query)
-  const ripGrepArgs = GetTextSearchRipGrepArgs.getRipGrepArgs({
-    ...options,
-    searchString: query,
-  })
-  const actualOptions = {
-    id: searchId,
-    ripGrepArgs,
-    searchDir: root,
-  }
-
-  const resultPromise = SearchProcess.invoke('TextSearch.searchIncremental', actualOptions)
+  const resultPromise = TextSearchWorker.searchIncremental(root, query, options, assetDir, platform, searchId, uid)
   for (let i = 0; i < 100; i++) {
     const latest = SearchViewStates.get(uid)
     const { newState } = latest
     const { headerHeight, height, itemHeight, minLineY } = newState
     const listHeight = height - headerHeight
     const numberOfVisible = GetNumberOfVisibleItems.getNumberOfVisibleItems(listHeight, itemHeight)
-    const visible = await SearchProcess.invoke('TextSearch.getIncrementalResults', searchId, minLineY, minLineY + numberOfVisible)
+    const visible = await TextSearchWorker.getIncrementalResults(searchId, minLineY, minLineY + numberOfVisible)
     const latest2 = SearchViewStates.get(uid)
     if (!latest2 || latest2.newState.searchId !== searchId) {
       return

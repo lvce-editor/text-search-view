@@ -1,10 +1,10 @@
 import { expect, jest, test } from '@jest/globals'
+import { TextSearchWorker } from '@lvce-editor/rpc-registry'
 import type { SearchResult } from '../src/parts/SearchResult/SearchResult.ts'
 import type { SearchState } from '../src/parts/SearchState/SearchState.ts'
 import * as CreateDefaultState from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
 import { handleUpdate } from '../src/parts/HandleUpdate/HandleUpdate.ts'
 import * as SearchFlags from '../src/parts/SearchFlags/SearchFlags.ts'
-import { add } from '../src/parts/TextSearchProviders/TextSearchProviders.ts'
 
 test('handleUpdate - empty search value returns cleared state', async () => {
   const state: SearchState = {
@@ -47,8 +47,8 @@ test.skip('handleUpdate - performs search with valid input', async () => {
     { end: 0, lineNumber: 0, start: 0, text: 'match1', type: 2 },
   ]
 
-  add({
-    async ''(): Promise<{ results: readonly SearchResult[]; limitHit: boolean }> {
+  using _mockTextSearchWorker = TextSearchWorker.registerMockRpc({
+    async 'TextSearch.search'() {
       return {
         limitHit: false,
         results: searchResults,
@@ -79,8 +79,8 @@ test('handleUpdate - handles search error', async () => {
   }
   const update = { value: 'test' }
 
-  add({
-    async ''(): Promise<{ results: readonly SearchResult[]; limitHit: boolean }> {
+  using _mockTextSearchWorker = TextSearchWorker.registerMockRpc({
+    async 'TextSearch.search'() {
       throw new Error('Search failed')
     },
   })
@@ -126,8 +126,8 @@ test.skip('handleUpdate - uses search flags from state', async () => {
   }
   const update = { value: 'test' }
 
-  add({
-    async ''(): Promise<{ results: readonly SearchResult[]; limitHit: boolean }> {
+  using _mockTextSearchWorker = TextSearchWorker.registerMockRpc({
+    async 'TextSearch.search'() {
       return {
         limitHit: false,
         results: [],
