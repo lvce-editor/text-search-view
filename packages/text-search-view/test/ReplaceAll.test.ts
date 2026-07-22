@@ -9,6 +9,9 @@ import * as TextSearchResultType from '../src/parts/TextSearchResultType/TextSea
 test('replaceAll - replaces all matches and updates state', async () => {
   using mockRpc = RendererWorker.registerMockRpc({
     'BulkReplacement.applyBulkReplacement'() {},
+    'ConfirmPrompt.prompt'() {
+      return true
+    },
     'Layout.handleWorkspaceRefresh'() {},
   })
 
@@ -36,6 +39,14 @@ test('replaceAll - replaces all matches and updates state', async () => {
     minLineY: 0,
   })
   expect(mockRpc.invocations).toEqual([
+    [
+      'ConfirmPrompt.prompt',
+      "Replace 2 occurrences across 2 files with 'new-text'",
+      {
+        confirmMessage: 'Replace',
+        title: 'Replace All',
+      },
+    ],
     [
       'BulkReplacement.applyBulkReplacement',
       [
@@ -69,6 +80,42 @@ test('replaceAll - replaces all matches and updates state', async () => {
   ])
 })
 
+test('replaceAll - user cancels replacement', async () => {
+  using mockRpc = RendererWorker.registerMockRpc({
+    'ConfirmPrompt.prompt'() {
+      return false
+    },
+  })
+
+  const state: SearchState = {
+    ...CreateDefaultState.createDefaultState(),
+    fileCount: 2,
+    items: [
+      { end: 0, lineNumber: 0, start: 0, text: 'file1.txt', type: TextSearchResultType.File },
+      { end: 0, lineNumber: 1, start: 0, text: 'match1', type: TextSearchResultType.Match },
+      { end: 0, lineNumber: 2, start: 0, text: 'file2.txt', type: TextSearchResultType.File },
+      { end: 0, lineNumber: 3, start: 0, text: 'match2', type: TextSearchResultType.Match },
+    ],
+    matchCount: 2,
+    replacement: 'new-text',
+    workspacePath: '/test',
+  }
+
+  const result = await replaceAll(state)
+
+  expect(result).toBe(state)
+  expect(mockRpc.invocations).toEqual([
+    [
+      'ConfirmPrompt.prompt',
+      "Replace 2 occurrences across 2 files with 'new-text'",
+      {
+        confirmMessage: 'Replace',
+        title: 'Replace All',
+      },
+    ],
+  ])
+})
+
 test('replaceAllWithProgress - renders progress before applying replacements', async () => {
   const { promise: replacementStarted, resolve: notifyReplacementStarted } = Promise.withResolvers<void>()
   const { promise: continueReplacement, resolve: finishReplacement } = Promise.withResolvers<void>()
@@ -76,6 +123,9 @@ test('replaceAllWithProgress - renders progress before applying replacements', a
     async 'BulkReplacement.applyBulkReplacement'() {
       notifyReplacementStarted()
       await continueReplacement
+    },
+    'ConfirmPrompt.prompt'() {
+      return true
     },
     'Layout.handleWorkspaceRefresh'() {},
     'Search.rerender'() {},
@@ -108,7 +158,15 @@ test('replaceAllWithProgress - renders progress before applying replacements', a
   await replacementStarted
 
   expect(currentState.message).toBe('Replacing 2 occurrences across 2 files…')
-  expect(mockRpc.invocations.slice(0, 2)).toEqual([
+  expect(mockRpc.invocations.slice(0, 3)).toEqual([
+    [
+      'ConfirmPrompt.prompt',
+      "Replace 2 occurrences across 2 files with 'new-text'",
+      {
+        confirmMessage: 'Replace',
+        title: 'Replace All',
+      },
+    ],
     ['Search.rerender'],
     [
       'BulkReplacement.applyBulkReplacement',
@@ -170,6 +228,9 @@ test('replaceAllWithProgress - reports progress for the focused file', async () 
   }
   using mockRpc = RendererWorker.registerMockRpc({
     'BulkReplacement.applyBulkReplacement'() {},
+    'ConfirmPrompt.prompt'() {
+      return true
+    },
     'Layout.handleWorkspaceRefresh'() {},
     'Search.rerender'() {
       expect(currentState.message).toBe('Replacing 1 occurrence across 1 file…')
@@ -188,12 +249,66 @@ test('replaceAllWithProgress - reports progress for the focused file', async () 
   await replaceAllWithProgress(context)
 
   expect(currentState.message).toBe("Replaced 1 occurrence across 1 file with 'new-text'")
-  expect(mockRpc.invocations[0]).toEqual(['Search.rerender'])
+  expect(mockRpc.invocations[0]).toEqual([
+    'ConfirmPrompt.prompt',
+    "Replace 1 occurrence across 1 file with 'new-text'",
+    {
+      confirmMessage: 'Replace',
+      title: 'Replace All',
+    },
+  ])
+})
+
+test('replaceAllWithProgress - user cancels before progress is rendered', async () => {
+  using mockRpc = RendererWorker.registerMockRpc({
+    'ConfirmPrompt.prompt'() {
+      return false
+    },
+  })
+
+  let currentState: SearchState = {
+    ...CreateDefaultState.createDefaultState(),
+    fileCount: 1,
+    items: [
+      { end: 0, lineNumber: 0, start: 0, text: 'file1.txt', type: TextSearchResultType.File },
+      { end: 0, lineNumber: 1, start: 0, text: 'match1', type: TextSearchResultType.Match },
+    ],
+    matchCount: 1,
+    message: '1 result in 1 file',
+    replacement: 'new-text',
+    workspacePath: '/test',
+  }
+  const context: AsyncCommandContext<SearchState> = {
+    getState() {
+      return currentState
+    },
+    async updateState(updater) {
+      currentState = updater(currentState)
+      return currentState
+    },
+  }
+
+  await replaceAllWithProgress(context)
+
+  expect(currentState.message).toBe('1 result in 1 file')
+  expect(mockRpc.invocations).toEqual([
+    [
+      'ConfirmPrompt.prompt',
+      "Replace 1 occurrence across 1 file with 'new-text'",
+      {
+        confirmMessage: 'Replace',
+        title: 'Replace All',
+      },
+    ],
+  ])
 })
 
 test('replaceAll - replaces all matches in focused file only and updates state', async () => {
   using mockRpc = RendererWorker.registerMockRpc({
     'BulkReplacement.applyBulkReplacement'() {},
+    'ConfirmPrompt.prompt'() {
+      return true
+    },
     'Layout.handleWorkspaceRefresh'() {},
   })
 
@@ -239,6 +354,14 @@ test('replaceAll - replaces all matches in focused file only and updates state',
     scrollBarHeight: 20,
   })
   expect(mockRpc.invocations).toEqual([
+    [
+      'ConfirmPrompt.prompt',
+      "Replace 1 occurrence across 1 file with 'new-text'",
+      {
+        confirmMessage: 'Replace',
+        title: 'Replace All',
+      },
+    ],
     [
       'BulkReplacement.applyBulkReplacement',
       [

@@ -9,6 +9,7 @@ import * as GetReplacedMessage from '../GetReplacedMessage/GetReplacedMessage.ts
 import * as GetReplaceElements from '../GetReplaceElements/GetReplaceElements.ts'
 import * as GetReplacingMessage from '../GetReplacingMessage/GetReplacingMessage.ts'
 import { removeItemFromItems } from '../RemoveItemFromItems/RemoveItemFromItems.ts'
+import * as ReplaceAllAndPrompt from '../ReplaceAllAndPrompt/ReplaceAllAndPrompt.ts'
 import * as ScrollBarFunctions from '../ScrollBarFunctions/ScrollBarFunctions.ts'
 import * as TextSearchResultType from '../TextSearchResultType/TextSearchResultType.ts'
 
@@ -94,9 +95,18 @@ const replaceAllInFocusedFile = async (state: SearchState, fileIndex: number): P
   }
 }
 
-export const replaceAll = async (state: SearchState): Promise<SearchState> => {
-  const actualIndex = getActualIndex(state)
-  const fileIndex = getFileIndex(state, actualIndex)
+const confirmReplaceAll = async (state: SearchState, fileIndex: number): Promise<boolean> => {
+  const { items, matchCount: totalMatchCount, replacement, workspacePath } = state
+  const targetItems = fileIndex === -1 ? items : getFileItems(state, fileIndex)
+  const fileCount = fileIndex === -1 ? targetItems.filter((item) => item.type === TextSearchResultType.File).length : 1
+  const matchCount = fileIndex === -1 ? totalMatchCount : Math.max(targetItems.length - 1, 0)
+  if (matchCount === 0) {
+    return true
+  }
+  return ReplaceAllAndPrompt.replaceAllAndPrompt(workspacePath, targetItems, replacement, matchCount, fileCount)
+}
+
+const replaceAllConfirmed = async (state: SearchState, fileIndex: number): Promise<SearchState> => {
   if (fileIndex !== -1) {
     return replaceAllInFocusedFile(state, fileIndex)
   }
@@ -117,6 +127,16 @@ export const replaceAll = async (state: SearchState): Promise<SearchState> => {
   }
 }
 
+export const replaceAll = async (state: SearchState): Promise<SearchState> => {
+  const actualIndex = getActualIndex(state)
+  const fileIndex = getFileIndex(state, actualIndex)
+  const shouldReplace = await confirmReplaceAll(state, fileIndex)
+  if (!shouldReplace) {
+    return state
+  }
+  return replaceAllConfirmed(state, fileIndex)
+}
+
 export const replaceAllWithProgress = async (context: AsyncCommandContext<SearchState>): Promise<void> => {
   const state = context.getState()
   const { fileCount: totalFileCount, matchCount: totalMatchCount } = state
@@ -124,12 +144,16 @@ export const replaceAllWithProgress = async (context: AsyncCommandContext<Search
   const fileIndex = getFileIndex(state, actualIndex)
   const fileCount = fileIndex === -1 ? totalFileCount : 1
   const matchCount = fileIndex === -1 ? totalMatchCount : Math.max(getFileItems(state, fileIndex).length - 1, 0)
+  const shouldReplace = await confirmReplaceAll(state, fileIndex)
+  if (!shouldReplace) {
+    return
+  }
   const message = GetReplacingMessage.getReplacingMessage(fileCount, matchCount)
   await context.updateState((latestState) => ({
     ...latestState,
     message,
   }))
   await RendererWorker.invoke('Search.rerender')
-  const updatedState = await replaceAll(context.getState())
+  const updatedState = await replaceAllConfirmed(context.getState(), fileIndex)
   await context.updateState(() => updatedState)
 }

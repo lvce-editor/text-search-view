@@ -2,7 +2,7 @@ import type { Test } from '@lvce-editor/test-with-playwright'
 
 export const name = 'search.replace-regex'
 
-export const test: Test = async ({ expect, FileSystem, Locator, Main, Search, SideBar, Workspace }) => {
+export const test: Test = async ({ Dialog, expect, FileSystem, Locator, Main, Search, SideBar, Workspace }) => {
   // arrange
   const tmpDir = await FileSystem.getTmpDir()
   await FileSystem.writeFile(`${tmpDir}/test.css`, `abc`)
@@ -15,6 +15,7 @@ export const test: Test = async ({ expect, FileSystem, Locator, Main, Search, Si
   const viewletSearch = Locator('.Search')
   const message = viewletSearch.locator('[role="status"]')
   await expect(message).toHaveText('1 result in 1 file')
+  await Dialog.mockConfirm(() => true)
 
   // act
   await Search.replaceAll()
