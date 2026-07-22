@@ -3,11 +3,13 @@ import type { SearchState } from '../SearchState/SearchState.ts'
 export const isEqual = (oldState: SearchState, newState: SearchState): boolean => {
   return (
     oldState.collapsedPaths === newState.collapsedPaths &&
+    oldState.contextLinesEnabled === newState.contextLinesEnabled &&
     oldState.deltaY === newState.deltaY &&
     oldState.flags === newState.flags &&
     oldState.focus === newState.focus &&
     oldState.icons === newState.icons &&
     oldState.items === newState.items &&
+    oldState.isSearchEditor === newState.isSearchEditor &&
     oldState.listFocused === newState.listFocused &&
     oldState.listFocusedIndex === newState.listFocusedIndex &&
     oldState.loaded === newState.loaded &&

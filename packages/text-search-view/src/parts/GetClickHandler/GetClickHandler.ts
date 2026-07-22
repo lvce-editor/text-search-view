@@ -4,6 +4,7 @@ import * as FocusSearchValue from '../FocusSearchValue/FocusSearchValue.ts'
 import * as InputName from '../InputName/InputName.ts'
 import * as Noop from '../Noop/Noop.ts'
 import * as ReplaceAll from '../ReplaceAll/ReplaceAll.ts'
+import * as ToggleContextLines from '../ToggleContextLines/ToggleContextLines.ts'
 import * as ToggleDetailsExpanded from '../ToggleDetailsExpanded/ToggleDetailsExpanded.ts'
 import * as ToggleMatchCase from '../ToggleMatchCase/ToggleMatchCase.ts'
 import * as ToggleMatchWholeWord from '../ToggleMatchWholeWord/ToggleMatchWholeWord.ts'
@@ -30,6 +31,8 @@ export const getClickHandler = (name: string): ClickHandler => {
       return ToggleOpenEditors.toggleOpenEditors
     case InputName.SearchValue:
       return FocusSearchValue.focusSearchValue
+    case InputName.ToggleContextLines:
+      return ToggleContextLines.toggleContextLines
     case InputName.ToggleReplace:
       return ToggleReplace.toggleReplace
     case InputName.ToggleSearchDetails:

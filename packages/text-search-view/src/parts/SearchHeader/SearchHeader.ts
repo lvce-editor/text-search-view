@@ -1,4 +1,6 @@
 export interface SearchHeader {
+  readonly contextLines: number
+  readonly contextLinesEnabled: boolean
   readonly defaultExcludes: readonly string[]
   readonly excludeValue: string
   readonly flags: number
@@ -9,6 +11,7 @@ export interface SearchHeader {
   readonly historyIndex: number
   readonly includeValue: string
   readonly incrementalSearch: boolean
+  readonly isSearchEditor: boolean
   readonly limit: number
   readonly limitHit: boolean
   readonly limitHitWarning: string

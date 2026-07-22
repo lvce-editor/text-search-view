@@ -121,6 +121,14 @@ test('openNewSearchEditor', () => {
   expect(SearchStrings.openNewSearchEditor()).toBe('Open New Search Editor')
 })
 
+test('contextLines', () => {
+  expect(SearchStrings.contextLines()).toBe('Context Lines')
+})
+
+test('toggleContextLines', () => {
+  expect(SearchStrings.toggleContextLines()).toBe('Toggle Context Lines')
+})
+
 test('viewAsTree', () => {
   expect(SearchStrings.viewAsTree()).toBe('View as Tree')
 })

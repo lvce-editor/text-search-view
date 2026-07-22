@@ -6,6 +6,7 @@ import * as DomEventListenerFunctions from '../DomEventListenerFunctions/DomEven
 import * as GetInputActionsInput from '../GetInputActionsInput/GetInputActionsInput.ts'
 import * as GetInputActionsReplace from '../GetInputActionsReplace/GetInputActionsReplace.ts'
 import { getReplacePlaceholder } from '../GetReplacePlaceholder/GetReplacePlaceholder.ts'
+import * as GetSearchEditorContextLinesVirtualDom from '../GetSearchEditorContextLinesVirtualDom/GetSearchEditorContextLinesVirtualDom.ts'
 import * as GetSearchFieldVirtualDom from '../GetSearchFieldVirtualDom/GetSearchFieldVirtualDom.ts'
 import { getSearchPlaceholder } from '../GetSearchPlaceholder/GetSearchPlaceholder.ts'
 import * as GetSearchToggleVirtualDom from '../GetSearchToggleVirtualDom/GetSearchToggleVirtualDom.ts'
@@ -17,6 +18,9 @@ export const getSearchHeaderTopVirtualDom = (
   searchInputErrorMessage: string,
   matchCount: number,
   focus: number,
+  isSearchEditor: boolean = false,
+  contextLines: number = 1,
+  contextLinesEnabled: boolean = false,
 ): readonly VirtualDomNode[] => {
   const inputActions = GetInputActionsInput.getInputActionsInput(flags)
   const replaceActions = GetInputActionsReplace.getInputActionsReplace(flags, matchCount)
@@ -37,15 +41,30 @@ export const getSearchHeaderTopVirtualDom = (
       role: AriaRoles.None,
       type: VirtualDomElements.Div,
     },
-    ...GetSearchFieldVirtualDom.getSearchFieldVirtualDom(
-      InputName.SearchValue,
-      searchPlaceholder,
-      DomEventListenerFunctions.HandleInput2,
-      inputActions.inside,
-      inputActions.outside,
-      Boolean(searchInputErrorMessage),
-    ),
   ]
+
+  const searchFieldDom = GetSearchFieldVirtualDom.getSearchFieldVirtualDom(
+    InputName.SearchValue,
+    searchPlaceholder,
+    DomEventListenerFunctions.HandleInput2,
+    inputActions.inside,
+    inputActions.outside,
+    Boolean(searchInputErrorMessage),
+  )
+  if (isSearchEditor) {
+    dom.push(
+      {
+        childCount: 3,
+        className: ClassNames.SearchFieldContainer,
+        role: AriaRoles.None,
+        type: VirtualDomElements.Div,
+      },
+      ...searchFieldDom,
+      ...GetSearchEditorContextLinesVirtualDom.getSearchEditorContextLinesVirtualDom(contextLines, contextLinesEnabled),
+    )
+  } else {
+    dom.push(...searchFieldDom)
+  }
 
   if (flags & SearchFlags.ReplaceExpanded) {
     dom.push(

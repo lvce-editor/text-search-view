@@ -21,6 +21,7 @@ export const create = (
   value: string = '',
   replacement: string = '',
   platform?: number,
+  isSearchEditor: boolean = false,
 ): SearchState => {
   const headerHeight = GetTopHeight.getTopHeight(0)
   const state: SearchState = {
@@ -42,6 +43,8 @@ export const create = (
     }),
     assetDir,
     collapsedPaths: [],
+    contextLines: 1,
+    contextLinesEnabled: false,
     defaultExcludes: DefaultExcludeValue.defaultExcludes,
     deltaY: 0,
     excludeValue: '',
@@ -59,6 +62,7 @@ export const create = (
     includeValue: '',
     incrementalSearch: false,
     inputSource: InputSource.User,
+    isSearchEditor,
     limit: 20_000,
     limitHit: false,
     limitHitWarning: '',

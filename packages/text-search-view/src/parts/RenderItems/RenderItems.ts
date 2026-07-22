@@ -19,6 +19,9 @@ export const getDom = (newState: SearchState): readonly any[] => {
     newState.limitHitWarning,
     viewModel.focus,
     newState.initial,
+    newState.isSearchEditor,
+    newState.contextLines,
+    newState.contextLinesEnabled,
   )
   return dom
 }

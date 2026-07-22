@@ -14,6 +14,9 @@ export const getSearchHeaderVirtualDom = (
   matchCount: number,
   focus: number,
   limitHitWarning: string,
+  isSearchEditor: boolean = false,
+  contextLines: number = 1,
+  contextLinesEnabled: boolean = false,
 ): readonly VirtualDomNode[] => {
   const warningDom = getSearchHeaderLimitHitVirtualDom(limitHitWarning)
   const parentNode: VirtualDomNode = {
@@ -25,7 +28,15 @@ export const getSearchHeaderVirtualDom = (
   }
   const dom: readonly VirtualDomNode[] = [
     parentNode,
-    ...GetSearchHeaderTopVirtualDom.getSearchHeaderTopVirtualDom(flags, searchInputErrorMessage, matchCount, focus),
+    ...GetSearchHeaderTopVirtualDom.getSearchHeaderTopVirtualDom(
+      flags,
+      searchInputErrorMessage,
+      matchCount,
+      focus,
+      isSearchEditor,
+      contextLines,
+      contextLinesEnabled,
+    ),
     ...GetSearchHeaderDetailsVirtualDom.getSearchHeaderDetailsVirtualDom(flags, message),
     ...warningDom,
   ]

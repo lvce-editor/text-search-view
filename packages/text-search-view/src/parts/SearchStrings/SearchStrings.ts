@@ -178,6 +178,14 @@ export const openNewSearchEditor = (): string => {
   return I18nString.i18nString(UiStrings.OpenNewSearchEditor)
 }
 
+export const contextLines = (): string => {
+  return I18nString.i18nString(UiStrings.ContextLines)
+}
+
+export const toggleContextLines = (): string => {
+  return I18nString.i18nString(UiStrings.ToggleContextLines)
+}
+
 export const viewAsTree = (): string => {
   return I18nString.i18nString(UiStrings.ViewAsTree)
 }
