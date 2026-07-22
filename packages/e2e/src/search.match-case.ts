@@ -1,6 +1,6 @@
 import type { Test } from '@lvce-editor/test-with-playwright'
 
-export const name = 'search.exclude'
+export const name = 'search.match-case'
 
 export const test: Test = async ({ expect, FileSystem, Locator, Search, SideBar, Workspace }) => {
   // arrange

@@ -73,6 +73,7 @@ test('handleUpdatePullBased - enables pull-based mode for file protocol and comp
     query: 'test',
     root: '/test',
     scheme: '',
+    useIgnoreFiles: true,
     usePullBasedSearch: true,
   })
   expect(seenUid).toBe(101)
@@ -115,6 +116,7 @@ test('handleUpdatePullBased - disables pull-based mode for non-file protocol and
   expect(seenOptions).toMatchObject({
     defaultExcludes: [],
     scheme: 'memfs',
+    useIgnoreFiles: false,
     usePullBasedSearch: false,
   })
   expect(SearchFlags.hasUseIgnoreFiles(state.flags)).toBe(false)

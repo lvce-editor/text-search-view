@@ -1,5 +1,5 @@
 import { expect, test } from '@jest/globals'
-import { TextSearchWorker } from '@lvce-editor/rpc-registry'
+import { RendererWorker, TextSearchWorker } from '@lvce-editor/rpc-registry'
 import * as CreateDefaultState from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
 import { loadContent } from '../src/parts/LoadContent/LoadContent.ts'
 import * as SearchFlags from '../src/parts/SearchFlags/SearchFlags.ts'
@@ -57,6 +57,24 @@ test('loadContent without saved value returns state with loaded flag', async () 
     loaded: true,
     threads: 1,
   })
+})
+
+test('loadContent loads enabled search exclude settings', async () => {
+  using mockRpc = RendererWorker.registerMockRpc({
+    'Preferences.get': () => ({
+      '**/*.tmp': false,
+      '**/excluded': true,
+    }),
+  })
+  const state = CreateDefaultState.createDefaultState()
+
+  const result = await loadContent(state, undefined)
+
+  expect(result.defaultExcludes).toEqual(['**/excluded'])
+  expect(mockRpc.invocations).toEqual([
+    ['Preferences.get', 'search.exclude'],
+    ['Preferences.get', 'Search.usePullBasedSearch'],
+  ])
 })
 
 test('loadContent with null savedState', async () => {

@@ -15,6 +15,7 @@ export interface TextSearchOptions {
   readonly threads: number
 
   // TODO use flags or options object?
+  readonly useIgnoreFiles: boolean
   readonly usePullBasedSearch: boolean
   readonly useRegularExpression: boolean
 }

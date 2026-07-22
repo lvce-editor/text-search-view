@@ -153,6 +153,7 @@ test('handleUpdateFull - passes enabled search options to the provider', async (
     defaultExcludes: state.defaultExcludes,
     isCaseSensitive: true,
     matchWholeWord: true,
+    useIgnoreFiles: true,
     usePullBasedSearch: true,
     useRegularExpression: true,
   })

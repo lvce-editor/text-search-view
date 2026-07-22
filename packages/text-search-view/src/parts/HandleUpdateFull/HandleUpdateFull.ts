@@ -52,6 +52,7 @@ export const handleUpdateFull = async (state: SearchState, update: Partial<Searc
       root,
       scheme,
       threads,
+      useIgnoreFiles: SearchFlags.hasUseIgnoreFiles(flags),
       usePullBasedSearch: shouldUsePullBasedSearch,
       useRegularExpression: Boolean(flags & SearchFlags.UseRegularExpression),
     },
