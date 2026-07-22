@@ -36,6 +36,7 @@ export const handleUpdateIncremental = async (state: SearchState, update: Partia
       root,
       scheme,
       threads,
+      useIgnoreFiles: SearchFlags.hasUseIgnoreFiles(flags),
       usePullBasedSearch: usePullBasedSearch,
       useRegularExpression: Boolean(flags & SearchFlags.UseRegularExpression),
     },

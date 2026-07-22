@@ -39,6 +39,7 @@ export const handleUpdatePullBased = async (state: SearchState, update: Partial<
       root,
       scheme,
       threads,
+      useIgnoreFiles: SearchFlags.hasUseIgnoreFiles(flags),
       usePullBasedSearch: shouldUsePullBasedSearch,
       useRegularExpression: Boolean(flags & SearchFlags.UseRegularExpression),
     },

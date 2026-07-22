@@ -23,6 +23,7 @@ test('textSearch - delegates searching to the text search worker', async () => {
     root: 'file:///workspace',
     scheme: 'file',
     threads: 1,
+    useIgnoreFiles: true,
     usePullBasedSearch: false,
     useRegularExpression: false,
   } satisfies TextSearchOptions
