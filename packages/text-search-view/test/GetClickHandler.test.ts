@@ -4,6 +4,7 @@ import * as FocusSearchValue from '../src/parts/FocusSearchValue/FocusSearchValu
 import * as GetClickHandler from '../src/parts/GetClickHandler/GetClickHandler.ts'
 import * as InputName from '../src/parts/InputName/InputName.ts'
 import * as ReplaceAll from '../src/parts/ReplaceAll/ReplaceAll.ts'
+import * as ToggleContextLines from '../src/parts/ToggleContextLines/ToggleContextLines.ts'
 import * as ToggleDetailsExpanded from '../src/parts/ToggleDetailsExpanded/ToggleDetailsExpanded.ts'
 import * as ToggleMatchCase from '../src/parts/ToggleMatchCase/ToggleMatchCase.ts'
 import * as ToggleMatchWholeWord from '../src/parts/ToggleMatchWholeWord/ToggleMatchWholeWord.ts'
@@ -14,6 +15,7 @@ import * as ToggleUseIgnoreFiles from '../src/parts/ToggleUseIgnoreFiles/ToggleU
 import * as ToggleUseRegularExpression from '../src/parts/ToggleUseRegularExpression/ToggleUseRegularExpression.ts'
 
 test('getClickHandler - returns correct handlers', () => {
+  expect(GetClickHandler.getClickHandler(InputName.ToggleContextLines)).toBe(ToggleContextLines.toggleContextLines)
   expect(GetClickHandler.getClickHandler(InputName.MatchCase)).toBe(ToggleMatchCase.toggleMatchCase)
   expect(GetClickHandler.getClickHandler(InputName.ToggleReplace)).toBe(ToggleReplace.toggleReplace)
   expect(GetClickHandler.getClickHandler(InputName.UseRegularExpression)).toBe(ToggleUseRegularExpression.toggleUseRegularExpression)

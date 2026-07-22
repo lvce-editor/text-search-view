@@ -11,4 +11,7 @@ test('create', () => {
   expect(state.defaultExcludes).toEqual(['.git', 'node_modules'])
   expect(state.excludeValue).toBe('')
   expect(state.flags).toBe(SearchFlags.UseIgnoreFiles)
+  expect(state.contextLines).toBe(1)
+  expect(state.contextLinesEnabled).toBe(false)
+  expect(state.isSearchEditor).toBe(false)
 })

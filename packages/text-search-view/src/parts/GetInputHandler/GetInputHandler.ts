@@ -1,4 +1,5 @@
 import type { InputHandler } from '../InputHandler/InputHandler.ts'
+import * as HandleContextLinesInput from '../HandleContextLinesInput/HandleContextLinesInput.ts'
 import * as HandleExcludeInput from '../HandleExcludeInput/HandleExcludeInput.ts'
 import * as HandleIncludeInput from '../HandleIncludeInput/HandleIncludeInput.ts'
 import * as HandleInput from '../HandleInput/HandleInput.ts'
@@ -7,6 +8,8 @@ import * as InputName from '../InputName/InputName.ts'
 
 export const getInputHandler = (name: string): InputHandler => {
   switch (name) {
+    case InputName.ContextLines:
+      return HandleContextLinesInput.handleContextLinesInput
     case InputName.FilesToExclude:
       return HandleExcludeInput.handleExcludeInput
     case InputName.FilesToInclude:

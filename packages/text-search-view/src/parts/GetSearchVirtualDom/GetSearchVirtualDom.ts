@@ -24,6 +24,9 @@ export const getSearchVirtualDom = (
   limitHitWarning: string,
   focus: number = 0,
   initial: boolean = false,
+  isSearchEditor: boolean = false,
+  contextLines: number = 1,
+  contextLinesEnabled: boolean = false,
 ): readonly VirtualDomNode[] => {
   if (initial) {
     return []
@@ -37,7 +40,17 @@ export const getSearchVirtualDom = (
       className,
       type: VirtualDomElements.Div,
     },
-    ...GetSearchHeaderVirtualDom.getSearchHeaderVirtualDom(flags, message, searchInputErrorMessage, matchCount, focus, limitHitWarning),
+    ...GetSearchHeaderVirtualDom.getSearchHeaderVirtualDom(
+      flags,
+      message,
+      searchInputErrorMessage,
+      matchCount,
+      focus,
+      limitHitWarning,
+      isSearchEditor,
+      contextLines,
+      contextLinesEnabled,
+    ),
     ...errorDom,
     ...GetSearchResultsVirtualDom.getSearchResultsVirtualDom(
       visibleItems,
