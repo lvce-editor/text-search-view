@@ -4,7 +4,7 @@ export const name = 'search.replace-empty-string'
 
 export const skip = 1
 
-export const test: Test = async ({ expect, FileSystem, Locator, Main, Search, Workspace }) => {
+export const test: Test = async ({ Dialog, expect, FileSystem, Locator, Main, Search, Workspace }) => {
   // arrange
   const tmpDir = await FileSystem.getTmpDir()
   await FileSystem.writeFile(
@@ -20,6 +20,7 @@ abc`,
   const viewletSearch = Locator('.Search')
   const message = viewletSearch.locator('[role="status"]')
   await expect(message).toHaveText('2 results in 1 file')
+  await Dialog.mockConfirm(() => true)
 
   // act
   await Search.replaceAll()

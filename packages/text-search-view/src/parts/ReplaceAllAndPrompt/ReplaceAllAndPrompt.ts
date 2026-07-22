@@ -18,13 +18,8 @@ export const replaceAllAndPrompt = async (
   const confirmTitle = ViewletSearchStrings.replaceAll()
   const confirmAccept = ViewletSearchStrings.replace()
   const confirmText = GetReplaceAllConfirmText.getReplaceAllConfirmText(matchCount, fileCount, replacement)
-  const shouldReplace = await ConfirmPrompt.prompt(confirmText, {
+  return ConfirmPrompt.prompt(confirmText, {
     confirmMessage: confirmAccept,
     title: confirmTitle,
   })
-  if (shouldReplace) {
-    // TODO
-    // await TextSearchReplaceAll.replaceAll(workspacePath, items, replacement)
-  }
-  return shouldReplace
 }

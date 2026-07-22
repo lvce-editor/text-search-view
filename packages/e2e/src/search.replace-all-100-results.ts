@@ -2,7 +2,7 @@ import type { Test } from '@lvce-editor/test-with-playwright'
 
 export const name = 'search.replace-all-100-results'
 
-export const test: Test = async ({ expect, FileSystem, Locator, Main, Search, SideBar, Workspace }) => {
+export const test: Test = async ({ Dialog, expect, FileSystem, Locator, Main, Search, SideBar, Workspace }) => {
   // arrange
   const tmpDir = await FileSystem.getTmpDir()
   const promises: Promise<void>[] = []
@@ -18,6 +18,7 @@ export const test: Test = async ({ expect, FileSystem, Locator, Main, Search, Si
   const viewletSearch = Locator('.Search')
   const message = viewletSearch.locator('[role="status"]')
   await expect(message).toHaveText('100 results in 100 files')
+  await Dialog.mockConfirm(() => true)
 
   // act
   await Search.replaceAll()
