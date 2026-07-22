@@ -1,12 +1,11 @@
 import { expect, test } from '@jest/globals'
-import { IconThemeWorker, RendererWorker } from '@lvce-editor/rpc-registry'
+import { IconThemeWorker, RendererWorker, TextSearchWorker } from '@lvce-editor/rpc-registry'
 import type { SearchResult } from '../src/parts/SearchResult/SearchResult.ts'
 import type { SearchState } from '../src/parts/SearchState/SearchState.ts'
 import type { TextSearchOptions } from '../src/parts/TextSearchOptions/TextSearchOptions.ts'
 import * as CreateDefaultState from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
 import { handleUpdateFull } from '../src/parts/HandleUpdateFull/HandleUpdateFull.ts'
 import * as SearchFlags from '../src/parts/SearchFlags/SearchFlags.ts'
-import { add } from '../src/parts/TextSearchProviders/TextSearchProviders.ts'
 
 test('handleUpdateFull - sets limitHit to true when search hits limit', async () => {
   using mockRpc = IconThemeWorker.registerMockRpc({
@@ -37,8 +36,8 @@ test('handleUpdateFull - sets limitHit to true when search hits limit', async ()
     { end: 6, lineNumber: 1, start: 0, text: 'match1', type: 2 },
   ]
 
-  add({
-    async ''(): Promise<{ results: readonly SearchResult[]; limitHit: boolean }> {
+  using _mockTextSearchWorker = TextSearchWorker.registerMockRpc({
+    async 'TextSearch.search'(): Promise<{ results: readonly SearchResult[]; limitHit: boolean }> {
       return {
         limitHit: true,
         results: searchResults,
@@ -95,8 +94,8 @@ test('handleUpdateFull - sets limitHit to false when search does not hit limit',
     { end: 6, lineNumber: 1, start: 0, text: 'match1', type: 2 },
   ]
 
-  add({
-    async ''(): Promise<{ results: readonly SearchResult[]; limitHit: boolean }> {
+  using _mockTextSearchWorker = TextSearchWorker.registerMockRpc({
+    async 'TextSearch.search'(): Promise<{ results: readonly SearchResult[]; limitHit: boolean }> {
       return {
         limitHit: false,
         results: searchResults,
@@ -126,8 +125,12 @@ test('handleUpdateFull - sets limitHit to false when search does not hit limit',
 
 test('handleUpdateFull - passes enabled search options to the provider', async () => {
   let receivedOptions: TextSearchOptions | undefined
-  add({
-    async ''(_scheme, _root, _query, options): Promise<{ results: readonly SearchResult[]; limitHit: boolean }> {
+  using _mockTextSearchWorker = TextSearchWorker.registerMockRpc({
+    async 'TextSearch.search'(
+      _root: string,
+      _query: string,
+      options: TextSearchOptions,
+    ): Promise<{ results: readonly SearchResult[]; limitHit: boolean }> {
       receivedOptions = options
       return {
         limitHit: false,
@@ -157,8 +160,8 @@ test('handleUpdateFull - passes enabled search options to the provider', async (
 })
 
 test('handleUpdateFull - rejects a provider result that is not an array', async () => {
-  add({
-    async ''(): Promise<any> {
+  using _mockTextSearchWorker = TextSearchWorker.registerMockRpc({
+    async 'TextSearch.search'(): Promise<any> {
       return {
         limitHit: false,
         results: {},

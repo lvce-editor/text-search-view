@@ -1,5 +1,5 @@
 import { expect, test } from '@jest/globals'
-import { RendererWorker } from '@lvce-editor/rpc-registry'
+import { RendererWorker, TextSearchWorker } from '@lvce-editor/rpc-registry'
 import type { SearchResult } from '../src/parts/SearchResult/SearchResult.ts'
 import type { SearchState } from '../src/parts/SearchState/SearchState.ts'
 import * as CreateDefaultState from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
@@ -7,14 +7,12 @@ import { handleUpdatePullBased } from '../src/parts/HandleUpdatePullBased/Handle
 import * as SearchFlags from '../src/parts/SearchFlags/SearchFlags.ts'
 import * as SearchStrings from '../src/parts/SearchStrings/SearchStrings.ts'
 import * as SearchViewStates from '../src/parts/SearchViewStates/SearchViewStates.ts'
-import { reset, set } from '../src/parts/TextSearchProviders/TextSearchProviders.ts'
 import * as TextSearchResultType from '../src/parts/TextSearchResultType/TextSearchResultType.ts'
 
 test('handleUpdatePullBased - enables pull-based mode for file protocol and computes summary from latest state', async () => {
   using mockRendererWorker = RendererWorker.registerMockRpc({
     'MeasureTextHeight.measureTextBlockHeight': () => 18,
   })
-  reset()
   const state: SearchState = {
     ...CreateDefaultState.createDefaultState(),
     uid: 101,
@@ -42,12 +40,12 @@ test('handleUpdatePullBased - enables pull-based mode for file protocol and comp
 
   let seenOptions: any
   let seenUid = -1
-  set({
-    async ''(_scheme, _root, _query, options, _assetDir, _platform, searchId, uid) {
+  using _mockTextSearchWorker = TextSearchWorker.registerMockRpc({
+    async 'TextSearch.search'(_root: string, _query: string, options: any, _assetDir: string, _platform: number, searchId: string, uid: number) {
       seenOptions = options
-      seenUid = uid as number
-      const latest = SearchViewStates.get(uid as number)
-      SearchViewStates.set(uid as number, latest.oldState, {
+      seenUid = uid
+      const latest = SearchViewStates.get(uid)
+      SearchViewStates.set(uid, latest.oldState, {
         ...latest.newState,
         items: pulledResults,
         listItems: pulledResults,
@@ -84,7 +82,6 @@ test('handleUpdatePullBased - enables pull-based mode for file protocol and comp
 })
 
 test('handleUpdatePullBased - disables pull-based mode for non-file protocol and ignores default excludes when flag is off', async () => {
-  reset()
   const state: SearchState = {
     ...CreateDefaultState.createDefaultState(),
     flags: 0,
@@ -95,8 +92,8 @@ test('handleUpdatePullBased - disables pull-based mode for non-file protocol and
   }
 
   let seenOptions: any
-  set({
-    async memfs(_scheme, _root, _query, options) {
+  using _mockTextSearchWorker = TextSearchWorker.registerMockRpc({
+    async 'TextSearch.search'(_root: string, _query: string, options: any) {
       seenOptions = options
       return {
         limitHit: false,
@@ -124,7 +121,6 @@ test('handleUpdatePullBased - disables pull-based mode for non-file protocol and
 })
 
 test('handleUpdatePullBased - returns previous state when latest state cannot be retrieved', async () => {
-  reset()
   const state: SearchState = {
     ...CreateDefaultState.createDefaultState(),
     uid: 103,
@@ -133,9 +129,9 @@ test('handleUpdatePullBased - returns previous state when latest state cannot be
   }
 
   let seenUid = -1
-  set({
-    async ''(_scheme, _root, _query, _options, _assetDir, _platform, _searchId, uid) {
-      seenUid = uid as number
+  using _mockTextSearchWorker = TextSearchWorker.registerMockRpc({
+    async 'TextSearch.search'(_root: string, _query: string, _options: any, _assetDir: string, _platform: number, _searchId: string, uid: number) {
+      seenUid = uid
       return {
         limitHit: false,
         results: [],

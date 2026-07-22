@@ -1,9 +1,8 @@
 import { expect, test } from '@jest/globals'
-import type { SearchResult } from '../src/parts/SearchResult/SearchResult.ts'
+import { TextSearchWorker } from '@lvce-editor/rpc-registry'
 import * as CreateDefaultState from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
 import { loadContent } from '../src/parts/LoadContent/LoadContent.ts'
 import * as SearchFlags from '../src/parts/SearchFlags/SearchFlags.ts'
-import * as TextSearchProviders from '../src/parts/TextSearchProviders/TextSearchProviders.ts'
 
 test('loadContent with saved value calls handleUpdate', async () => {
   const state = CreateDefaultState.createDefaultState()
@@ -17,8 +16,8 @@ test('loadContent with saved value calls handleUpdate', async () => {
     value: 'test',
   }
 
-  TextSearchProviders.add({
-    async ''(): Promise<{ results: readonly SearchResult[]; limitHit: boolean }> {
+  using _mockTextSearchWorker = TextSearchWorker.registerMockRpc({
+    async 'TextSearch.search'() {
       return {
         limitHit: false,
         results: [],

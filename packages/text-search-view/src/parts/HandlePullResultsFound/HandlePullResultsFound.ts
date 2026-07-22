@@ -1,5 +1,4 @@
-import { PlatformType } from '@lvce-editor/constants'
-import { RendererWorker, SearchProcess } from '@lvce-editor/rpc-registry'
+import { RendererWorker } from '@lvce-editor/rpc-registry'
 import type { SearchResult } from '../SearchResult/SearchResult.ts'
 import type { SearchState } from '../SearchState/SearchState.ts'
 import * as GetFileIcons from '../GetFileIcons/GetFileIcons.ts'
@@ -9,16 +8,15 @@ import * as ScrollBarFunctions from '../ScrollBarFunctions/ScrollBarFunctions.ts
 import * as SearchStatusMessage from '../SearchStatusMessage/SearchStatusMessage.ts'
 import * as SearchViewStates from '../SearchViewStates/SearchViewStates.ts'
 
-export const handlePullResultsFound = async (state: SearchState, resultSearchId: string): Promise<SearchState> => {
-  const { fileIconCache, headerHeight, height, itemHeight, listItems, minimumSliderSize, platform, searchId, uid } = state
+export const handlePullResultsFound = async (
+  state: SearchState,
+  resultSearchId: string,
+  newResults: readonly SearchResult[],
+): Promise<SearchState> => {
+  const { fileIconCache, headerHeight, height, itemHeight, listItems, minimumSliderSize, searchId, uid } = state
   if (searchId !== resultSearchId) {
     return state
   }
-  const result: readonly SearchResult[] =
-    platform === PlatformType.Remote || platform === PlatformType.Electron
-      ? await SearchProcess.invoke('TextSearch.getPullResults', searchId)
-      : await RendererWorker.invoke('SearchProcess.invoke', 'TextSearch.getPullResults', searchId)
-  const newResults = result
   const allResults = [...listItems, ...newResults]
   const { fileCount, resultCount } = GetTextSearchResultCounts.getTextSearchResultCounts(allResults)
   const message = SearchStatusMessage.getStatusMessage(resultCount, fileCount)

@@ -11,30 +11,14 @@ test('handlePullResultsFound - ignores stale search id', async () => {
     searchId: 'active-search',
   }
 
-  const result = await handlePullResultsFound(state, 'stale-search')
+  const result = await handlePullResultsFound(state, 'stale-search', [])
 
   expect(result).toBe(state)
 })
 
-test('handlePullResultsFound - fetches and merges pull results', async () => {
+test('handlePullResultsFound - merges results received from the text search worker', async () => {
   using mockRendererWorker = RendererWorker.registerMockRpc({
     'Search.rerender': () => undefined,
-    'SearchProcess.invoke': () => [
-      {
-        end: 0,
-        lineNumber: 0,
-        start: 0,
-        text: 'file1.txt',
-        type: TextSearchResultType.File,
-      },
-      {
-        end: 4,
-        lineNumber: 1,
-        start: 0,
-        text: 'test',
-        type: TextSearchResultType.Match,
-      },
-    ],
   })
   IconThemeWorker.registerMockRpc({
     'IconTheme.getIcons': () => ['file-icon'],
@@ -50,7 +34,23 @@ test('handlePullResultsFound - fetches and merges pull results', async () => {
   }
   SearchViewStates.set(state.uid, state, state)
 
-  const result = await handlePullResultsFound(state, 'active-search')
+  const newResults = [
+    {
+      end: 0,
+      lineNumber: 0,
+      start: 0,
+      text: 'file1.txt',
+      type: TextSearchResultType.File,
+    },
+    {
+      end: 4,
+      lineNumber: 1,
+      start: 0,
+      text: 'test',
+      type: TextSearchResultType.Match,
+    },
+  ]
+  const result = await handlePullResultsFound(state, 'active-search', newResults)
   const { newState } = SearchViewStates.get(state.uid)
 
   expect(result).toBe(state)
@@ -95,5 +95,5 @@ test('handlePullResultsFound - fetches and merges pull results', async () => {
     maxLineY: 2,
     message: '1 result in 1 file',
   })
-  expect(mockRendererWorker.invocations).toEqual([['SearchProcess.invoke', 'TextSearch.getPullResults', 'active-search'], ['Search.rerender']])
+  expect(mockRendererWorker.invocations).toEqual([['Search.rerender']])
 })
