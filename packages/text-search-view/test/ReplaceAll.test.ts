@@ -1,6 +1,6 @@
 import type { AsyncCommandContext } from '@lvce-editor/viewlet-registry'
 import { expect, test } from '@jest/globals'
-import { RendererWorker } from '@lvce-editor/rpc-registry'
+import { DialogWorker, RendererWorker } from '@lvce-editor/rpc-registry'
 import type { SearchState } from '../src/parts/SearchState/SearchState.ts'
 import * as CreateDefaultState from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
 import { replaceAll, replaceAllWithProgress } from '../src/parts/ReplaceAll/ReplaceAll.ts'
@@ -9,10 +9,10 @@ import * as TextSearchResultType from '../src/parts/TextSearchResultType/TextSea
 test('replaceAll - replaces all matches and updates state', async () => {
   using mockRpc = RendererWorker.registerMockRpc({
     'BulkReplacement.applyBulkReplacement'() {},
-    'ConfirmPrompt.prompt'() {
-      return true
-    },
     'Layout.handleWorkspaceRefresh'() {},
+  })
+  using mockDialogRpc = DialogWorker.registerMockRpc({
+    'ConfirmPrompt.prompt': () => true,
   })
 
   const state: SearchState = {
@@ -38,7 +38,7 @@ test('replaceAll - replaces all matches and updates state', async () => {
     message: "Replaced 2 occurrences across 2 files with 'new-text'",
     minLineY: 0,
   })
-  expect(mockRpc.invocations).toEqual([
+  expect(mockDialogRpc.invocations).toEqual([
     [
       'ConfirmPrompt.prompt',
       "Replace 2 occurrences across 2 files with 'new-text'",
@@ -47,6 +47,8 @@ test('replaceAll - replaces all matches and updates state', async () => {
         title: 'Replace All',
       },
     ],
+  ])
+  expect(mockRpc.invocations).toEqual([
     [
       'BulkReplacement.applyBulkReplacement',
       [
@@ -81,7 +83,7 @@ test('replaceAll - replaces all matches and updates state', async () => {
 })
 
 test('replaceAll - user cancels replacement', async () => {
-  using mockRpc = RendererWorker.registerMockRpc({
+  using mockRpc = DialogWorker.registerMockRpc({
     'ConfirmPrompt.prompt'() {
       return false
     },
@@ -124,11 +126,11 @@ test('replaceAllWithProgress - renders progress before applying replacements', a
       notifyReplacementStarted()
       await continueReplacement
     },
-    'ConfirmPrompt.prompt'() {
-      return true
-    },
     'Layout.handleWorkspaceRefresh'() {},
     'Search.rerender'() {},
+  })
+  using mockDialogRpc = DialogWorker.registerMockRpc({
+    'ConfirmPrompt.prompt': () => true,
   })
 
   let currentState: SearchState = {
@@ -158,7 +160,7 @@ test('replaceAllWithProgress - renders progress before applying replacements', a
   await replacementStarted
 
   expect(currentState.message).toBe('Replacing 2 occurrences across 2 files…')
-  expect(mockRpc.invocations.slice(0, 3)).toEqual([
+  expect(mockDialogRpc.invocations).toEqual([
     [
       'ConfirmPrompt.prompt',
       "Replace 2 occurrences across 2 files with 'new-text'",
@@ -167,6 +169,8 @@ test('replaceAllWithProgress - renders progress before applying replacements', a
         title: 'Replace All',
       },
     ],
+  ])
+  expect(mockRpc.invocations.slice(0, 2)).toEqual([
     ['Search.rerender'],
     [
       'BulkReplacement.applyBulkReplacement',
@@ -228,13 +232,13 @@ test('replaceAllWithProgress - reports progress for the focused file', async () 
   }
   using mockRpc = RendererWorker.registerMockRpc({
     'BulkReplacement.applyBulkReplacement'() {},
-    'ConfirmPrompt.prompt'() {
-      return true
-    },
     'Layout.handleWorkspaceRefresh'() {},
     'Search.rerender'() {
       expect(currentState.message).toBe('Replacing 1 occurrence across 1 file…')
     },
+  })
+  using mockDialogRpc = DialogWorker.registerMockRpc({
+    'ConfirmPrompt.prompt': () => true,
   })
   const context: AsyncCommandContext<SearchState> = {
     getState() {
@@ -249,7 +253,8 @@ test('replaceAllWithProgress - reports progress for the focused file', async () 
   await replaceAllWithProgress(context)
 
   expect(currentState.message).toBe("Replaced 1 occurrence across 1 file with 'new-text'")
-  expect(mockRpc.invocations[0]).toEqual([
+  expect(mockRpc.invocations.length).toBeGreaterThan(0)
+  expect(mockDialogRpc.invocations[0]).toEqual([
     'ConfirmPrompt.prompt',
     "Replace 1 occurrence across 1 file with 'new-text'",
     {
@@ -260,7 +265,7 @@ test('replaceAllWithProgress - reports progress for the focused file', async () 
 })
 
 test('replaceAllWithProgress - user cancels before progress is rendered', async () => {
-  using mockRpc = RendererWorker.registerMockRpc({
+  using mockRpc = DialogWorker.registerMockRpc({
     'ConfirmPrompt.prompt'() {
       return false
     },
@@ -306,10 +311,10 @@ test('replaceAllWithProgress - user cancels before progress is rendered', async 
 test('replaceAll - replaces all matches in focused file only and updates state', async () => {
   using mockRpc = RendererWorker.registerMockRpc({
     'BulkReplacement.applyBulkReplacement'() {},
-    'ConfirmPrompt.prompt'() {
-      return true
-    },
     'Layout.handleWorkspaceRefresh'() {},
+  })
+  using mockDialogRpc = DialogWorker.registerMockRpc({
+    'ConfirmPrompt.prompt': () => true,
   })
 
   const state: SearchState = {
@@ -353,7 +358,7 @@ test('replaceAll - replaces all matches in focused file only and updates state',
     message: "Replaced 1 occurrence across 1 file with 'new-text'",
     scrollBarHeight: 20,
   })
-  expect(mockRpc.invocations).toEqual([
+  expect(mockDialogRpc.invocations).toEqual([
     [
       'ConfirmPrompt.prompt',
       "Replace 1 occurrence across 1 file with 'new-text'",
@@ -362,6 +367,8 @@ test('replaceAll - replaces all matches in focused file only and updates state',
         title: 'Replace All',
       },
     ],
+  ])
+  expect(mockRpc.invocations).toEqual([
     [
       'BulkReplacement.applyBulkReplacement',
       [

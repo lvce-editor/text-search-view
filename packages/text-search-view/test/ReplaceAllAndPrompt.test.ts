@@ -1,9 +1,9 @@
 import { expect, test } from '@jest/globals'
-import { RendererWorker } from '@lvce-editor/rpc-registry'
+import { DialogWorker, RendererWorker } from '@lvce-editor/rpc-registry'
 import * as ReplaceAllAndPrompt from '../src/parts/ReplaceAllAndPrompt/ReplaceAllAndPrompt.ts'
 
 test('replaceAllAndPrompt - user cancels prompt', async () => {
-  using mockRpc = RendererWorker.registerMockRpc({
+  using mockRpc = DialogWorker.registerMockRpc({
     'ConfirmPrompt.prompt': () => false,
   })
 
@@ -23,7 +23,7 @@ test('replaceAllAndPrompt - user cancels prompt', async () => {
 })
 
 test('replaceAllAndPrompt - user confirms prompt', async () => {
-  using mockRpc = RendererWorker.registerMockRpc({
+  using mockRpc = DialogWorker.registerMockRpc({
     'ConfirmPrompt.prompt': () => true,
   })
 
