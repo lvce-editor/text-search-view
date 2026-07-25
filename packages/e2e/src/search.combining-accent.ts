@@ -4,11 +4,11 @@ export const name = 'search.combining-accent'
 
 export const test: Test = async ({ expect, FileSystem, Locator, Search, SideBar, Workspace }) => {
   const tmpDir = await FileSystem.getTmpDir()
-  await FileSystem.writeFile(`${tmpDir}/test.txt`, `cafe\u0301`)
+  await FileSystem.writeFile(`${tmpDir}/test.txt`, `cafe\u{301}`)
   await Workspace.setPath(tmpDir)
   await SideBar.open('Search')
 
-  await Search.setValue('e\u0301')
+  await Search.setValue('e\u{301}')
 
   const message = Locator('.Search').locator('[role="status"]')
   await expect(message).toHaveText('1 result in 1 file')
