@@ -1,6 +1,5 @@
 export const ClearSearchResults = 'Clear Search Results'
 export const CollapseAll = 'Collapse All'
-export const ConfirmReplaceAll = 'Replace All?'
 export const ConfirmReplaceManyOccurrencesInManyFiles = "Replace {PH1} occurrences across {PH2} files with '{PH3}'"
 export const ConfirmReplaceManyOccurrencesInManyFilesNoValue = 'Replace {PH1} occurrences across {PH2} files'
 export const ConfirmReplaceManyOccurrencesInOneFile = "Replace {PH1} occurrences across 1 file with '{PH2}'"
@@ -36,7 +35,6 @@ export const ReplacingManyOccurrencesInManyFiles = 'Replacing {PH1} occurrences 
 export const ReplacingManyOccurrencesInOneFile = 'Replacing {PH1} occurrences across 1 file…'
 export const ReplacingOneOccurrenceInOneFile = 'Replacing 1 occurrence across 1 file…'
 export const ReplacedManyOccurrencesInManyFiles = "Replaced {PH1} occurrences across {PH2} files with '{PH3}'"
-export const ReplacedManyOccurrencesInOneFile = "Replaced {PH1} occurrences across 1 file with '{PH2}'"
 export const ReplacedOneOccurrenceInOneFile = "Replaced 1 occurrence across 1 file with '{PH1}'"
 export const ReplaceForHistory = 'Replace (⇅ for history)'
 export const Search = 'Search'
