@@ -1,6 +1,7 @@
+import { defineConfig } from 'eslint/config'
 import * as config from '@lvce-editor/eslint-config'
 
-export default [
+export default defineConfig([
   ...config.default,
   ...config.recommendedActions,
   ...config.recommendedTsconfig,
@@ -53,4 +54,4 @@ export default [
       '@cspell/spellchecker': 'off',
     },
   },
-]
+])
