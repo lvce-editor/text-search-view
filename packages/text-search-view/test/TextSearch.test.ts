@@ -1,5 +1,5 @@
 import { expect, test } from '@jest/globals'
-import { TextSearchWorker } from '@lvce-editor/rpc-registry'
+import { RendererWorker, TextSearchWorker } from '@lvce-editor/rpc-registry'
 import type { TextSearchOptions } from '../src/parts/TextSearchOptions/TextSearchOptions.ts'
 import { textSearch } from '../src/parts/TextSearch/TextSearch.ts'
 
@@ -33,4 +33,46 @@ test('textSearch - delegates searching to the text search worker', async () => {
 
   expect(result).toEqual(completion)
   expect(mockRpc.invocations).toEqual([['TextSearch.search', 'file:///workspace', 'search term', options, '/assets', 1, 'search-1', 42]])
+})
+
+test('textSearch - supplies open editor uris when the filter is enabled', async () => {
+  using rendererRpc = RendererWorker.registerMockRpc({
+    'GetActiveEditor.getOpenEditorUris': () => ['file:///workspace/src/app.ts'],
+  })
+  using textSearchRpc = TextSearchWorker.registerMockRpc({
+    'TextSearch.search': () => ({ limitHit: false, results: [] }),
+  })
+  const options = {
+    assetDir: '/assets',
+    contextLines: 0,
+    exclude: '',
+    flags: 64,
+    include: '',
+    isCaseSensitive: false,
+    limit: 20_000,
+    matchWholeWord: false,
+    query: 'needle',
+    root: 'file:///workspace',
+    scheme: 'file',
+    threads: 1,
+    useIgnoreFiles: true,
+    usePullBasedSearch: false,
+    useRegularExpression: false,
+  } satisfies TextSearchOptions
+
+  await textSearch('file:///workspace', 'needle', options, '/assets', 1, 'search-1', 42)
+
+  expect(rendererRpc.invocations).toEqual([['GetActiveEditor.getOpenEditorUris']])
+  expect(textSearchRpc.invocations).toEqual([
+    [
+      'TextSearch.search',
+      'file:///workspace',
+      'needle',
+      { ...options, openEditorUris: ['file:///workspace/src/app.ts'] },
+      '/assets',
+      1,
+      'search-1',
+      42,
+    ],
+  ])
 })
