@@ -100,3 +100,23 @@ test('getDisplayResult - result', () => {
     title: 'fun main(args : Array<String>) {',
   })
 })
+
+test('getDisplayResult - context has no match or replacement highlight', () => {
+  const results: readonly SearchResult[] = [
+    {
+      end: 0,
+      lineNumber: 4,
+      start: 0,
+      text: 'context before primary match',
+      type: 3,
+    },
+  ]
+
+  expect(GetSearchDisplayResult.getDisplayResult(results, [], 0, 1, 6, 'replacement', -1, [], false, 0, results)).toMatchObject({
+    matchLength: 0,
+    matchStart: 0,
+    replacement: '',
+    text: 'context before primary match',
+    title: 'context before primary match',
+  })
+})

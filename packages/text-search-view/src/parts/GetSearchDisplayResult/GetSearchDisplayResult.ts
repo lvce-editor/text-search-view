@@ -23,6 +23,8 @@ export const getDisplayResult = (
   const focused = i === focusedIndex
   const relativeIndex = i - minLineY
   switch (type) {
+    case TextSearchResultType.Context:
+      return GetSearchDisplayResultMatch.getDisplayResultMatch(setSize, 0, '', text, posInSet, 0, focused)
     case TextSearchResultType.File:
       return GetSearchDisplayResultFile.getSearchDisplayResultFile(
         results,

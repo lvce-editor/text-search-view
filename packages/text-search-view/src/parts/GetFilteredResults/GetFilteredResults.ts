@@ -12,7 +12,7 @@ export const getFilteredResults = (results: readonly SearchResult[], collapsedPa
       filteredResults.push(result)
       isExcluded = collapsedPaths.includes(result.text) ? true : false
     }
-    if (result.type === TextSearchResultType.Match && !isExcluded) {
+    if ((result.type === TextSearchResultType.Match || result.type === TextSearchResultType.Context) && !isExcluded) {
       filteredResults.push(result)
     }
   }

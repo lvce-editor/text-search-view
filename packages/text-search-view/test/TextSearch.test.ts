@@ -13,6 +13,7 @@ test('textSearch - delegates searching to the text search worker', async () => {
   })
   const options = {
     assetDir: '/assets',
+    contextLines: 0,
     exclude: '',
     flags: 0,
     include: '*.ts',

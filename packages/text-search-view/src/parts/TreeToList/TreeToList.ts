@@ -13,9 +13,7 @@ export const treeToList = (map: Tree, root: string): readonly SearchResult[] => 
     const count = children.length
     for (let i = 0; i < count; i++) {
       const child = children[i]
-      if (child.type === TextSearchResultType.Match) {
-        items.push(child)
-      } else {
+      if (child.type === TextSearchResultType.File) {
         const childPath = join2(path, child.text)
         const absolutePath = `${root}${childPath}`
         items.push({
@@ -23,6 +21,8 @@ export const treeToList = (map: Tree, root: string): readonly SearchResult[] => 
           text: absolutePath,
         })
         processChildren(childPath, depth + 1)
+      } else {
+        items.push(child)
       }
     }
   }

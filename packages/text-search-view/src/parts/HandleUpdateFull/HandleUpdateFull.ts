@@ -16,6 +16,8 @@ export const handleUpdateFull = async (state: SearchState, update: Partial<Searc
   const partialNewState = { ...state, ...update }
   const {
     assetDir,
+    contextLines,
+    contextLinesEnabled,
     excludeValue,
     fileIconCache,
     flags,
@@ -41,6 +43,7 @@ export const handleUpdateFull = async (state: SearchState, update: Partial<Searc
     value,
     {
       assetDir,
+      contextLines: contextLinesEnabled ? contextLines : 0,
       defaultExcludes: SearchFlags.hasUseIgnoreFiles(flags) ? partialNewState.defaultExcludes : [],
       exclude: excludeValue,
       flags,

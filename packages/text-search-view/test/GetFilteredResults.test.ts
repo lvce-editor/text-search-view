@@ -31,6 +31,23 @@ test('getFilteredResults - filters matches under collapsed file', () => {
   ])
 })
 
+test('getFilteredResults - filters context under collapsed file', () => {
+  const results: SearchResult[] = [
+    { end: 0, lineNumber: 0, start: 0, text: 'file1.txt', type: TextSearchResultType.File },
+    { end: 0, lineNumber: 1, start: 0, text: 'context before', type: TextSearchResultType.Context },
+    { end: 6, lineNumber: 2, start: 0, text: 'match1', type: TextSearchResultType.Match },
+    { end: 0, lineNumber: 3, start: 0, text: 'context after', type: TextSearchResultType.Context },
+    { end: 0, lineNumber: 0, start: 0, text: 'file2.txt', type: TextSearchResultType.File },
+    { end: 6, lineNumber: 1, start: 0, text: 'match2', type: TextSearchResultType.Match },
+  ]
+
+  expect(GetFilteredResults.getFilteredResults(results, ['file1.txt'])).toEqual([
+    { end: 0, lineNumber: 0, start: 0, text: 'file1.txt', type: TextSearchResultType.File },
+    { end: 0, lineNumber: 0, start: 0, text: 'file2.txt', type: TextSearchResultType.File },
+    { end: 6, lineNumber: 1, start: 0, text: 'match2', type: TextSearchResultType.Match },
+  ])
+})
+
 test('getFilteredResults - handles multiple collapsed files', () => {
   const results: SearchResult[] = [
     { end: 0, lineNumber: 0, start: 0, text: 'file1.txt', type: TextSearchResultType.File },

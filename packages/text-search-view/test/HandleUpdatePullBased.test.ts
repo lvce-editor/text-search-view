@@ -15,6 +15,8 @@ test('handleUpdatePullBased - enables pull-based mode for file protocol and comp
   })
   const state: SearchState = {
     ...CreateDefaultState.createDefaultState(),
+    contextLines: 2,
+    contextLinesEnabled: true,
     uid: 101,
     usePullBasedSearch: true,
     value: 'before',
@@ -69,6 +71,7 @@ test('handleUpdatePullBased - enables pull-based mode for file protocol and comp
     value: 'test',
   })
   expect(seenOptions).toMatchObject({
+    contextLines: 2,
     defaultExcludes: state.defaultExcludes,
     query: 'test',
     root: '/test',

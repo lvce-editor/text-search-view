@@ -7,7 +7,8 @@ import * as TextSearchIncremental from '../TextSearchIncremental/TextSearchIncre
 export const handleUpdateIncremental = async (state: SearchState, update: Partial<SearchState>): Promise<SearchState> => {
   const { workspacePath } = state
   const partialNewState = { ...state, ...update }
-  const { assetDir, excludeValue, flags, includeValue, limit, platform, threads, uid, usePullBasedSearch, value } = partialNewState
+  const { assetDir, contextLines, contextLinesEnabled, excludeValue, flags, includeValue, limit, platform, threads, uid, usePullBasedSearch, value } =
+    partialNewState
   const root = workspacePath
   const scheme = GetProtocol.getProtocol(root)
   const searchId = crypto.randomUUID() // TODO try to avoid side effect
@@ -25,6 +26,7 @@ export const handleUpdateIncremental = async (state: SearchState, update: Partia
     value,
     {
       assetDir: assetDir,
+      contextLines: contextLinesEnabled ? contextLines : 0,
       defaultExcludes: SearchFlags.hasUseIgnoreFiles(flags) ? partialNewState.defaultExcludes : [],
       exclude: excludeValue,
       flags,

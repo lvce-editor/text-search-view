@@ -6,6 +6,7 @@ import * as TextSearchResultType from '../src/parts/TextSearchResultType/TextSea
 test('getTextSearchResultCounts returns correct counts for mixed results', () => {
   const results: readonly SearchResult[] = [
     { end: 0, lineNumber: 0, start: 0, text: 'file1.txt', type: TextSearchResultType.File },
+    { end: 0, lineNumber: 1, start: 0, text: 'context before', type: TextSearchResultType.Context },
     { end: 6, lineNumber: 0, start: 0, text: 'match1', type: TextSearchResultType.Match },
     { end: 0, lineNumber: 1, start: 0, text: 'file2.txt', type: TextSearchResultType.File },
     { end: 6, lineNumber: 1, start: 0, text: 'match2', type: TextSearchResultType.Match },

@@ -40,6 +40,30 @@ test('getReplacementEdits - single file with one match', () => {
   ])
 })
 
+test('getReplacementEdits - ignores context lines', () => {
+  const results: readonly SearchResult[] = [
+    { end: 0, lineNumber: 0, start: 0, text: './file.txt', type: TextSearchResultType.File },
+    { end: 0, lineNumber: 4, start: 0, text: 'context before', type: TextSearchResultType.Context },
+    { end: 6, lineNumber: 5, start: 0, text: 'needle', type: TextSearchResultType.Match },
+    { end: 0, lineNumber: 6, start: 0, text: 'context after', type: TextSearchResultType.Context },
+  ]
+
+  expect(GetReplacementEdits.getReplaceElements(results, '/test', 'pin')).toEqual([
+    {
+      changes: [
+        {
+          endColumnIndex: 6,
+          endRowIndex: 5,
+          startColumnIndex: 0,
+          startRowIndex: 4,
+          text: 'pin',
+        },
+      ],
+      uri: '/test/file.txt',
+    },
+  ])
+})
+
 test('getReplacementEdits - multiple files with matches', () => {
   const workspacePath = '/test'
   const results: readonly SearchResult[] = [
