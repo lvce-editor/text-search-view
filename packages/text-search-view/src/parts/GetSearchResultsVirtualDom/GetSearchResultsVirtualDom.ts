@@ -2,7 +2,7 @@ import { AriaRoles } from '@lvce-editor/constants'
 import { ClassNames, VirtualDomElements } from '@lvce-editor/virtual-dom-worker'
 import type { DisplaySearchResult } from '../DisplaySearchResult/DisplaySearchResult.ts'
 import type { VirtualDomNode } from '../VirtualDomNode/VirtualDomNode.ts'
-import { HandleListBlur } from '../DomEventListenerFunctions/DomEventListenerFunctions.ts'
+import { HandleListBlur, HandleListFocus } from '../DomEventListenerFunctions/DomEventListenerFunctions.ts'
 import * as GetScrollBarVirtualDom from '../GetScrollBarVirtualDom/GetScrollBarVirtualDom.ts'
 import * as GetTreeItemsVirtualDom from '../GetTreeItemsVirtualDom/GetTreeItemsVirtualDom.ts'
 import * as MergeClassNames from '../MergeClassNames/MergeClassNames.ts'
@@ -28,12 +28,12 @@ export const getSearchResultsVirtualDom = (
         focusOutline ? ClassNames.FocusOutline : ClassNames.Empty,
       ),
       onBlur: HandleListBlur,
+      onFocus: HandleListFocus,
       role: AriaRoles.Tree,
       tabIndex: TabIndex.Focusable,
       type: VirtualDomElements.Div,
       // TODO renable this when dom diffing is supported
       // onPointerDown: HandleListPointerDown,
-      // onFocus: HandleListFocus,
     },
     ...GetTreeItemsVirtualDom.getTreeItemsVirtualDom(visibleItems, deltaY, itemHeight),
     ...GetScrollBarVirtualDom.getScrollBarVirtualDom(scrollbarHeight, scrollBarY, scrollBarValue),

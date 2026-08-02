@@ -219,11 +219,11 @@ test('getSearchVirtualDom returns correct virtual DOM structure', () => {
       childCount: 1,
       className: 'Viewlet List Tree',
       onBlur: DomEventListenerFunctions.HandleListBlur,
+      onFocus: DomEventListenerFunctions.HandleListFocus,
       role: AriaRoles.Tree,
       tabIndex: 0,
       type: 4,
       // onPointerDown: DomEventListenerFunctions.HandleListPointerDown,
-      // onFocus: DomEventListenerFunctions.HandleListFocus,
     },
     {
       childCount: 2,
