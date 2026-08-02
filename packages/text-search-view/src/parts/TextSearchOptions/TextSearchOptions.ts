@@ -8,6 +8,7 @@ export interface TextSearchOptions {
   readonly isCaseSensitive: boolean
   readonly limit: number
   readonly matchWholeWord: boolean
+  readonly openEditorUris?: readonly string[]
 
   readonly query: string
   readonly root: string
