@@ -26,6 +26,17 @@ test('getMatchCount - matches between two files', () => {
   expect(GetMatchCount.getMatchCount(results, 0)).toBe(2)
 })
 
+test('getMatchCount - does not count context lines', () => {
+  const results: readonly SearchResult[] = [
+    { end: 0, lineNumber: 0, start: 0, text: 'file1.txt', type: TextSearchResultType.File },
+    { end: 0, lineNumber: 1, start: 0, text: 'context before', type: TextSearchResultType.Context },
+    { end: 6, lineNumber: 2, start: 0, text: 'match1', type: TextSearchResultType.Match },
+    { end: 0, lineNumber: 3, start: 0, text: 'context after', type: TextSearchResultType.Context },
+  ]
+
+  expect(GetMatchCount.getMatchCount(results, 0)).toBe(1)
+})
+
 test('getMatchCount - matches after last file', () => {
   const results: readonly SearchResult[] = [
     { end: 0, lineNumber: 0, start: 0, text: 'file1.txt', type: TextSearchResultType.File },

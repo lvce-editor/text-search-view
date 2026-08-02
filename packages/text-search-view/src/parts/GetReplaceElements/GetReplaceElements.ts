@@ -18,7 +18,7 @@ export const getReplaceElements = (items: readonly SearchResult[], workspacePath
         changes,
         uri: absolutePath,
       })
-    } else {
+    } else if (type === TextSearchResultType.Match) {
       changes.push({
         endColumnIndex: end,
         endRowIndex: lineNumber,
