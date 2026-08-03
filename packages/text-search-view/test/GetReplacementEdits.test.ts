@@ -223,3 +223,40 @@ test('getReplacementEdits - handles different file paths', () => {
     },
   ])
 })
+
+test('getReplacementEdits - uses absolute columns when the preview is truncated', () => {
+  const results: readonly SearchResult[] = [
+    {
+      end: 0,
+      lineNumber: 0,
+      start: 0,
+      text: './src/app.test.ts',
+      type: TextSearchResultType.File,
+    },
+    {
+      end: 32,
+      endColumnIndex: 41,
+      lineNumber: 3,
+      rowIndex: 2,
+      start: 26,
+      startColumnIndex: 35,
+      text: "const expected = alpha === 'needle'",
+      type: TextSearchResultType.Match,
+    },
+  ]
+
+  expect(GetReplacementEdits.getReplaceElements(results, '/workspace', 'pin')).toEqual([
+    {
+      changes: [
+        {
+          endColumnIndex: 41,
+          endRowIndex: 3,
+          startColumnIndex: 35,
+          startRowIndex: 2,
+          text: 'pin',
+        },
+      ],
+      uri: '/workspace/src/app.test.ts',
+    },
+  ])
+})

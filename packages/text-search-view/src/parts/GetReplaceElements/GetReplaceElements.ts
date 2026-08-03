@@ -9,7 +9,7 @@ export const getReplaceElements = (items: readonly SearchResult[], workspacePath
   let changes: TextEdit[] = []
   // TODO simplify code by first matching files with their elements, then creating bulk edits
   for (const match of items) {
-    const { end, lineNumber, start, text, type } = match
+    const { end, endColumnIndex, lineNumber, start, startColumnIndex, text, type } = match
     if (type === TextSearchResultType.File) {
       changes = []
       const fileName = GetFileName.getFilePath(text)
@@ -20,9 +20,9 @@ export const getReplaceElements = (items: readonly SearchResult[], workspacePath
       })
     } else if (type === TextSearchResultType.Match) {
       changes.push({
-        endColumnIndex: end,
+        endColumnIndex: endColumnIndex ?? end,
         endRowIndex: lineNumber,
-        startColumnIndex: start,
+        startColumnIndex: startColumnIndex ?? start,
         startRowIndex: lineNumber - 1,
         text: replacement,
       })
