@@ -8,3 +8,7 @@ test('File', () => {
 test('Match', () => {
   expect(TextSearchResultType.Match).toBe(2)
 })
+
+test('Context', () => {
+  expect(TextSearchResultType.Context).toBe(3)
+})

@@ -32,13 +32,13 @@ test('getOutsideButtonsDom - multiple buttons', () => {
   expect(items).toEqual({
     postNodes: [
       {
-        ariaChecked: false,
+        ariaChecked: undefined,
         childCount: 1,
         className: 'SearchFieldButton',
         disabled: undefined,
         name: 'Button1',
         onClick: DomEventListenerFunctions.HandleButtonClick,
-        role: AriaRoles.CheckBox,
+        role: undefined,
         tabIndex: 0,
         title: 'Button 1',
         type: 1,

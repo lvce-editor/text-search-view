@@ -141,6 +141,8 @@ test('handleUpdateFull - passes enabled search options to the provider', async (
   const flags = SearchFlags.MatchCase | SearchFlags.MatchWholeWord | SearchFlags.UseIgnoreFiles | SearchFlags.UseRegularExpression
   const state: SearchState = {
     ...CreateDefaultState.createDefaultState(),
+    contextLines: 2,
+    contextLinesEnabled: true,
     flags,
     usePullBasedSearch: true,
     value: 'test',
@@ -150,6 +152,7 @@ test('handleUpdateFull - passes enabled search options to the provider', async (
   const result = await handleUpdateFull(state, {})
 
   expect(receivedOptions).toMatchObject({
+    contextLines: 2,
     defaultExcludes: state.defaultExcludes,
     isCaseSensitive: true,
     matchWholeWord: true,
@@ -158,6 +161,27 @@ test('handleUpdateFull - passes enabled search options to the provider', async (
     useRegularExpression: true,
   })
   expect(result.searchId).not.toBe('')
+})
+
+test('handleUpdateFull - disables context in provider options when the toggle is off', async () => {
+  let receivedOptions: TextSearchOptions | undefined
+  using _mockTextSearchWorker = TextSearchWorker.registerMockRpc({
+    async 'TextSearch.search'(_root: string, _query: string, options: TextSearchOptions) {
+      receivedOptions = options
+      return { limitHit: false, results: [] }
+    },
+  })
+  const state: SearchState = {
+    ...CreateDefaultState.createDefaultState(),
+    contextLines: 2,
+    contextLinesEnabled: false,
+    value: 'test',
+    workspacePath: '/test',
+  }
+
+  await handleUpdateFull(state, {})
+
+  expect(receivedOptions?.contextLines).toBe(0)
 })
 
 test('handleUpdateFull - rejects a provider result that is not an array', async () => {

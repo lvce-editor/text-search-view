@@ -35,6 +35,35 @@ test('getSearchFieldButtonVirtualDom - enabled checkbox', () => {
   ])
 })
 
+test('getSearchFieldButtonVirtualDom - enabled button', () => {
+  const button: InputAction = {
+    flag: InputActionFlag.ButtonEnabled,
+    icon: 'MaskIconReplaceAll',
+    name: 'ReplaceAll',
+    title: 'Replace All',
+  }
+
+  expect(GetSearchFieldButtonVirtualDom.getSearchFieldButtonVirtualDom(button)).toEqual([
+    {
+      ariaChecked: undefined,
+      childCount: 1,
+      className: 'SearchFieldButton',
+      disabled: undefined,
+      name: 'ReplaceAll',
+      onClick: DomEventListenerFunctions.HandleButtonClick,
+      role: undefined,
+      tabIndex: 0,
+      title: 'Replace All',
+      type: VirtualDomElements.Button,
+    },
+    {
+      childCount: 0,
+      className: 'MaskIcon MaskIconReplaceAll',
+      type: VirtualDomElements.Span,
+    },
+  ])
+})
+
 test('getSearchFieldButtonVirtualDom - disabled button', () => {
   const button: InputAction = {
     flag: InputActionFlag.ButtonDisabled,

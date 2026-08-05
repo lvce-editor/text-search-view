@@ -14,6 +14,11 @@ test('getSelectHandler - match type', () => {
   expect(handler).toBe(SelectIndexPreview.selectIndexPreview)
 })
 
+test('getSelectHandler - context type', () => {
+  const handler = GetSelectHandler.getSelectHandler(TextSearchResultType.Context)
+  expect(handler).toBe(SelectIndexPreview.selectIndexPreview)
+})
+
 test('getSelectHandler - invalid type', () => {
   expect(() => GetSelectHandler.getSelectHandler(999)).toThrow('unexpected search result type 999')
 })

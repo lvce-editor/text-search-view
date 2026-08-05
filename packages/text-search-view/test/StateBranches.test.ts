@@ -1,6 +1,7 @@
 import { expect, test } from '@jest/globals'
 import { MouseEventType } from '@lvce-editor/constants'
 import { IconThemeWorker } from '@lvce-editor/rpc-registry'
+import { WhenExpression } from '@lvce-editor/virtual-dom-worker'
 import { createDefaultState } from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
 import { handleHeaderFocusOut } from '../src/parts/HandleHeaderFocusOut/HandleHeaderFocusOut.ts'
 import { handleListFocus } from '../src/parts/HandleListFocus/HandleListFocus.ts'
@@ -29,6 +30,7 @@ test('handleHeaderFocusOut clears header focus', () => {
 test('handleListFocus preserves an already focused list', async () => {
   const state = {
     ...createDefaultState(),
+    focus: WhenExpression.FocusSearchResults,
     listFocused: true,
   }
   expect(await handleListFocus(state)).toBe(state)
@@ -38,7 +40,20 @@ test('handleListFocus focuses the list', async () => {
   const state = createDefaultState()
   expect(await handleListFocus(state)).toEqual({
     ...state,
+    focus: WhenExpression.FocusSearchResults,
     listFocused: true,
+  })
+})
+
+test('handleListFocus repairs a stale search input focus context', async () => {
+  const state = {
+    ...createDefaultState(),
+    focus: WhenExpression.FocusSearchInput,
+    listFocused: true,
+  }
+  expect(await handleListFocus(state)).toEqual({
+    ...state,
+    focus: WhenExpression.FocusSearchResults,
   })
 })
 

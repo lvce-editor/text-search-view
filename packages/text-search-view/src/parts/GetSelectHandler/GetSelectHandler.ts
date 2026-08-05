@@ -5,6 +5,8 @@ import * as TextSearchResultType from '../TextSearchResultType/TextSearchResultT
 
 export const getSelectHandler = (type: number): SelectHandler => {
   switch (type) {
+    case TextSearchResultType.Context:
+      return SelectIndexPreview.selectIndexPreview
     case TextSearchResultType.File:
       return SelectIndexFile.selectIndexFile
     case TextSearchResultType.Match:

@@ -18,7 +18,21 @@ export const handleUpdatePullBased = async (state: SearchState, update: Partial<
   const searchId = getsearchid()
   const partialNewState: SearchState = { ...state, ...update, items: [], listItems: [], message: '', searchId, searchResults: [] }
   set(previousUid, state, partialNewState)
-  const { assetDir, excludeValue, flags, includeValue, limit, platform, threads, uid, usePullBasedSearch, value, width } = partialNewState
+  const {
+    assetDir,
+    contextLines,
+    contextLinesEnabled,
+    excludeValue,
+    flags,
+    includeValue,
+    limit,
+    platform,
+    threads,
+    uid,
+    usePullBasedSearch,
+    value,
+    width,
+  } = partialNewState
   const root = workspacePath
   const scheme = GetProtocol.getProtocol(root)
   const isFileSearch = scheme === '' || scheme === 'file'
@@ -28,6 +42,7 @@ export const handleUpdatePullBased = async (state: SearchState, update: Partial<
     value,
     {
       assetDir,
+      contextLines: contextLinesEnabled ? contextLines : 0,
       defaultExcludes: SearchFlags.hasUseIgnoreFiles(flags) ? partialNewState.defaultExcludes : [],
       exclude: excludeValue,
       flags,

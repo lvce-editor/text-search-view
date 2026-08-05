@@ -1,6 +1,6 @@
 import type { MenuEntryId } from '@lvce-editor/constants'
 
-export interface ContextMenuPropsBase {
+interface ContextMenuPropsBase {
   readonly menuId: number
 }
 

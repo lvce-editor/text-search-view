@@ -1,5 +1,6 @@
 export interface TextSearchOptions {
   readonly assetDir: string
+  readonly contextLines: number
   readonly defaultExcludes?: readonly string[]
   readonly exclude: string
   readonly flags: number
@@ -7,6 +8,7 @@ export interface TextSearchOptions {
   readonly isCaseSensitive: boolean
   readonly limit: number
   readonly matchWholeWord: boolean
+  readonly openEditorUris?: readonly string[]
 
   readonly query: string
   readonly root: string

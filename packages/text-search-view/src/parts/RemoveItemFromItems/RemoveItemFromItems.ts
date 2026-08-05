@@ -21,6 +21,19 @@ const getSetSize = (items: readonly SearchResult[], index: number): number => {
   return setSize
 }
 
+const getMatchCount = (items: readonly SearchResult[], index: number): number => {
+  let matchCount = 0
+  for (let i = index + 1; i < items.length; i++) {
+    if (items[i].type === TextSearchResultType.File) {
+      break
+    }
+    if (items[i].type === TextSearchResultType.Match) {
+      matchCount++
+    }
+  }
+  return matchCount
+}
+
 const getRemoveIndicesFile = (
   items: readonly SearchResult[],
   item: SearchResult,
@@ -29,10 +42,11 @@ const getRemoveIndicesFile = (
   fileCount: number,
 ): RemoveIndices => {
   const setSize = getSetSize(items, index)
+  const removedMatchCount = getMatchCount(items, index)
   return {
     newFileCount: fileCount - 1,
     newFocusedIndex: index + setSize + 1 < items.length ? index : index - 1,
-    newMatchCount: matchCount - setSize,
+    newMatchCount: matchCount - removedMatchCount,
     removeCount: setSize + 1,
     startIndex: index,
   }
@@ -63,9 +77,21 @@ const getRemoveIndicesMatch = (items: readonly SearchResult[], index: number, ma
   throw new Error('could not compute indices to remove')
 }
 
+const getRemoveIndicesContext = (index: number, matchCount: number, fileCount: number): RemoveIndices => {
+  return {
+    newFileCount: fileCount,
+    newFocusedIndex: index,
+    newMatchCount: matchCount,
+    removeCount: 1,
+    startIndex: index,
+  }
+}
+
 const getRemoveIndices = (items: readonly SearchResult[], index: number, matchCount: number, fileCount: number): RemoveIndices => {
   const item = items[index]
   switch (item.type) {
+    case TextSearchResultType.Context:
+      return getRemoveIndicesContext(index, matchCount, fileCount)
     case TextSearchResultType.File:
       return getRemoveIndicesFile(items, item, index, matchCount, fileCount)
     case TextSearchResultType.Match:
