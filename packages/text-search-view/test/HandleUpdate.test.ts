@@ -135,5 +135,7 @@ test.skip('handleUpdate - uses search flags from state', async () => {
     },
   })
 
-  await handleUpdate(state, update)
+  const result = await handleUpdate(state, update)
+
+  expect(result.flags).toBe(SearchFlags.MatchCase | SearchFlags.UseRegularExpression)
 })
