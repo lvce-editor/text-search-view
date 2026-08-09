@@ -18,6 +18,7 @@ export default defineConfig([
   {
     files: ['packages/text-search-view/test/**/*.ts'],
     rules: {
+      'jest/no-disabled-tests': 'off',
       'virtual-dom/no-empty-aria': 'off',
       'virtual-dom/no-inline-event-handlers': 'off',
       'virtual-dom/no-object-attribute-values': 'off',
@@ -25,6 +26,12 @@ export default defineConfig([
       'virtual-dom/prefer-merge-class-names': 'off',
       'virtual-dom/prefer-state-destructuring': 'off',
       'virtual-dom/valid-child-count': 'off',
+    },
+  },
+  {
+    files: ['packages/text-search-view/test/Diff2.test.ts', 'packages/text-search-view/test/Submit.test.ts'],
+    rules: {
+      'jest/expect-expect': 'off',
     },
   },
   {
