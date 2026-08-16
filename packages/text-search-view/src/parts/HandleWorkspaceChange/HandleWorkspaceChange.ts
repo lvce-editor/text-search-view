@@ -1,6 +1,6 @@
 import type { SearchState } from '../SearchState/SearchState.ts'
 
-export const handleWorkspaceChange = (state: SearchState): SearchState => {
+export const handleWorkspaceChange = (state: SearchState, workspacePath: string): SearchState => {
   return {
     ...state,
     deltaY: 0,
@@ -12,5 +12,6 @@ export const handleWorkspaceChange = (state: SearchState): SearchState => {
     minLineY: 0,
     replacement: '',
     value: '',
+    workspacePath,
   }
 }
