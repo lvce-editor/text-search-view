@@ -19,7 +19,7 @@ test('handleWorkspaceChange - clears search, replace, and search results', () =>
     workspacePath: 'test',
   }
 
-  const result = HandleWorkspaceChange.handleWorkspaceChange(state)
+  const result = HandleWorkspaceChange.handleWorkspaceChange(state, '/new-workspace')
 
   expect(result).toEqual({
     ...state,
@@ -32,5 +32,6 @@ test('handleWorkspaceChange - clears search, replace, and search results', () =>
     minLineY: 0,
     replacement: '',
     value: '',
+    workspacePath: '/new-workspace',
   })
 })
