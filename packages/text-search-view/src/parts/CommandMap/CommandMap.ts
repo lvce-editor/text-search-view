@@ -96,6 +96,8 @@ import * as ToggleUseRegularExpression from '../ToggleUseRegularExpression/Toggl
 import * as ViewAsTree from '../ViewAsTree/ViewAsTree.ts'
 import * as ViewletSearchHandleContextMenu from '../ViewletSearchHandleContextMenu/ViewletSearchHandleContextMenu.ts'
 
+const handleDirectMessagePort = (port: MessagePort): Promise<void> => HandleMessagePort.handleMessagePort(port, commandMap)
+
 export const commandMap = {
   'TextSearch.clearSearchResults': WrapCommand.wrapCommand(ClearSearchResults.clearSearchResults),
   'TextSearch.collapseAll': WrapCommand.wrapCommand(CollapseAll.collapseAll),
@@ -162,7 +164,7 @@ export const commandMap = {
   'TextSearch.handleListBlur': WrapCommand.wrapCommand(HandleListBlur.handleListBlur),
   'TextSearch.handleListFocus': WrapCommand.wrapCommand(handleListFocus),
   'TextSearch.handleListPointerDown': WrapCommand.wrapCommand(handleListPointerDown),
-  'TextSearch.handleMessagePort': HandleMessagePort.handleMessagePort,
+  'TextSearch.handleMessagePort': handleDirectMessagePort,
   'TextSearch.handlePullResultsFound': WrapCommand.wrapCommand(handlePullResultsFound),
   'TextSearch.handleReplaceInput': WrapCommand.wrapCommand(HandleReplaceInput.handleReplaceInput),
   'TextSearch.handleResize': WrapCommand.wrapCommand(HandleResize.handleResize),
