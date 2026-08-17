@@ -96,7 +96,7 @@ import * as ToggleUseRegularExpression from '../ToggleUseRegularExpression/Toggl
 import * as ViewAsTree from '../ViewAsTree/ViewAsTree.ts'
 import * as ViewletSearchHandleContextMenu from '../ViewletSearchHandleContextMenu/ViewletSearchHandleContextMenu.ts'
 
-const handleDirectMessagePort = (port: MessagePort, setAsRendererProcess = true): Promise<void> =>
+const handleDirectMessagePort = (port: MessagePort, setAsRendererProcess?: boolean): Promise<void> =>
   HandleMessagePort.handleMessagePort(port, commandMap, setAsRendererProcess)
 
 export const commandMap = {
