@@ -53,3 +53,15 @@ test('diff - exclude value change', () => {
   }
   expect(Diff.diff(oldState, newState)).toEqual([DiffType.RenderExcludeValue])
 })
+
+test('diff - workspace path change', () => {
+  const uid = 1
+  const state = { ...CreateDefaultState.createDefaultState(), uid }
+  SearchViewStates.set(uid, state, state)
+  const { oldState } = SearchViewStates.get(uid)
+  const newState: SearchState = {
+    ...oldState,
+    workspacePath: '/test',
+  }
+  expect(Diff.diff(oldState, newState)).toEqual([DiffType.RenderIncremental])
+})

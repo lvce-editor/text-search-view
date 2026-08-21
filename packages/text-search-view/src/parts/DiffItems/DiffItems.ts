@@ -18,6 +18,7 @@ export const isEqual = (oldState: SearchState, newState: SearchState): boolean =
     oldState.minLineY === newState.minLineY &&
     oldState.renderFolderPaths === newState.renderFolderPaths &&
     oldState.replacement === newState.replacement &&
-    oldState.searchInputErrorMessage === newState.searchInputErrorMessage
+    oldState.searchInputErrorMessage === newState.searchInputErrorMessage &&
+    oldState.workspacePath === newState.workspacePath
   )
 }

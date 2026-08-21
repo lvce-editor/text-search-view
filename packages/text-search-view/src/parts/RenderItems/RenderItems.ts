@@ -22,6 +22,7 @@ export const getDom = (newState: SearchState): readonly any[] => {
     newState.isSearchEditor,
     newState.contextLines,
     newState.contextLinesEnabled,
+    newState.workspacePath,
   )
   return dom
 }

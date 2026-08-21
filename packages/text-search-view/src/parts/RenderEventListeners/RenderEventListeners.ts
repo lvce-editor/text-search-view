@@ -93,5 +93,10 @@ export const renderEventListeners = (): readonly DomEventListener[] => {
       name: DomEventListenerFunctions.HandleInputBlur,
       params: ['handleInputBlur', EventExpression.TargetName],
     },
+    {
+      name: DomEventListenerFunctions.HandleOpenFolderClick,
+      params: ['handleOpenFolderClick'],
+      preventDefault: true,
+    },
   ]
 }

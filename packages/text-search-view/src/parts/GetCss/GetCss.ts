@@ -44,6 +44,16 @@ export const getCss = (
   contain: strict;
   height: ${headerHeight}px;
 }
+
+.SearchWorkspaceMessageAction {
+  background: none;
+  border: none;
+  color: var(--LinkForeground, #3794ff);
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+  text-decoration: underline;
+}
   `,
 
     ...uniqueIndents.map(getIndentRule),

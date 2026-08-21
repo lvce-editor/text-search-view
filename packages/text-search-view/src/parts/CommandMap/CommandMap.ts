@@ -43,6 +43,7 @@ import { handleInputSelectionChange } from '../HandleInputSelectionChange/Handle
 import * as HandleListBlur from '../HandleListBlur/HandleListBlur.ts'
 import { handleListFocus } from '../HandleListFocus/HandleListFocus.ts'
 import * as HandleMessagePort from '../HandleMessagePort/HandleMessagePort.ts'
+import * as HandleOpenFolderClick from '../HandleOpenFolderClick/HandleOpenFolderClick.ts'
 import { handlePullResultsFound } from '../HandlePullResultsFound/HandlePullResultsFound.ts'
 import * as HandleReplaceInput from '../HandleReplaceInput/HandleReplaceInput.ts'
 import * as HandleResize from '../HandleResize/HandleResize.ts'
@@ -166,6 +167,7 @@ export const commandMap = {
   'TextSearch.handleListFocus': WrapCommand.wrapCommand(handleListFocus),
   'TextSearch.handleListPointerDown': WrapCommand.wrapCommand(handleListPointerDown),
   'TextSearch.handleMessagePort': handleDirectMessagePort,
+  'TextSearch.handleOpenFolderClick': WrapCommand.wrapCommand(HandleOpenFolderClick.handleOpenFolderClick),
   'TextSearch.handlePullResultsFound': WrapCommand.wrapCommand(handlePullResultsFound),
   'TextSearch.handleReplaceInput': WrapCommand.wrapCommand(HandleReplaceInput.handleReplaceInput),
   'TextSearch.handleResize': WrapCommand.wrapCommand(HandleResize.handleResize),
