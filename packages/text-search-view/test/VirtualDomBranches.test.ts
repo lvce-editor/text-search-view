@@ -31,6 +31,11 @@ test('search virtual DOM includes an input error', () => {
   expect(dom.some((node) => node.text === 'Invalid expression')).toBe(true)
 })
 
+test('search virtual DOM includes the no workspace message', () => {
+  const dom = getSearchVirtualDom([], 0, '', false, '', 0, 0, 0, 0, 22, 0, '', 0, false, false, 1, false, '')
+  expect(dom.some((node) => node.className?.includes('SearchWorkspaceMessage'))).toBe(true)
+})
+
 test('tree items handle a zero item height', () => {
   expect(getTreeItemsVirtualDom([], 10, 0)[0]).toMatchObject({
     className: 'TreeItems TreeItemsTop-0',

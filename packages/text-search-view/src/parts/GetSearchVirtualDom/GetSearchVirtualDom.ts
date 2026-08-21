@@ -2,6 +2,7 @@ import { ClassNames } from '@lvce-editor/virtual-dom-worker'
 import { VirtualDomElements } from '@lvce-editor/virtual-dom-worker'
 import type { DisplaySearchResult } from '../DisplaySearchResult/DisplaySearchResult.ts'
 import type { VirtualDomNode } from '../VirtualDomNode/VirtualDomNode.ts'
+import * as GetNoWorkspaceMessageVirtualDom from '../GetNoWorkspaceMessageVirtualDom/GetNoWorkspaceMessageVirtualDom.ts'
 import * as GetSearchHeaderVirtualDom from '../GetSearchHeaderVirtualDom/GetSearchHeaderVirtualDom.ts'
 import * as GetSearchInputErrorVirtualDom from '../GetSearchInputErrorVirtualDom/GetSearchInputErrorVirtualDom.ts'
 import * as GetSearchResultsVirtualDom from '../GetSearchResultsVirtualDom/GetSearchResultsVirtualDom.ts'
@@ -27,12 +28,14 @@ export const getSearchVirtualDom = (
   isSearchEditor: boolean = false,
   contextLines: number = 1,
   contextLinesEnabled: boolean = false,
+  workspacePath?: string,
 ): readonly VirtualDomNode[] => {
   if (initial) {
     return []
   }
   const errorDom = GetSearchInputErrorVirtualDom.getSearchInputErrorVirtualDom(searchInputErrorMessage)
-  const childCount = 2 + (errorDom.length > 0 ? 1 : 0)
+  const noWorkspaceMessageDom = GetNoWorkspaceMessageVirtualDom.getNoWorkspaceMessageVirtualDom(workspacePath)
+  const childCount = 2 + (errorDom.length > 0 ? 1 : 0) + (noWorkspaceMessageDom.length > 0 ? 1 : 0)
 
   return [
     {
@@ -52,6 +55,7 @@ export const getSearchVirtualDom = (
       contextLinesEnabled,
     ),
     ...errorDom,
+    ...noWorkspaceMessageDom,
     ...GetSearchResultsVirtualDom.getSearchResultsVirtualDom(
       visibleItems,
       focusOutline,

@@ -11,6 +11,8 @@ test('getCss - returns base css variables when there are no indents', () => {
   expect(result).toContain('top: 0px;')
   expect(result).toContain('.ScrollBarThumbTop-12 {')
   expect(result).toContain('transform: translateY(12px);')
+  expect(result).toContain('.SearchWorkspaceMessageAction {')
+  expect(result).toContain('color: var(--LinkForeground, #3794ff);')
 })
 
 test('getCss - returns css variables and indent rules', () => {

@@ -5,6 +5,14 @@ export const noResults = (): string => {
   return I18nString.i18nString(UiStrings.NoResults)
 }
 
+export const noWorkspaceFolder = (): string => {
+  return I18nString.i18nString(UiStrings.NoWorkspaceFolder)
+}
+
+export const openFolder = (): string => {
+  return I18nString.i18nString(UiStrings.OpenFolder)
+}
+
 export const oneResult = (): string => {
   return I18nString.i18nString(UiStrings.Oneresult)
 }
