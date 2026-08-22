@@ -1,0 +1,10 @@
+[
+  {
+    "category": "search",
+    "description": "Configures glob patterns for excluding files and folders from text search results.",
+    "heading": "Exclude",
+    "id": "search.exclude",
+    "type": 4,
+    "value": {}
+  }
+]
