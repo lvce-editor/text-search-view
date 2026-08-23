@@ -23,7 +23,7 @@ export const getNoWorkspaceMessageVirtualDom = (workspacePath: string | undefine
     text(`${SearchStrings.noWorkspaceFolder()} - `),
     {
       childCount: 1,
-      className: LocalClassNames.SearchWorkspaceMessageAction,
+      className: MergeClassNames.mergeClassNames(LocalClassNames.MessageAction, LocalClassNames.SearchWorkspaceMessageAction),
       onClick: DomEventListenerFunctions.HandleOpenFolderClick,
       type: VirtualDomElements.Button,
     },

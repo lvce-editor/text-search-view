@@ -17,7 +17,7 @@ test('getNoWorkspaceMessageVirtualDom - no workspace folder', () => {
     },
     {
       childCount: 1,
-      className: 'SearchWorkspaceMessageAction',
+      className: 'MessageAction SearchWorkspaceMessageAction',
       onClick: DomEventListenerFunctions.HandleOpenFolderClick,
       type: VirtualDomElements.Button,
     },
