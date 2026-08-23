@@ -12,7 +12,15 @@ test('getCss - returns base css variables when there are no indents', () => {
   expect(result).toContain('.ScrollBarThumbTop-12 {')
   expect(result).toContain('transform: translateY(12px);')
   expect(result).toContain('.SearchWorkspaceMessageAction {')
+  expect(result).toContain('appearance: none;')
+  expect(result).toContain('background-color: transparent;')
+  expect(result).toContain('border: 0;')
   expect(result).toContain('color: var(--LinkForeground, #3794ff);')
+  expect(result).toContain('display: inline;')
+  expect(result).toContain('margin: 0;')
+  expect(result).toContain('text-decoration: none;')
+  expect(result).toContain('.SearchWorkspaceMessageAction:hover {')
+  expect(result).toContain('.SearchWorkspaceMessageAction:focus-visible {')
 })
 
 test('getCss - returns css variables and indent rules', () => {

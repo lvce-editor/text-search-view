@@ -46,13 +46,28 @@ export const getCss = (
 }
 
 .SearchWorkspaceMessageAction {
-  background: none;
-  border: none;
+  appearance: none;
+  background-color: transparent;
+  border: 0;
   color: var(--LinkForeground, #3794ff);
   cursor: pointer;
+  display: inline;
   font: inherit;
+  line-height: inherit;
+  margin: 0;
   padding: 0;
+  text-decoration: none;
+  vertical-align: baseline;
+}
+
+.SearchWorkspaceMessageAction:hover {
   text-decoration: underline;
+}
+
+.SearchWorkspaceMessageAction:focus-visible {
+  border-radius: 1px;
+  outline: 1px solid var(--FocusBorder, currentColor);
+  outline-offset: 1px;
 }
   `,
 

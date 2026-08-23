@@ -27,3 +27,12 @@ test('diffCss - not equal when items change', () => {
   }
   expect(DiffCss.isEqual(oldState, newState)).toBe(false)
 })
+
+test('diffCss - not equal when content loads', () => {
+  const oldState = CreateDefaultState.createDefaultState()
+  const newState = {
+    ...oldState,
+    loaded: true,
+  }
+  expect(DiffCss.isEqual(oldState, newState)).toBe(false)
+})

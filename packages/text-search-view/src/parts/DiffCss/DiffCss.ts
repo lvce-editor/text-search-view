@@ -7,6 +7,7 @@ export const isEqual = (oldState: SearchState, newState: SearchState): boolean =
     oldState.height === newState.height &&
     oldState.headerHeight === newState.headerHeight &&
     oldState.itemHeight === newState.itemHeight &&
-    oldState.items === newState.items
+    oldState.items === newState.items &&
+    oldState.loaded === newState.loaded
   )
 }
