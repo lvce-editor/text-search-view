@@ -34,6 +34,7 @@ test('getActionsVirtualDom - should return correct virtual dom structure', () =>
     {
       childCount: 1,
       className: 'IconButton',
+      disabled: false,
       name: 'searchInFiles',
       title: 'Search in Files',
       type: 1,
@@ -47,6 +48,7 @@ test('getActionsVirtualDom - should return correct virtual dom structure', () =>
     {
       childCount: 1,
       className: 'IconButton',
+      disabled: false,
       name: 'findInFile',
       title: 'Find in File',
       type: 1,

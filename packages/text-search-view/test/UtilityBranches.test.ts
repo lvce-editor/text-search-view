@@ -78,6 +78,7 @@ test('action virtual DOM supports disabled and unknown actions', () => {
   }
   expect(getActionButtonVirtualDom(action)[0]).toMatchObject({
     className: 'IconButton IconButtonDisabled',
+    disabled: true,
   })
   expect(getActionVirtualDom({ ...action, type: 99 })).toEqual([])
 })
