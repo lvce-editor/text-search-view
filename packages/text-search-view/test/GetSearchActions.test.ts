@@ -9,7 +9,7 @@ test('getSearchActions - should return array of search actions', () => {
   expect(getActions(state)).toEqual([
     {
       command: 'refresh',
-      enabled: true,
+      enabled: false,
       icon: 'Refresh',
       id: 'Refresh',
       label: 'Refresh',
@@ -33,7 +33,7 @@ test('getSearchActions - should return array of search actions', () => {
     },
     {
       command: '',
-      enabled: true,
+      enabled: false,
       icon: 'ListFlat',
       id: 'ViewAsTree',
       label: 'View as Tree',
@@ -41,11 +41,20 @@ test('getSearchActions - should return array of search actions', () => {
     },
     {
       command: '',
-      enabled: true,
+      enabled: false,
       icon: 'CollapseAll',
       id: 'CollapseAll',
       label: 'Collapse All',
       type: 1,
     },
   ])
+})
+
+test('getSearchActions - enables actions for a search pattern and results', () => {
+  const state = {
+    ...createDefaultState(),
+    items: [{ end: 0, lineNumber: 0, start: 0, text: 'file.txt', type: 1 }],
+    value: 'test',
+  }
+  expect(getActions(state).map(({ enabled }) => enabled)).toEqual([true, true, true, true, true])
 })

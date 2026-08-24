@@ -6,12 +6,14 @@ import * as MaskIcon from '../MaskIcon/MaskIcon.ts'
 import * as SearchStrings from '../SearchStrings/SearchStrings.ts'
 
 export const getActions = (state: SearchState): readonly Action[] => {
-  const { replacement, value } = state
-  const bothEmpty = value === '' && replacement === ''
+  const { items, replacement, value } = state
+  const hasSearchPattern = value !== ''
+  const hasSearchResults = items.length > 0
+  const canClear = hasSearchResults || hasSearchPattern || replacement !== ''
   return [
     {
       command: 'refresh',
-      enabled: true,
+      enabled: hasSearchPattern,
       icon: MaskIcon.Refresh,
       id: InputName.Refresh,
       label: SearchStrings.refresh(),
@@ -19,7 +21,7 @@ export const getActions = (state: SearchState): readonly Action[] => {
     },
     {
       command: 'clearSearchResults',
-      enabled: !bothEmpty,
+      enabled: canClear,
       icon: MaskIcon.ClearAll,
       id: InputName.ClearAll,
       label: SearchStrings.clearSearchResults(),
@@ -35,7 +37,7 @@ export const getActions = (state: SearchState): readonly Action[] => {
     },
     {
       command: '',
-      enabled: true,
+      enabled: hasSearchResults,
       icon: MaskIcon.ListFlat,
       id: InputName.ViewAsTree,
       label: SearchStrings.viewAsTree(),
@@ -43,7 +45,7 @@ export const getActions = (state: SearchState): readonly Action[] => {
     },
     {
       command: '',
-      enabled: true,
+      enabled: hasSearchResults,
       icon: MaskIcon.CollapseAll,
       id: InputName.CollapseAll,
       label: SearchStrings.collapseAll(),
