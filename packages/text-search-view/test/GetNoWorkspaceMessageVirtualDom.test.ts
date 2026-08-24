@@ -12,7 +12,7 @@ test('getNoWorkspaceMessageVirtualDom - no workspace folder', () => {
     },
     {
       childCount: 0,
-      text: 'You have not opened or specified a folder. - ',
+      text: 'You have not opened or specified a folder. Only open files are currently searched - ',
       type: VirtualDomElements.Text,
     },
     {
