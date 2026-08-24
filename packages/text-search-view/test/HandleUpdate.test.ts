@@ -31,6 +31,32 @@ test('handleUpdate - empty search value returns cleared state', async () => {
   })
 })
 
+test('handleUpdate - empty workspace path does not search', async () => {
+  const state: SearchState = {
+    ...CreateDefaultState.createDefaultState(),
+    value: '',
+  }
+  const update = { value: 'test' }
+
+  using mockTextSearchWorker = TextSearchWorker.registerMockRpc({
+    async 'TextSearch.search'() {
+      throw new Error('Unexpected search')
+    },
+  })
+
+  const result = await handleUpdate(state, update)
+
+  expect(result).toMatchObject({
+    items: [],
+    listItems: [],
+    matchCount: 0,
+    message: '',
+    value: 'test',
+    workspacePath: '',
+  })
+  expect(mockTextSearchWorker.invocations).toEqual([])
+})
+
 test.skip('handleUpdate - performs search with valid input', async () => {
   const state: SearchState = {
     ...CreateDefaultState.createDefaultState(),
@@ -76,6 +102,7 @@ test('handleUpdate - handles search error', async () => {
   const state: SearchState = {
     ...CreateDefaultState.createDefaultState(),
     value: 'test',
+    workspacePath: '/test',
   }
   const update = { value: 'test' }
 
@@ -110,6 +137,7 @@ test('handleUpdate - returns a validation error for an invalid regular expressio
     ...CreateDefaultState.createDefaultState(),
     flags: SearchFlags.UseRegularExpression,
     value: '[',
+    workspacePath: '/test',
   }
 
   const result = await handleUpdate(state, {})

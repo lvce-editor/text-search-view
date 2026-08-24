@@ -13,8 +13,8 @@ export const handleUpdate = async (state: SearchState, update: Partial<SearchSta
   const { incrementalSearch, usePullBasedSearch } = state
   const partialNewState = { ...state, ...update }
   try {
-    const { flags, value } = partialNewState
-    if (IsEmptyString.isEmptyString(value)) {
+    const { flags, value, workspacePath } = partialNewState
+    if (IsEmptyString.isEmptyString(value) || IsEmptyString.isEmptyString(workspacePath)) {
       return handleUpdateEmpty(state, update)
     }
     const searchInputErrorMessage = ValidateSearchInput.validateSearchInput(value, flags)
