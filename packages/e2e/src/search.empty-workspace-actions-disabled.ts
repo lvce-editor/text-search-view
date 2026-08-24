@@ -10,10 +10,10 @@ export const test: Test = async ({ expect, Locator, SideBar, Workspace }) => {
   await SideBar.open('Search')
 
   // assert
-  const search = Locator('.Search')
-  await expect(search.locator('[name="Refresh"]')).toHaveAttribute('disabled', '')
-  await expect(search.locator('[name="ClearAll"]')).toHaveAttribute('disabled', '')
-  await expect(search.locator('[name="ViewAsTree"]')).toHaveAttribute('disabled', '')
-  await expect(search.locator('[name="CollapseAll"]')).toHaveAttribute('disabled', '')
-  await expect(search.locator('[name="OpenSearchEditor"]')).not.toHaveAttribute('disabled', '')
+  const actions = Locator('.SideBarTitleArea')
+  await expect(actions.locator('[name="Refresh"]')).toHaveAttribute('disabled', '')
+  await expect(actions.locator('[name="ClearAll"]')).toHaveAttribute('disabled', '')
+  await expect(actions.locator('[name="ViewAsTree"]')).toHaveAttribute('disabled', '')
+  await expect(actions.locator('[name="CollapseAll"]')).toHaveAttribute('disabled', '')
+  await expect(actions.locator('[name="OpenSearchEditor"]')).not.toHaveAttribute('disabled', '')
 }
