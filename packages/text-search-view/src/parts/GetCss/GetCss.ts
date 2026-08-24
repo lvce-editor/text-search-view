@@ -60,6 +60,12 @@ export const getCss = (
   vertical-align: baseline;
 }
 
+.SearchWorkspaceMessage {
+  margin-top: -16px;
+  overflow-wrap: break-word;
+  padding-right: 22px;
+}
+
 .SearchWorkspaceMessageAction:hover {
   text-decoration: underline;
 }

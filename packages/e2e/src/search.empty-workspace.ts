@@ -12,7 +12,10 @@ export const test: Test = async ({ expect, Locator, SideBar, Workspace }) => {
   // assert
   const message = Locator('.SearchWorkspaceMessage')
   await expect(message).toBeVisible()
-  await expect(message).toHaveText('You have not opened or specified a folder. - Open Folder')
+  await expect(message).toHaveText('You have not opened or specified a folder. Only open files are currently searched - Open Folder')
+  await expect(message).toHaveCSS('margin-top', '-16px')
+  await expect(message).toHaveCSS('overflow-wrap', 'break-word')
+  await expect(message).toHaveCSS('padding-right', '22px')
   const openFolderLink = message.locator('.MessageAction')
   await expect(openFolderLink).toHaveText('Open Folder')
   await expect(openFolderLink).toHaveCSS('appearance', 'none')
