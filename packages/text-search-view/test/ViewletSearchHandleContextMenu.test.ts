@@ -5,13 +5,14 @@ import * as CreateDefaultState from '../src/parts/CreateDefaultState/CreateDefau
 import * as MouseEventType from '../src/parts/MouseEventType/MouseEventType.ts'
 import { handleContextMenu } from '../src/parts/ViewletSearchHandleContextMenu/ViewletSearchHandleContextMenu.ts'
 
-test('handleContextMenu - mouse event shows context menu at mouse position', async () => {
+test('handleContextMenu - keyboard event shows context menu for the focused item', async () => {
   using mockRpc = RendererWorker.registerMockRpc({
     'ContextMenu.show2': () => undefined,
   })
 
   const state: SearchState = {
     ...CreateDefaultState.createDefaultState(),
+    focusedIndex: 0,
     x: 0,
     y: 0,
   }

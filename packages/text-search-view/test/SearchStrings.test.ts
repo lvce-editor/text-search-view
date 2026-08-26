@@ -109,6 +109,10 @@ test('copyAll', () => {
   expect(SearchStrings.copyAll()).toBe('Copy All')
 })
 
+test('revealInExplorerView', () => {
+  expect(SearchStrings.revealInExplorerView()).toBe('Reveal in Explorer View')
+})
+
 test('refresh', () => {
   expect(SearchStrings.refresh()).toBe('Refresh')
 })

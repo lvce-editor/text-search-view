@@ -43,24 +43,36 @@ test('returns file entries for a file result', () => {
   const state = {
     ...createDefaultState(),
     items: [file],
+    workspacePath: '/workspace',
   }
 
   expect(getMenuEntries(state, { index: 0, menuId: MenuEntryId.Search }).map(({ id }) => id)).toEqual([
     'replaceAll',
     'dismiss',
+    'separator',
     'copy',
     'copyPath',
     'copyAll',
+    'separator',
+    'revealInExplorerView',
   ])
 })
 
 test('returns match entries for a match result', () => {
   const state = {
     ...createDefaultState(),
-    items: [match],
+    items: [file, match],
+    workspacePath: '/workspace',
   }
 
-  expect(getMenuEntries(state, { index: 0, menuId: MenuEntryId.Search }).map(({ id }) => id)).toEqual(['dismiss', 'copy', 'copyAll'])
+  expect(getMenuEntries(state, { index: 1, menuId: MenuEntryId.Search }).map(({ id }) => id)).toEqual([
+    'dismiss',
+    'separator',
+    'copy',
+    'copyAll',
+    'separator',
+    'revealInExplorerView',
+  ])
 })
 
 test('returns no entries for a missing or unknown result', () => {
