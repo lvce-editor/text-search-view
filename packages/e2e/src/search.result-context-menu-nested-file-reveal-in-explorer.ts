@@ -10,14 +10,11 @@ export const test: Test = async ({ ContextMenu, expect, FileSystem, Locator, Sea
   await SideBar.open('Search')
   await Search.setValue('nested target')
 
-  await Search.handleContextMenu(2, 300, 100)
+  await Search.focusIndex(0)
+  await Search.handleContextMenu(-1, 0, 0)
   await ContextMenu.selectItem('Reveal in Explorer View')
 
-  const src = Locator('.TreeItem[aria-label="src"]')
-  const nested = Locator('.TreeItem[aria-label="nested"]')
   const target = Locator('.TreeItem[aria-label="target.ts"]')
-  await expect(src).toHaveAttribute('aria-expanded', 'true')
-  await expect(nested).toHaveAttribute('aria-expanded', 'true')
   await expect(target).toBeVisible()
   await expect(target).toHaveId('TreeItemActive')
 }

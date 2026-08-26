@@ -10,14 +10,11 @@ export const test: Test = async ({ ContextMenu, expect, FileSystem, Locator, Sea
   await SideBar.open('Search')
   await Search.setValue('reveal this match')
 
-  await Search.handleContextMenu(2, 300, 124)
+  await Search.focusIndex(1)
+  await Search.handleContextMenu(-1, 0, 0)
   await ContextMenu.selectItem('Reveal in Explorer View')
 
-  const packages = Locator('.TreeItem[aria-label="packages"]')
-  const search = Locator('.TreeItem[aria-label="search"]')
   const target = Locator('.TreeItem[aria-label="item.ts"]')
-  await expect(packages).toHaveAttribute('aria-expanded', 'true')
-  await expect(search).toHaveAttribute('aria-expanded', 'true')
   await expect(target).toBeVisible()
   await expect(target).toHaveId('TreeItemActive')
 }

@@ -7,12 +7,6 @@ interface ViewletState {
   readonly uid: number
 }
 
-interface TimerGlobal {
-  readonly setTimeout: (callback: () => void, delay: number) => number
-}
-
-const timerGlobal = globalThis as unknown as TimerGlobal
-
 const revealInExplorerActual = async (uri: string): Promise<void> => {
   await RendererWorker.invoke('SideBar.show', 'Explorer')
   const states = (await RendererWorker.invoke('Viewlet.getAllStates')) as Record<string, ViewletState>
@@ -22,9 +16,7 @@ const revealInExplorerActual = async (uri: string): Promise<void> => {
   await RendererWorker.invoke('Viewlet.executeViewletCommand', explorerUid, 'reveal', uri)
 }
 
-export const revealInExplorer = (state: SearchState, uri: string): SearchState => {
-  timerGlobal.setTimeout(() => {
-    void revealInExplorerActual(uri)
-  }, 0)
+export const revealInExplorer = async (state: SearchState, uri: string): Promise<SearchState> => {
+  await revealInExplorerActual(uri)
   return state
 }

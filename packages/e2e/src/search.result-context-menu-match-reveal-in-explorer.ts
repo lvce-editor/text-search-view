@@ -9,7 +9,8 @@ export const test: Test = async ({ ContextMenu, expect, FileSystem, Locator, Sea
   await SideBar.open('Search')
   await Search.setValue('needle')
 
-  await Search.handleContextMenu(2, 300, 124)
+  await Search.focusIndex(1)
+  await Search.handleContextMenu(-1, 0, 0)
   await ContextMenu.selectItem('Reveal in Explorer View')
 
   const target = Locator('.TreeItem[aria-label="result.ts"]')
