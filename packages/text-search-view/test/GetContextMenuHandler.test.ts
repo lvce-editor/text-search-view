@@ -36,6 +36,7 @@ test('keyboard handler works correctly', async () => {
 
   const state: SearchState = {
     ...CreateDefaultState.createDefaultState(),
+    focusedIndex: 0,
     x: 100,
     y: 200,
   }
