@@ -174,6 +174,10 @@ export const copyAll = (): string => {
   return I18nString.i18nString(UiStrings.CopyAll)
 }
 
+export const revealInExplorerView = (): string => {
+  return I18nString.i18nString(UiStrings.RevealInExplorerView)
+}
+
 export const refresh = (): string => {
   return I18nString.i18nString(UiStrings.Refresh)
 }
