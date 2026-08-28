@@ -6,5 +6,14 @@
     "id": "search.exclude",
     "type": 4,
     "value": {}
+  },
+  {
+    "category": "features",
+    "description": "Controls the number of worker threads used for search",
+    "heading": "Search Threads",
+    "id": "search.threads",
+    "minimum": 1,
+    "type": 5,
+    "value": 1
   }
 ]
