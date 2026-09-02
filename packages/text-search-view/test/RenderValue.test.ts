@@ -13,11 +13,12 @@ test('renderValue - returns correct command structure', () => {
 
   const newState: SearchState = {
     ...oldState,
+    uid: 1,
     value: 'test search',
   }
 
   const result = RenderValue.renderValue(oldState, newState)
-  expect(result).toEqual([ViewletCommand.SetValueByName, InputName.SearchValue, 'test search'])
+  expect(result).toEqual([ViewletCommand.SetValueByName, 1, InputName.SearchValue, 'test search'])
 })
 
 test('renderReplacement - returns correct command structure', () => {
@@ -29,10 +30,11 @@ test('renderReplacement - returns correct command structure', () => {
   const newState: SearchState = {
     ...oldState,
     replacement: 'test replacement',
+    uid: 1,
   }
 
   const result = RenderValue.renderReplacement(oldState, newState)
-  expect(result).toEqual([ViewletCommand.SetValueByName, InputName.ReplaceValue, 'test replacement'])
+  expect(result).toEqual([ViewletCommand.SetValueByName, 1, InputName.ReplaceValue, 'test replacement'])
 })
 
 test('renderIncludeValue - returns correct command structure', () => {
@@ -44,10 +46,11 @@ test('renderIncludeValue - returns correct command structure', () => {
   const newState: SearchState = {
     ...oldState,
     includeValue: '*.ts',
+    uid: 1,
   }
 
   const result = RenderValue.renderIncludeValue(oldState, newState)
-  expect(result).toEqual([ViewletCommand.SetValueByName, InputName.FilesToInclude, '*.ts'])
+  expect(result).toEqual([ViewletCommand.SetValueByName, 1, InputName.FilesToInclude, '*.ts'])
 })
 
 test('renderExcludeValue - returns correct command structure', () => {
@@ -59,8 +62,9 @@ test('renderExcludeValue - returns correct command structure', () => {
   const newState: SearchState = {
     ...oldState,
     excludeValue: 'node_modules',
+    uid: 1,
   }
 
   const result = RenderValue.renderExcludeValue(oldState, newState)
-  expect(result).toEqual([ViewletCommand.SetValueByName, InputName.FilesToExclude, 'node_modules'])
+  expect(result).toEqual([ViewletCommand.SetValueByName, 1, InputName.FilesToExclude, 'node_modules'])
 })
