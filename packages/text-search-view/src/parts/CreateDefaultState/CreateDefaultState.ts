@@ -74,6 +74,11 @@ export const createDefaultState = (): SearchState => {
     scrollBarY,
     searchId: '',
     searchInputErrorMessage: '',
+    searchWarningFontFamily: 'system-ui',
+    searchWarningFontSize: 12,
+    searchWarningHorizontalPadding: 10,
+    searchWarningLineHeight: 18,
+    searchWarningVerticalPadding: 8,
     selections: {
       FilesToExclude: {
         end: 0,

@@ -28,6 +28,11 @@ export const handleUpdatePullBased = async (state: SearchState, update: Partial<
     includeValue,
     limit,
     platform,
+    searchWarningFontFamily,
+    searchWarningFontSize,
+    searchWarningHorizontalPadding,
+    searchWarningLineHeight,
+    searchWarningVerticalPadding,
     threads,
     uid,
     usePullBasedSearch,
@@ -74,7 +79,15 @@ export const handleUpdatePullBased = async (state: SearchState, update: Partial<
   const message = getStatusMessage(resultCount, fileCount)
   const [messageHeight, warningHeight] = await Promise.all([
     GetSearchMessageHeight.getSearchMessageHeight(message, width, flags),
-    GetSearchWarningMessageHeight.getSearchWarningMessageHeight(limitHitWarning, width),
+    GetSearchWarningMessageHeight.getSearchWarningMessageHeight(
+      limitHitWarning,
+      width,
+      searchWarningFontFamily,
+      searchWarningFontSize,
+      searchWarningLineHeight,
+      searchWarningHorizontalPadding,
+      searchWarningVerticalPadding,
+    ),
   ])
   const headerHeight = GetSearchHeaderHeight.getSearchHeaderHeight(flags, messageHeight, warningHeight)
   return {

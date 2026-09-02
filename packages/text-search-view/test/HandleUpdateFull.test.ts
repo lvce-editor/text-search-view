@@ -30,8 +30,14 @@ test('handleUpdateFull - sets limitHit to true when search hits limit', async ()
     itemHeight: 20,
     minimumSliderSize: 20,
     platform: 0,
+    searchWarningFontFamily: 'custom-font',
+    searchWarningFontSize: 14,
+    searchWarningHorizontalPadding: 23,
+    searchWarningLineHeight: 20,
+    searchWarningVerticalPadding: 11,
     threads: 0,
     value: 'test',
+    width: 120,
     workspacePath: '/test',
   }
   const update = { value: 'test' }
@@ -53,7 +59,7 @@ test('handleUpdateFull - sets limitHit to true when search hits limit', async ()
 
   expect(result).toMatchObject({
     fileCount: 1,
-    headerHeight: 87,
+    headerHeight: 90,
     icons: ['file-icon', ''],
     items: searchResults,
     limitHit: true,
@@ -66,7 +72,7 @@ test('handleUpdateFull - sets limitHit to true when search hits limit', async ()
     value: 'test',
   })
   expect(mockRpc.invocations).toEqual([['IconTheme.getIcons', [{ name: 'file1.txt', type: 1 }]]])
-  expect(mockRendererWorker.invocations).toEqual([['MeasureTextHeight.measureTextBlockHeight', expect.any(String), 'system-ui', 12, '18px', 1]])
+  expect(mockRendererWorker.invocations).toEqual([['MeasureTextHeight.measureTextBlockHeight', expect.any(String), 'custom-font', 14, '20px', 97]])
 })
 
 test('handleUpdateFull - sets limitHit to false when search does not hit limit', async () => {

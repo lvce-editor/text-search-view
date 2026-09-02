@@ -28,6 +28,11 @@ export const handleUpdateFull = async (state: SearchState, update: Partial<Searc
     limit,
     minimumSliderSize,
     platform,
+    searchWarningFontFamily,
+    searchWarningFontSize,
+    searchWarningHorizontalPadding,
+    searchWarningLineHeight,
+    searchWarningVerticalPadding,
     threads,
     uid,
     usePullBasedSearch,
@@ -73,7 +78,15 @@ export const handleUpdateFull = async (state: SearchState, update: Partial<Searc
   const limitHitWarning = limitHit ? SearchStrings.theResultSetOnlyContainsASubSetOfMatches() : ''
   const [messageHeight, warningHeight] = await Promise.all([
     GetSearchMessageHeight.getSearchMessageHeight(message, width, flags),
-    GetSearchWarningMessageHeight.getSearchWarningMessageHeight(limitHitWarning, width),
+    GetSearchWarningMessageHeight.getSearchWarningMessageHeight(
+      limitHitWarning,
+      width,
+      searchWarningFontFamily,
+      searchWarningFontSize,
+      searchWarningLineHeight,
+      searchWarningHorizontalPadding,
+      searchWarningVerticalPadding,
+    ),
   ])
   const headerHeight = GetSearchHeaderHeight.getSearchHeaderHeight(flags, messageHeight, warningHeight)
   const total = results.length
