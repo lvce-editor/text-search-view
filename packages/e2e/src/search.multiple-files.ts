@@ -5,8 +5,10 @@ export const name = 'search.multiple-files'
 export const test: Test = async ({ expect, FileSystem, Locator, Search, SideBar, Workspace }) => {
   // arrange
   const tmpDir = await FileSystem.getTmpDir()
-  await FileSystem.writeFile(`${tmpDir}/a.txt`, `needle`)
-  await FileSystem.writeFile(`${tmpDir}/b.txt`, `needle`)
+  await FileSystem.setFiles([
+    { content: `needle`, uri: `${tmpDir}/a.txt` },
+    { content: `needle`, uri: `${tmpDir}/b.txt` },
+  ])
   await Workspace.setPath(tmpDir)
   await SideBar.open('Search')
 

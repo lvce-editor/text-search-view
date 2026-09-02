@@ -3,6 +3,11 @@ export const patchRendererWorker = (content: string, remoteUrl = '', useRemoteUr
 
   newContent = newContent.replaceAll('http://localhost:3001/tests/', '/tests/')
 
+  newContent = newContent.replace(
+    /(const launchTextSearchViewWorker = async \(\) => \{[\s\S]*?)\n  await [^\n]*'TextSearch\.initialize'[^\n]*;/,
+    '$1',
+  )
+
   if (useRemoteUrl && remoteUrl && !newContent.includes('// const textSearchWorkerUrl = ')) {
     const occurrence = `const textSearchWorkerUrl = \`\${assetDir}/packages/text-search-view/dist/textSearchViewMain.js\``
     const replacement = `// const textSearchWorkerUrl = \`\${assetDir}/packages/text-search-view/dist/textSearchViewMain.js\`

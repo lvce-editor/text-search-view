@@ -11,5 +11,5 @@ test('getAriaChecked - checkbox enabled', () => {
 })
 
 test('getAriaChecked - unknown flag', () => {
-  expect(GetAriaChecked.getAriaChecked(-1)).toBe(undefined)
+  expect(GetAriaChecked.getAriaChecked(-1)).toBeUndefined()
 })

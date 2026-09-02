@@ -12,9 +12,9 @@ test('getRole - checkbox enabled', () => {
 })
 
 test('getRole - button disabled', () => {
-  expect(GetRole.getRole(InputActionFlag.ButtonDisabled)).toBe(undefined)
+  expect(GetRole.getRole(InputActionFlag.ButtonDisabled)).toBeUndefined()
 })
 
 test('getRole - unknown flag', () => {
-  expect(GetRole.getRole(-1)).toBe(undefined)
+  expect(GetRole.getRole(-1)).toBeUndefined()
 })

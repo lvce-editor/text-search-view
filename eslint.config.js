@@ -10,18 +10,10 @@ export default defineConfig([
     ignores: ['packages/text-search-view/src/textSearchViewMain.ts'],
   },
   {
-    files: ['packages/text-search-view/src/parts/LaunchSearchProcessNode/LaunchSearchProcessNode.ts'],
-    rules: {
-      'virtual-dom/no-object-attribute-values': 'off',
-    },
-  },
-  {
     files: ['packages/text-search-view/test/**/*.ts'],
     rules: {
       'jest/no-disabled-tests': 'off',
-      'virtual-dom/no-empty-aria': 'off',
       'virtual-dom/no-inline-event-handlers': 'off',
-      'virtual-dom/no-object-attribute-values': 'off',
       'virtual-dom/prefer-constants': 'off',
       'virtual-dom/prefer-merge-class-names': 'off',
       'virtual-dom/prefer-state-destructuring': 'off',
@@ -32,33 +24,41 @@ export default defineConfig([
     files: ['packages/text-search-view/test/Diff2.test.ts', 'packages/text-search-view/test/Submit.test.ts'],
     rules: {
       'jest/expect-expect': 'off',
+      'sonarjs/assertions-in-tests': 'off',
+    },
+  },
+  {
+    files: ['packages/text-search-view/test/CopyAll.test.ts', 'packages/e2e/**/*.ts'],
+    rules: {
+      '@cspell/spellchecker': 'off',
+    },
+  },
+  {
+    files: ['packages/text-search-view/test/GetProtocol.test.ts', 'packages/e2e/src/search.regex-optional-protocol.ts'],
+    rules: {
+      'unicorn/prefer-https': 'off',
+    },
+  },
+  {
+    files: [
+      'packages/text-search-view/src/parts/TextMeasurementWorker/TextMeasurementWorker.ts',
+      'packages/text-search-view/src/parts/WaitForNextFrame/WaitForNextFrame.ts',
+    ],
+    rules: {
+      '@typescript-eslint/prefer-readonly-parameter-types': 'off',
+    },
+  },
+  {
+    files: ['packages/text-search-view/test/WaitForNextFrame.test.ts'],
+    rules: {
+      'unicorn/no-global-object-property-assignment': 'off',
     },
   },
   {
     files: ['**/*.ts'],
     rules: {
       'e2e/no-direct-click': 'off',
-      'e2e/no-inline-locator-in-expect': 'off',
-      'e2e/no-inline-nth-in-expect': 'off',
-      'e2e/prefer-filesystem-set-files': 'off',
-      'jest/no-restricted-jest-methods': 'off',
-      'sonarjs/assertions-in-tests': 'off',
-      'sonarjs/prefer-specific-assertions': 'off',
       'unicorn/no-break-in-nested-loop': 'off',
-      'unicorn/no-global-object-property-assignment': 'off',
-      'unicorn/no-useless-template-literals': 'off',
-      'unicorn/prefer-minimal-ternary': 'off',
-      'unicorn/prefer-https': 'off',
-      'unicorn/prefer-single-call': 'off',
-      'virtual-dom/hoist-static-nodes': 'off',
-      'virtual-dom/prefer-merge-class-names': 'off',
-      '@typescript-eslint/prefer-readonly-parameter-types': 'off',
-    },
-  },
-  {
-    rules: {
-      'github-actions/permissions': 'off',
-      '@cspell/spellchecker': 'off',
     },
   },
 ])

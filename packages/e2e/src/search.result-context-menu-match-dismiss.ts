@@ -22,7 +22,9 @@ export const test: Test = async ({ expect, FileSystem, Locator, Search, SideBar,
   // assert
   const viewletSearch = Locator('.Search')
   const message = viewletSearch.locator('[role="status"]')
+  const firstMatch = Locator('.TreeItem[aria-label="abc"]')
+  const secondMatch = Locator('.TreeItem[aria-label="abx"]')
   await expect(message).toHaveText('1 result in 1 file')
-  await expect(Locator('.TreeItem[aria-label="abc"]')).toBeHidden()
-  await expect(Locator('.TreeItem[aria-label="abx"]')).toBeVisible()
+  await expect(firstMatch).toBeHidden()
+  await expect(secondMatch).toBeVisible()
 }

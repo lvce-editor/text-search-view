@@ -26,7 +26,7 @@ export const getSearchDisplayResultFile = (
   const index = originalResults.indexOf(results[i])
   const matchCount = GetMatchCount.getMatchCount(originalResults, index)
   const expanded = collapsedPaths.includes(path) ? ExpandedType.Collapsed : ExpandedType.Expanded
-  const badgeText = `${matchCount}`
+  const badgeText = String(matchCount)
   const depth = 0
   const indent = GetTreeItemIndent.getTreeItemIndent(depth)
   return {

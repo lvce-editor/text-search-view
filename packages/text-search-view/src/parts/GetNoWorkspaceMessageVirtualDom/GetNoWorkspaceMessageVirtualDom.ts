@@ -6,27 +6,26 @@ import * as MergeClassNames from '../MergeClassNames/MergeClassNames.ts'
 import * as SearchStrings from '../SearchStrings/SearchStrings.ts'
 import { text } from '../VirtualDomHelpers/VirtualDomHelpers.ts'
 
+const parentNode: VirtualDomNode = {
+  childCount: 2,
+  className: MergeClassNames.mergeClassNames(
+    ClassNames.ViewletSearchMessage,
+    ClassNames.ViewletSearchMessageIndented,
+    LocalClassNames.SearchWorkspaceMessage,
+  ),
+  type: VirtualDomElements.Div,
+}
+
+const actionNode: VirtualDomNode = {
+  childCount: 1,
+  className: MergeClassNames.mergeClassNames(LocalClassNames.MessageAction, LocalClassNames.SearchWorkspaceMessageAction),
+  onClick: DomEventListenerFunctions.HandleOpenFolderClick,
+  type: VirtualDomElements.Button,
+}
+
 export const getNoWorkspaceMessageVirtualDom = (workspacePath: string | undefined): readonly VirtualDomNode[] => {
   if (workspacePath !== '') {
     return []
   }
-  return [
-    {
-      childCount: 2,
-      className: MergeClassNames.mergeClassNames(
-        ClassNames.ViewletSearchMessage,
-        ClassNames.ViewletSearchMessageIndented,
-        LocalClassNames.SearchWorkspaceMessage,
-      ),
-      type: VirtualDomElements.Div,
-    },
-    text(`${SearchStrings.noWorkspaceFolder()} - `),
-    {
-      childCount: 1,
-      className: MergeClassNames.mergeClassNames(LocalClassNames.MessageAction, LocalClassNames.SearchWorkspaceMessageAction),
-      onClick: DomEventListenerFunctions.HandleOpenFolderClick,
-      type: VirtualDomElements.Button,
-    },
-    text(SearchStrings.openFolder()),
-  ]
+  return [parentNode, text(`${SearchStrings.noWorkspaceFolder()} - `), actionNode, text(SearchStrings.openFolder())]
 }
