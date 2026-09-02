@@ -1,12 +1,15 @@
 import type { AsyncCommandContext } from '@lvce-editor/viewlet-registry'
 import { expect, test } from '@jest/globals'
-import { DialogWorker, RendererWorker } from '@lvce-editor/rpc-registry'
+import { DialogWorker, RendererWorker, TextMeasurementWorker } from '@lvce-editor/rpc-registry'
 import type { SearchState } from '../src/parts/SearchState/SearchState.ts'
 import * as CreateDefaultState from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
 import { replaceAll, replaceAllWithProgress } from '../src/parts/ReplaceAll/ReplaceAll.ts'
 import * as TextSearchResultType from '../src/parts/TextSearchResultType/TextSearchResultType.ts'
 
 test('replaceAll - replaces all matches and updates state', async () => {
+  using _mockTextMeasurementRpc = TextMeasurementWorker.registerMockRpc({
+    'TextMeasurement.measureTextBlockHeight': () => 13,
+  })
   using mockRpc = RendererWorker.registerMockRpc({
     'BulkReplacement.applyBulkReplacement'() {},
     'Layout.handleWorkspaceRefresh'() {},
@@ -119,6 +122,9 @@ test('replaceAll - user cancels replacement', async () => {
 })
 
 test('replaceAllWithProgress - renders progress before applying replacements', async () => {
+  using _mockTextMeasurementRpc = TextMeasurementWorker.registerMockRpc({
+    'TextMeasurement.measureTextBlockHeight': () => 13,
+  })
   const { promise: replacementStarted, resolve: notifyReplacementStarted } = Promise.withResolvers<void>()
   const { promise: continueReplacement, resolve: finishReplacement } = Promise.withResolvers<void>()
   using mockRpc = RendererWorker.registerMockRpc({
@@ -210,6 +216,9 @@ test('replaceAllWithProgress - renders progress before applying replacements', a
 })
 
 test('replaceAllWithProgress - reports progress for the focused file', async () => {
+  using _mockTextMeasurementRpc = TextMeasurementWorker.registerMockRpc({
+    'TextMeasurement.measureTextBlockHeight': () => 13,
+  })
   let currentState: SearchState = {
     ...CreateDefaultState.createDefaultState(),
     fileCount: 2,
@@ -309,6 +318,9 @@ test('replaceAllWithProgress - user cancels before progress is rendered', async 
 })
 
 test('replaceAll - replaces all matches in focused file only and updates state', async () => {
+  using _mockTextMeasurementRpc = TextMeasurementWorker.registerMockRpc({
+    'TextMeasurement.measureTextBlockHeight': () => 13,
+  })
   using mockRpc = RendererWorker.registerMockRpc({
     'BulkReplacement.applyBulkReplacement'() {},
     'Layout.handleWorkspaceRefresh'() {},

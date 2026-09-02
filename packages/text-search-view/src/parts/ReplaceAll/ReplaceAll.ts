@@ -8,6 +8,7 @@ import { getNewMinMax } from '../GetNewMinMax/GetNewMinMax.ts'
 import * as GetReplacedMessage from '../GetReplacedMessage/GetReplacedMessage.ts'
 import * as GetReplaceElements from '../GetReplaceElements/GetReplaceElements.ts'
 import * as GetReplacingMessage from '../GetReplacingMessage/GetReplacingMessage.ts'
+import * as GetSearchMessageLayout from '../GetSearchMessageLayout/GetSearchMessageLayout.ts'
 import { removeItemFromItems } from '../RemoveItemFromItems/RemoveItemFromItems.ts'
 import * as ReplaceAllAndPrompt from '../ReplaceAllAndPrompt/ReplaceAllAndPrompt.ts'
 import * as ScrollBarFunctions from '../ScrollBarFunctions/ScrollBarFunctions.ts'
@@ -47,7 +48,6 @@ const replaceAllInFocusedFile = async (state: SearchState, fileIndex: number): P
     deltaY,
     fileCount,
     fileIconCache,
-    headerHeight,
     height,
     itemHeight,
     items,
@@ -68,6 +68,8 @@ const replaceAllInFocusedFile = async (state: SearchState, fileIndex: number): P
   await RendererWorker.handleWorkspaceRefresh()
 
   const { newFileCount, newFocusedIndex, newItems, newMatchCount } = removeItemFromItems(items, fileIndex, totalMatchCount, fileCount)
+  const message = GetReplacedMessage.getReplacedMessage(1, matchCount, replacement)
+  const { headerHeight, messageHeight } = await GetSearchMessageLayout.getSearchMessageLayout(state, message)
   const { newDeltaY, newMaxLineY, newMinLineY } = getNewMinMax(newItems.length, minLineY, maxLineY, deltaY, itemHeight)
   const total = newItems.length
   const contentHeight = total * itemHeight
@@ -83,13 +85,15 @@ const replaceAllInFocusedFile = async (state: SearchState, fileIndex: number): P
     fileCount: newFileCount,
     fileIconCache: newFileIconCache,
     finalDeltaY,
+    headerHeight,
     icons,
     items: newItems,
     listFocusedIndex: newFocusedIndex,
     listItems: newItems,
     matchCount: newMatchCount,
     maxLineY: newMaxLineY,
-    message: GetReplacedMessage.getReplacedMessage(1, matchCount, replacement),
+    message,
+    messageHeight,
     minLineY: newMinLineY,
     scrollBarHeight,
   }
@@ -117,12 +121,15 @@ const replaceAllConfirmed = async (state: SearchState, fileIndex: number): Promi
   await RendererWorker.handleWorkspaceRefresh()
   const fileCount = bulkEdits.length
   const message = GetReplacedMessage.getReplacedMessage(fileCount, matchCount, replacement)
+  const { headerHeight, messageHeight } = await GetSearchMessageLayout.getSearchMessageLayout(state, message)
   return {
     ...state,
+    headerHeight,
     items: [],
     listItems: [],
     maxLineY: 0,
     message,
+    messageHeight,
     minLineY: 0,
   }
 }
@@ -149,10 +156,8 @@ export const replaceAllWithProgress = async (context: AsyncCommandContext<Search
     return
   }
   const message = GetReplacingMessage.getReplacingMessage(fileCount, matchCount)
-  await context.updateState((latestState) => ({
-    ...latestState,
-    message,
-  }))
+  const messageLayout = await GetSearchMessageLayout.getSearchMessageLayout(state, message)
+  await context.updateState((latestState) => ({ ...latestState, ...messageLayout, message }))
   await RendererWorker.invoke('Search.rerender')
   const updatedState = await replaceAllConfirmed(context.getState(), fileIndex)
   await context.updateState(() => updatedState)

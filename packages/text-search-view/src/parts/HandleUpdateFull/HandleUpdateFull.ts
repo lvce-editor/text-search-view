@@ -2,9 +2,10 @@ import type { SearchState } from '../SearchState/SearchState.ts'
 import * as GetFileIcons from '../GetFileIcons/GetFileIcons.ts'
 import * as GetNumberOfVisibleItems from '../GetNumberOfVisibleItems/GetNumberOfVisibleItems.ts'
 import * as GetProtocol from '../GetProtocol/GetProtocol.ts'
+import * as GetSearchHeaderHeight from '../GetSearchHeaderHeight/GetSearchHeaderHeight.ts'
+import * as GetSearchMessageHeight from '../GetSearchMessageHeight/GetSearchMessageHeight.ts'
 import * as GetSearchWarningMessageHeight from '../GetSearchWarningMessageHeight/GetSearchWarningMessageHeight.ts'
 import * as GetTextSearchResultCounts from '../GetTextSearchResultCounts/GetTextSearchResultCounts.ts'
-import * as GetTopHeight from '../GetTopHeight/GetTopHeight.ts'
 import * as ScrollBarFunctions from '../ScrollBarFunctions/ScrollBarFunctions.ts'
 import * as SearchFlags from '../SearchFlags/SearchFlags.ts'
 import * as SearchStatusMessage from '../SearchStatusMessage/SearchStatusMessage.ts'
@@ -70,8 +71,11 @@ export const handleUpdateFull = async (state: SearchState, update: Partial<Searc
   const { fileCount, resultCount } = GetTextSearchResultCounts.getTextSearchResultCounts(results)
   const message = SearchStatusMessage.getStatusMessage(resultCount, fileCount)
   const limitHitWarning = limitHit ? SearchStrings.theResultSetOnlyContainsASubSetOfMatches() : ''
-  const warningHeight = await GetSearchWarningMessageHeight.getSearchWarningMessageHeight(limitHitWarning, width)
-  const headerHeight = GetTopHeight.getTopHeight(flags) + warningHeight
+  const [messageHeight, warningHeight] = await Promise.all([
+    GetSearchMessageHeight.getSearchMessageHeight(message, width, flags),
+    GetSearchWarningMessageHeight.getSearchWarningMessageHeight(limitHitWarning, width),
+  ])
+  const headerHeight = GetSearchHeaderHeight.getSearchHeaderHeight(flags, messageHeight, warningHeight)
   const total = results.length
   const contentHeight = total * itemHeight
   const listHeight = height - headerHeight
@@ -98,6 +102,7 @@ export const handleUpdateFull = async (state: SearchState, update: Partial<Searc
     matchCount: resultCount,
     maxLineY: maxLineY,
     message,
+    messageHeight,
     minLineY: 0,
     scrollBarHeight,
     searchId,

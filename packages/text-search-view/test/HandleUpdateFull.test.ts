@@ -1,5 +1,5 @@
 import { expect, test } from '@jest/globals'
-import { IconThemeWorker, RendererWorker, TextSearchWorker } from '@lvce-editor/rpc-registry'
+import { IconThemeWorker, RendererWorker, TextMeasurementWorker, TextSearchWorker } from '@lvce-editor/rpc-registry'
 import type { SearchResult } from '../src/parts/SearchResult/SearchResult.ts'
 import type { SearchState } from '../src/parts/SearchState/SearchState.ts'
 import type { TextSearchOptions } from '../src/parts/TextSearchOptions/TextSearchOptions.ts'
@@ -8,6 +8,9 @@ import { handleUpdateFull } from '../src/parts/HandleUpdateFull/HandleUpdateFull
 import * as SearchFlags from '../src/parts/SearchFlags/SearchFlags.ts'
 
 test('handleUpdateFull - sets limitHit to true when search hits limit', async () => {
+  using _mockTextMeasurementWorker = TextMeasurementWorker.registerMockRpc({
+    'TextMeasurement.measureTextBlockHeight': () => 13,
+  })
   using mockRpc = IconThemeWorker.registerMockRpc({
     'IconTheme.getIcons': () => ['file-icon', undefined],
   })
@@ -66,6 +69,9 @@ test('handleUpdateFull - sets limitHit to true when search hits limit', async ()
 })
 
 test('handleUpdateFull - sets limitHit to false when search does not hit limit', async () => {
+  using _mockTextMeasurementWorker = TextMeasurementWorker.registerMockRpc({
+    'TextMeasurement.measureTextBlockHeight': () => 13,
+  })
   using mockRpc = IconThemeWorker.registerMockRpc({
     'IconTheme.getIcons': () => ['file-icon', undefined],
   })
@@ -124,6 +130,9 @@ test('handleUpdateFull - sets limitHit to false when search does not hit limit',
 })
 
 test('handleUpdateFull - passes enabled search options to the provider', async () => {
+  using _mockTextMeasurementWorker = TextMeasurementWorker.registerMockRpc({
+    'TextMeasurement.measureTextBlockHeight': () => 13,
+  })
   let receivedOptions: TextSearchOptions | undefined
   using _mockTextSearchWorker = TextSearchWorker.registerMockRpc({
     async 'TextSearch.search'(
@@ -164,6 +173,9 @@ test('handleUpdateFull - passes enabled search options to the provider', async (
 })
 
 test('handleUpdateFull - disables context in provider options when the toggle is off', async () => {
+  using _mockTextMeasurementWorker = TextMeasurementWorker.registerMockRpc({
+    'TextMeasurement.measureTextBlockHeight': () => 13,
+  })
   let receivedOptions: TextSearchOptions | undefined
   using _mockTextSearchWorker = TextSearchWorker.registerMockRpc({
     async 'TextSearch.search'(_root: string, _query: string, options: TextSearchOptions) {

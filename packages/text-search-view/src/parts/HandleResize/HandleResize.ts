@@ -2,10 +2,23 @@ import type { SearchState } from '../SearchState/SearchState.ts'
 import * as Clamp from '../Clamp/Clamp.ts'
 import * as GetFileIcons from '../GetFileIcons/GetFileIcons.ts'
 import * as GetNumberOfVisibleItems from '../GetNumberOfVisibleItems/GetNumberOfVisibleItems.ts'
+import * as GetSearchMessageHeight from '../GetSearchMessageHeight/GetSearchMessageHeight.ts'
 import * as ScrollBarFunctions from '../ScrollBarFunctions/ScrollBarFunctions.ts'
 
 export const handleResize = async (state: SearchState, x: number, y: number, width: number, height: number): Promise<SearchState> => {
-  const { deltaY, fileIconCache, headerHeight, itemHeight, listItems, minimumSliderSize } = state
+  const {
+    deltaY,
+    fileIconCache,
+    flags,
+    headerHeight: oldHeaderHeight,
+    itemHeight,
+    listItems,
+    message,
+    messageHeight: oldMessageHeight,
+    minimumSliderSize,
+  } = state
+  const messageHeight = await GetSearchMessageHeight.getSearchMessageHeight(message, width, flags)
+  const headerHeight = oldHeaderHeight + messageHeight - oldMessageHeight
   const total = listItems.length
   const contentHeight = total * itemHeight
   const listHeight = height - headerHeight
@@ -23,9 +36,11 @@ export const handleResize = async (state: SearchState, x: number, y: number, wid
     deltaY: newDeltaY,
     fileIconCache: newFileIconCache,
     finalDeltaY,
+    headerHeight,
     height,
     icons,
     maxLineY,
+    messageHeight,
     minLineY,
     scrollBarHeight,
     scrollBarY,

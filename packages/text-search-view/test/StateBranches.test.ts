@@ -1,6 +1,6 @@
 import { expect, test } from '@jest/globals'
 import { MouseEventType } from '@lvce-editor/constants'
-import { IconThemeWorker } from '@lvce-editor/rpc-registry'
+import { IconThemeWorker, TextMeasurementWorker } from '@lvce-editor/rpc-registry'
 import { WhenExpression } from '@lvce-editor/virtual-dom-worker'
 import { createDefaultState } from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
 import { handleHeaderFocusOut } from '../src/parts/HandleHeaderFocusOut/HandleHeaderFocusOut.ts'
@@ -77,6 +77,9 @@ test('removeCurrent preserves state when neither focus index is set', async () =
 })
 
 test('removeCurrent falls back to the list focus index', async () => {
+  using _mockTextMeasurementWorker = TextMeasurementWorker.registerMockRpc({
+    'TextMeasurement.measureTextBlockHeight': () => 13,
+  })
   using mockRpc = IconThemeWorker.registerMockRpc({
     'IconTheme.getIcons': () => [],
   })
@@ -96,6 +99,9 @@ test('removeCurrent falls back to the list focus index', async () => {
 })
 
 test('removeCurrent prefers the focused index', async () => {
+  using _mockTextMeasurementWorker = TextMeasurementWorker.registerMockRpc({
+    'TextMeasurement.measureTextBlockHeight': () => 13,
+  })
   using mockRpc = IconThemeWorker.registerMockRpc({
     'IconTheme.getIcons': () => [],
   })

@@ -1,8 +1,9 @@
 import type { SearchState } from '../SearchState/SearchState.ts'
 import * as GetProtocol from '../GetProtocol/GetProtocol.ts'
+import * as GetSearchHeaderHeight from '../GetSearchHeaderHeight/GetSearchHeaderHeight.ts'
+import * as GetSearchMessageHeight from '../GetSearchMessageHeight/GetSearchMessageHeight.ts'
 import * as GetSearchWarningMessageHeight from '../GetSearchWarningMessageHeight/GetSearchWarningMessageHeight.ts'
 import { getTextSearchResultCounts } from '../GetTextSearchResultCounts/GetTextSearchResultCounts.ts'
-import * as GetTopHeight from '../GetTopHeight/GetTopHeight.ts'
 import * as SearchFlags from '../SearchFlags/SearchFlags.ts'
 import { getStatusMessage } from '../SearchStatusMessage/SearchStatusMessage.ts'
 import * as SearchStrings from '../SearchStrings/SearchStrings.ts'
@@ -69,15 +70,19 @@ export const handleUpdatePullBased = async (state: SearchState, update: Partial<
     return state
   }
   const limitHitWarning = limitHit ? SearchStrings.theResultSetOnlyContainsASubSetOfMatches() : ''
-  const warningHeight = await GetSearchWarningMessageHeight.getSearchWarningMessageHeight(limitHitWarning, width)
-  const headerHeight = GetTopHeight.getTopHeight(flags) + warningHeight
   const { fileCount, resultCount } = getTextSearchResultCounts(latest.newState.items)
   const message = getStatusMessage(resultCount, fileCount)
+  const [messageHeight, warningHeight] = await Promise.all([
+    GetSearchMessageHeight.getSearchMessageHeight(message, width, flags),
+    GetSearchWarningMessageHeight.getSearchWarningMessageHeight(limitHitWarning, width),
+  ])
+  const headerHeight = GetSearchHeaderHeight.getSearchHeaderHeight(flags, messageHeight, warningHeight)
   return {
     ...latest.newState,
     headerHeight,
     limitHit,
     limitHitWarning,
     message,
+    messageHeight,
   }
 }

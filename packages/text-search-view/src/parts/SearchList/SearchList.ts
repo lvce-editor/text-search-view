@@ -21,6 +21,7 @@ export interface SearchList extends List<SearchResult> {
   readonly loaded: boolean
   readonly matchCount: number
   readonly message: string
+  readonly messageHeight: number
   readonly minimumSliderSize: number
   readonly removeButtonRight: number
   readonly removeButtonWidth: number

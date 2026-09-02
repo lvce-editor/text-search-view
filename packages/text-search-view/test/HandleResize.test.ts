@@ -1,4 +1,5 @@
 import { expect, test } from '@jest/globals'
+import { TextMeasurementWorker } from '@lvce-editor/rpc-registry'
 import type { SearchResult } from '../src/parts/SearchResult/SearchResult.ts'
 import type { SearchState } from '../src/parts/SearchState/SearchState.ts'
 import * as CreateDefaultState from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
@@ -75,4 +76,32 @@ test('handleResize - sets scrollBarY to 0 when content fits in viewport', async 
   expect(result.scrollBarHeight).toBe(0)
   expect(result.scrollBarY).toBe(0)
   expect(result.icons).toEqual(['', '', ''])
+})
+
+test('handleResize - remeasures the message and updates the header height', async () => {
+  using mockRpc = TextMeasurementWorker.registerMockRpc({
+    'TextMeasurement.measureTextBlockHeight': () => 78,
+  })
+  const state: SearchState = {
+    ...CreateDefaultState.createDefaultState(),
+    headerHeight: 70,
+    message: "Replaced 4 occurrences across 2 files with 'replacement-value-with-long-text'",
+    messageHeight: 39,
+    width: 400,
+  }
+
+  const result = await handleResize(state, 0, 0, 170, 500)
+
+  expect(result.messageHeight).toBe(91)
+  expect(result.headerHeight).toBe(122)
+  expect(mockRpc.invocations).toEqual([
+    [
+      'TextMeasurement.measureTextBlockHeight',
+      "Replaced 4 occurrences across 2 files with 'replacement-value-with-long-text'",
+      'system-ui',
+      13,
+      13,
+      118,
+    ],
+  ])
 })

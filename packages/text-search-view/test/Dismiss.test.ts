@@ -1,4 +1,5 @@
 import { expect, test } from '@jest/globals'
+import { TextMeasurementWorker } from '@lvce-editor/rpc-registry'
 import type { SearchState } from '../src/parts/SearchState/SearchState.ts'
 import * as CreateDefaultState from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
 import * as Dismiss from '../src/parts/Dismiss/Dismiss.ts'
@@ -15,6 +16,9 @@ test('dismissItem - no focused item', async () => {
 })
 
 test('dismissItem - dismiss file item', async () => {
+  using _mockTextMeasurementWorker = TextMeasurementWorker.registerMockRpc({
+    'TextMeasurement.measureTextBlockHeight': () => 13,
+  })
   const state: SearchState = {
     ...CreateDefaultState.createDefaultState(),
     fileCount: 2,
@@ -35,6 +39,9 @@ test('dismissItem - dismiss file item', async () => {
 })
 
 test('dismissItem - dismiss match item', async () => {
+  using _mockTextMeasurementWorker = TextMeasurementWorker.registerMockRpc({
+    'TextMeasurement.measureTextBlockHeight': () => 13,
+  })
   const state: SearchState = {
     ...CreateDefaultState.createDefaultState(),
     fileCount: 1,

@@ -1,5 +1,5 @@
 import { expect, jest, test } from '@jest/globals'
-import { TextSearchWorker } from '@lvce-editor/rpc-registry'
+import { TextMeasurementWorker, TextSearchWorker } from '@lvce-editor/rpc-registry'
 import type { SearchResult } from '../src/parts/SearchResult/SearchResult.ts'
 import type { SearchState } from '../src/parts/SearchState/SearchState.ts'
 import * as CreateDefaultState from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
@@ -98,6 +98,9 @@ test.skip('handleUpdate - performs search with valid input', async () => {
 })
 
 test('handleUpdate - handles search error', async () => {
+  using _mockTextMeasurementWorker = TextMeasurementWorker.registerMockRpc({
+    'TextMeasurement.measureTextBlockHeight': () => 13,
+  })
   const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {})
   const state: SearchState = {
     ...CreateDefaultState.createDefaultState(),

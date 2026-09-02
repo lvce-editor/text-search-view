@@ -1,5 +1,5 @@
 import { expect, test } from '@jest/globals'
-import { RendererWorker, TextSearchWorker } from '@lvce-editor/rpc-registry'
+import { RendererWorker, TextMeasurementWorker, TextSearchWorker } from '@lvce-editor/rpc-registry'
 import type { SearchResult } from '../src/parts/SearchResult/SearchResult.ts'
 import type { SearchState } from '../src/parts/SearchState/SearchState.ts'
 import * as CreateDefaultState from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
@@ -10,6 +10,9 @@ import * as SearchViewStates from '../src/parts/SearchViewStates/SearchViewState
 import * as TextSearchResultType from '../src/parts/TextSearchResultType/TextSearchResultType.ts'
 
 test('handleUpdatePullBased - enables pull-based mode for file protocol and computes summary from latest state', async () => {
+  using _mockTextMeasurementWorker = TextMeasurementWorker.registerMockRpc({
+    'TextMeasurement.measureTextBlockHeight': () => 13,
+  })
   using mockRendererWorker = RendererWorker.registerMockRpc({
     'MeasureTextHeight.measureTextBlockHeight': () => 18,
   })
@@ -86,6 +89,9 @@ test('handleUpdatePullBased - enables pull-based mode for file protocol and comp
 })
 
 test('handleUpdatePullBased - disables pull-based mode for non-file protocol and ignores default excludes when flag is off', async () => {
+  using _mockTextMeasurementWorker = TextMeasurementWorker.registerMockRpc({
+    'TextMeasurement.measureTextBlockHeight': () => 13,
+  })
   const state: SearchState = {
     ...CreateDefaultState.createDefaultState(),
     flags: 0,
