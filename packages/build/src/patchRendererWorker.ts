@@ -1,4 +1,4 @@
-export const patchRendererWorker = (content, remoteUrl = '', useRemoteUrl = true) => {
+export const patchRendererWorker = (content: string, remoteUrl = '', useRemoteUrl = true): string => {
   let newContent = content
 
   newContent = newContent.replaceAll('http://localhost:3001/tests/', '/tests/')
