@@ -4,8 +4,10 @@ export const name = 'search.result-context-menu-file-reveal-in-explorer'
 
 export const test: Test = async ({ ContextMenu, expect, FileSystem, Locator, Search, SideBar, Workspace }) => {
   const tmpDir = await FileSystem.getTmpDir()
-  await FileSystem.writeFile(`${tmpDir}/other.txt`, 'other')
-  await FileSystem.writeFile(`${tmpDir}/target.txt`, 'find me')
+  await FileSystem.setFiles([
+    { content: 'other', uri: `${tmpDir}/other.txt` },
+    { content: 'find me', uri: `${tmpDir}/target.txt` },
+  ])
   await Workspace.setPath(tmpDir)
   await SideBar.open('Search')
   await Search.setValue('find me')

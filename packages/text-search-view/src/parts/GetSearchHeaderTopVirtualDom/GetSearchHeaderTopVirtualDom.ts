@@ -13,6 +13,20 @@ import * as GetSearchToggleVirtualDom from '../GetSearchToggleVirtualDom/GetSear
 import * as InputName from '../InputName/InputName.ts'
 import * as SearchFlags from '../SearchFlags/SearchFlags.ts'
 
+const headerNode: VirtualDomNode = {
+  childCount: 2,
+  className: ClassNames.SearchHeaderTop,
+  role: AriaRoles.None,
+  type: VirtualDomElements.Div,
+}
+
+const searchEditorContainerNode: VirtualDomNode = {
+  childCount: 3,
+  className: ClassNames.SearchFieldContainer,
+  role: AriaRoles.None,
+  type: VirtualDomElements.Div,
+}
+
 export const getSearchHeaderTopVirtualDom = (
   flags: number,
   searchInputErrorMessage: string,
@@ -28,12 +42,7 @@ export const getSearchHeaderTopVirtualDom = (
   const replacePlaceholder = getReplacePlaceholder(focus)
   const replaceExpanded = flags & SearchFlags.ReplaceExpanded
   const dom: VirtualDomNode[] = [
-    {
-      childCount: 2,
-      className: ClassNames.SearchHeaderTop,
-      role: AriaRoles.None,
-      type: VirtualDomElements.Div,
-    },
+    headerNode,
     ...GetSearchToggleVirtualDom.getSearchToggleVirtualDom(replaceExpanded),
     {
       childCount: replaceExpanded ? 2 : 1,
@@ -53,12 +62,7 @@ export const getSearchHeaderTopVirtualDom = (
   )
   if (isSearchEditor) {
     dom.push(
-      {
-        childCount: 3,
-        className: ClassNames.SearchFieldContainer,
-        role: AriaRoles.None,
-        type: VirtualDomElements.Div,
-      },
+      searchEditorContainerNode,
       ...searchFieldDom,
       ...GetSearchEditorContextLinesVirtualDom.getSearchEditorContextLinesVirtualDom(contextLines, contextLinesEnabled),
     )

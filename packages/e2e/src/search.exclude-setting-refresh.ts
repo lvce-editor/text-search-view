@@ -7,8 +7,10 @@ export const test: Test = async ({ Command, expect, FileSystem, Locator, Search,
   const tmpDir = await FileSystem.getTmpDir({ scheme: 'file' })
   await FileSystem.mkdir(`${tmpDir}/excluded`)
   await FileSystem.mkdir(`${tmpDir}/included`)
-  await FileSystem.writeFile(`${tmpDir}/excluded/excluded.txt`, `needle`)
-  await FileSystem.writeFile(`${tmpDir}/included/included.txt`, `needle`)
+  await FileSystem.setFiles([
+    { content: `needle`, uri: `${tmpDir}/excluded/excluded.txt` },
+    { content: `needle`, uri: `${tmpDir}/included/included.txt` },
+  ])
   await Settings.update({ 'search.exclude': {} })
   await Workspace.setPath(tmpDir)
   await SideBar.open('Search')

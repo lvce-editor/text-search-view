@@ -7,9 +7,9 @@ test('getDisabled - button disabled', () => {
 })
 
 test('getDisabled - button enabled', () => {
-  expect(GetDisabled.getDisabled(InputActionFlag.ButtonEnabled)).toBe(undefined)
+  expect(GetDisabled.getDisabled(InputActionFlag.ButtonEnabled)).toBeUndefined()
 })
 
 test('getDisabled - unknown flag', () => {
-  expect(GetDisabled.getDisabled(-1)).toBe(undefined)
+  expect(GetDisabled.getDisabled(-1)).toBeUndefined()
 })

@@ -5,8 +5,10 @@ export const name = 'search.replace-all-cancel'
 export const test: Test = async ({ Dialog, expect, FileSystem, Locator, Main, Search, SideBar, Workspace }) => {
   // arrange
   const tmpDir = await FileSystem.getTmpDir()
-  await FileSystem.writeFile(`${tmpDir}/first.css`, `abc`)
-  await FileSystem.writeFile(`${tmpDir}/second.css`, `zabz`)
+  await FileSystem.setFiles([
+    { content: `abc`, uri: `${tmpDir}/first.css` },
+    { content: `zabz`, uri: `${tmpDir}/second.css` },
+  ])
   await Workspace.setPath(tmpDir)
   await SideBar.open('Search')
   await Search.setValue('ab')

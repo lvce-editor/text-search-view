@@ -28,7 +28,9 @@ abc`,
 
   // assert
   const rows = Locator('.EditorRow')
-  await expect(rows.nth(0)).toHaveText('d')
-  await expect(rows.nth(1)).toHaveText('d')
+  const firstRow = rows.nth(0)
+  const secondRow = rows.nth(1)
+  await expect(firstRow).toHaveText('d')
+  await expect(secondRow).toHaveText('d')
   await expect(message).toHaveText(`Replaced 2 occurrences across 1 file with 'd'`)
 }
