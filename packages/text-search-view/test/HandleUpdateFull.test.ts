@@ -197,6 +197,31 @@ test('handleUpdateFull - disables context in provider options when the toggle is
   expect(receivedOptions?.contextLines).toBe(0)
 })
 
+test('handleUpdateFull - enables pull-based search for an explicit file protocol', async () => {
+  using _mockTextMeasurementWorker = TextMeasurementWorker.registerMockRpc({
+    'TextMeasurement.measureTextBlockHeight': () => 13,
+  })
+  let receivedOptions: TextSearchOptions | undefined
+  using _mockTextSearchWorker = TextSearchWorker.registerMockRpc({
+    async 'TextSearch.search'(_root: string, _query: string, options: TextSearchOptions) {
+      receivedOptions = options
+      return { limitHit: false, results: [] }
+    },
+  })
+  const state: SearchState = {
+    ...CreateDefaultState.createDefaultState(),
+    usePullBasedSearch: true,
+    value: 'test',
+    workspacePath: 'file:///test',
+  }
+
+  const result = await handleUpdateFull(state, {})
+
+  expect(receivedOptions?.scheme).toBe('file')
+  expect(receivedOptions?.usePullBasedSearch).toBe(true)
+  expect(result.searchId).not.toBe('')
+})
+
 test('handleUpdateFull - rejects a provider result that is not an array', async () => {
   using _mockTextSearchWorker = TextSearchWorker.registerMockRpc({
     async 'TextSearch.search'(): Promise<any> {
