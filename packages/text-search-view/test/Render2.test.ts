@@ -16,7 +16,7 @@ SearchViewStates.set(uid, oldState, newState)
 test('render2 returns correct commands for RenderValue diff', () => {
   const diffResult = [DiffType.RenderValue]
   const result = Render2.render2(uid, diffResult)
-  expect(result).toEqual([['Viewlet.setValueByName', 'SearchValue', 'new value']])
+  expect(result).toEqual([['Viewlet.setValueByName', uid, 'SearchValue', 'new value']])
 })
 
 test('render2 queues renderer commands and returns a lightweight commit marker', async () => {
@@ -29,7 +29,7 @@ test('render2 queues renderer commands and returns a lightweight commit marker',
 
   const result = await Render2.render2(directUid, [DiffType.RenderValue])
 
-  expect(queueCommands).toHaveBeenCalledWith(directUid, [['Viewlet.setValueByName', 'SearchValue', 'direct value']])
+  expect(queueCommands).toHaveBeenCalledWith(directUid, [['Viewlet.setValueByName', directUid, 'SearchValue', 'direct value']])
   expect(result).toEqual([['Viewlet.commitPending', directUid, 17]])
 })
 
