@@ -1,5 +1,6 @@
 import type { SearchState } from '../SearchState/SearchState.ts'
 import * as GetTopHeight from '../GetTopHeight/GetTopHeight.ts'
+import * as SearchMessageHeight from '../SearchMessageHeight/SearchMessageHeight.ts'
 
 export const handleUpdateEmpty = (state: SearchState, update: Partial<SearchState>): SearchState => {
   const partialNewState = { ...state, ...update }
@@ -20,6 +21,7 @@ export const handleUpdateEmpty = (state: SearchState, update: Partial<SearchStat
     matchCount: 0,
     maxLineY: 0,
     message: '',
+    messageHeight: SearchMessageHeight.Minimum,
     minLineY: 0,
     scrollBarHeight: 0,
     scrollBarY: 0,

@@ -7,6 +7,7 @@ import { handleHeaderFocusOut } from '../src/parts/HandleHeaderFocusOut/HandleHe
 import { handleListFocus } from '../src/parts/HandleListFocus/HandleListFocus.ts'
 import { handleListPointerDown } from '../src/parts/ListHandlePointerDown/ListHandlePointerDown.ts'
 import { removeCurrent } from '../src/parts/RemoveCurrent/RemoveCurrent.ts'
+import * as TextMeasurementWorker from '../src/parts/TextMeasurementWorker/TextMeasurementWorker.ts'
 import * as TextSearchResultType from '../src/parts/TextSearchResultType/TextSearchResultType.ts'
 
 test('handleHeaderFocusOut preserves an unfocused state', () => {
@@ -77,6 +78,9 @@ test('removeCurrent preserves state when neither focus index is set', async () =
 })
 
 test('removeCurrent falls back to the list focus index', async () => {
+  using _mockTextMeasurementWorker = TextMeasurementWorker.registerMockRpc({
+    'TextMeasurement.measureTextBlockHeight': () => 13,
+  })
   using mockRpc = IconThemeWorker.registerMockRpc({
     'IconTheme.getIcons': () => [],
   })
@@ -96,6 +100,9 @@ test('removeCurrent falls back to the list focus index', async () => {
 })
 
 test('removeCurrent prefers the focused index', async () => {
+  using _mockTextMeasurementWorker = TextMeasurementWorker.registerMockRpc({
+    'TextMeasurement.measureTextBlockHeight': () => 13,
+  })
   using mockRpc = IconThemeWorker.registerMockRpc({
     'IconTheme.getIcons': () => [],
   })

@@ -3,6 +3,7 @@ import type { SearchResult } from '../SearchResult/SearchResult.ts'
 import type { SearchState } from '../SearchState/SearchState.ts'
 import * as GetFileIcons from '../GetFileIcons/GetFileIcons.ts'
 import * as GetNumberOfVisibleItems from '../GetNumberOfVisibleItems/GetNumberOfVisibleItems.ts'
+import * as GetSearchMessageLayout from '../GetSearchMessageLayout/GetSearchMessageLayout.ts'
 import * as GetTextSearchResultCounts from '../GetTextSearchResultCounts/GetTextSearchResultCounts.ts'
 import * as ScrollBarFunctions from '../ScrollBarFunctions/ScrollBarFunctions.ts'
 import * as SearchStatusMessage from '../SearchStatusMessage/SearchStatusMessage.ts'
@@ -13,13 +14,14 @@ export const handlePullResultsFound = async (
   resultSearchId: string,
   newResults: readonly SearchResult[],
 ): Promise<SearchState> => {
-  const { fileIconCache, headerHeight, height, itemHeight, listItems, minimumSliderSize, searchId, uid } = state
+  const { fileIconCache, height, itemHeight, listItems, minimumSliderSize, searchId, uid } = state
   if (searchId !== resultSearchId) {
     return state
   }
   const allResults = [...listItems, ...newResults]
   const { fileCount, resultCount } = GetTextSearchResultCounts.getTextSearchResultCounts(allResults)
   const message = SearchStatusMessage.getStatusMessage(resultCount, fileCount)
+  const { headerHeight, messageHeight } = await GetSearchMessageLayout.getSearchMessageLayout(state, message)
   const total = allResults.length
   const contentHeight = total * itemHeight
   const listHeight = height - headerHeight
@@ -37,6 +39,7 @@ export const handlePullResultsFound = async (
     fileCount,
     fileIconCache: newFileIconCache,
     finalDeltaY,
+    headerHeight,
     icons,
     items: allResults,
     listItems: allResults,
@@ -44,6 +47,7 @@ export const handlePullResultsFound = async (
     matchCount: resultCount,
     maxLineY,
     message,
+    messageHeight,
     minLineY: 0,
     scrollBarHeight,
   }

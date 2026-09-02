@@ -1,17 +1,19 @@
 import type { SearchState } from '../SearchState/SearchState.ts'
 import * as GetFileIcons from '../GetFileIcons/GetFileIcons.ts'
 import { getNewMinMax } from '../GetNewMinMax/GetNewMinMax.ts'
+import * as GetSearchMessageLayout from '../GetSearchMessageLayout/GetSearchMessageLayout.ts'
 import { removeItemFromItems } from '../RemoveItemFromItems/RemoveItemFromItems.ts'
 import * as ScrollBarFunctions from '../ScrollBarFunctions/ScrollBarFunctions.ts'
 import * as ViewletSearchStatusMessage from '../SearchStatusMessage/SearchStatusMessage.ts'
 
 export const removeIndex = async (state: SearchState, index: number): Promise<SearchState> => {
-  const { deltaY, fileCount, fileIconCache, headerHeight, height, itemHeight, items, matchCount, maxLineY, minimumSliderSize, minLineY } = state
+  const { deltaY, fileCount, fileIconCache, height, itemHeight, items, matchCount, maxLineY, minimumSliderSize, minLineY } = state
   if (index === -1) {
     return state
   }
   const { newFileCount, newFocusedIndex, newItems, newMatchCount } = removeItemFromItems(items, index, matchCount, fileCount)
   const message = ViewletSearchStatusMessage.getStatusMessage(newMatchCount, newFileCount)
+  const { headerHeight, messageHeight } = await GetSearchMessageLayout.getSearchMessageLayout(state, message)
   const { newDeltaY, newMaxLineY, newMinLineY } = getNewMinMax(newItems.length, minLineY, maxLineY, deltaY, itemHeight)
   const total = newItems.length
   const contentHeight = total * itemHeight
@@ -27,6 +29,7 @@ export const removeIndex = async (state: SearchState, index: number): Promise<Se
     fileCount: newFileCount,
     fileIconCache: newFileIconCache,
     finalDeltaY,
+    headerHeight,
     icons,
     items: newItems,
     listFocusedIndex: newFocusedIndex,
@@ -34,6 +37,7 @@ export const removeIndex = async (state: SearchState, index: number): Promise<Se
     matchCount: newMatchCount,
     maxLineY: newMaxLineY,
     message,
+    messageHeight,
     minLineY: newMinLineY,
     scrollBarHeight,
   }

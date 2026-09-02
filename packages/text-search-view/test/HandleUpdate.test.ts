@@ -5,6 +5,7 @@ import type { SearchState } from '../src/parts/SearchState/SearchState.ts'
 import * as CreateDefaultState from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
 import { handleUpdate } from '../src/parts/HandleUpdate/HandleUpdate.ts'
 import * as SearchFlags from '../src/parts/SearchFlags/SearchFlags.ts'
+import * as TextMeasurementWorker from '../src/parts/TextMeasurementWorker/TextMeasurementWorker.ts'
 
 test('handleUpdate - empty search value returns cleared state', async () => {
   const state: SearchState = {
@@ -98,6 +99,9 @@ test.skip('handleUpdate - performs search with valid input', async () => {
 })
 
 test('handleUpdate - handles search error', async () => {
+  using _mockTextMeasurementWorker = TextMeasurementWorker.registerMockRpc({
+    'TextMeasurement.measureTextBlockHeight': () => 13,
+  })
   const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {})
   const state: SearchState = {
     ...CreateDefaultState.createDefaultState(),

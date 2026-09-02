@@ -6,12 +6,12 @@ import { getUniqueIndents } from '../GetUniqueIndents/GetUniqueIndents.ts'
 import * as TreeItemPadding from '../TreeItemPadding/TreeItemPadding.ts'
 
 export const renderCss = (oldState: SearchState, newState: SearchState): readonly any[] => {
-  const { headerHeight, uid } = newState
+  const { headerHeight, messageHeight, uid } = newState
   const viewModel = createViewModel(newState)
   const indents = viewModel.displayResults.map((item) => item.indent)
   const uniqueIndents = getUniqueIndents(indents)
   const uniqueIndentRights = [TreeItemPadding.PaddingRight]
   const treeItemsTop = viewModel.itemHeight === 0 ? 0 : Math.round(-(viewModel.deltaY % viewModel.itemHeight))
-  const css = getCss(0, uniqueIndents, uniqueIndentRights, viewModel.scrollBarHeight, viewModel.scrollBarY, treeItemsTop, headerHeight)
+  const css = getCss(0, uniqueIndents, uniqueIndentRights, viewModel.scrollBarHeight, viewModel.scrollBarY, treeItemsTop, headerHeight, messageHeight)
   return [ViewletCommand.SetCss, uid, css]
 }

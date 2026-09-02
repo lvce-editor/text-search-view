@@ -7,9 +7,13 @@ import { handleUpdatePullBased } from '../src/parts/HandleUpdatePullBased/Handle
 import * as SearchFlags from '../src/parts/SearchFlags/SearchFlags.ts'
 import * as SearchStrings from '../src/parts/SearchStrings/SearchStrings.ts'
 import * as SearchViewStates from '../src/parts/SearchViewStates/SearchViewStates.ts'
+import * as TextMeasurementWorker from '../src/parts/TextMeasurementWorker/TextMeasurementWorker.ts'
 import * as TextSearchResultType from '../src/parts/TextSearchResultType/TextSearchResultType.ts'
 
 test('handleUpdatePullBased - enables pull-based mode for file protocol and computes summary from latest state', async () => {
+  using _mockTextMeasurementWorker = TextMeasurementWorker.registerMockRpc({
+    'TextMeasurement.measureTextBlockHeight': () => 13,
+  })
   using mockRendererWorker = RendererWorker.registerMockRpc({
     'MeasureTextHeight.measureTextBlockHeight': () => 18,
   })
@@ -86,6 +90,9 @@ test('handleUpdatePullBased - enables pull-based mode for file protocol and comp
 })
 
 test('handleUpdatePullBased - disables pull-based mode for non-file protocol and ignores default excludes when flag is off', async () => {
+  using _mockTextMeasurementWorker = TextMeasurementWorker.registerMockRpc({
+    'TextMeasurement.measureTextBlockHeight': () => 13,
+  })
   const state: SearchState = {
     ...CreateDefaultState.createDefaultState(),
     flags: 0,

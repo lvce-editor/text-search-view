@@ -3,6 +3,7 @@ import { IconThemeWorker, RendererWorker } from '@lvce-editor/rpc-registry'
 import * as CreateDefaultState from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
 import { handlePullResultsFound } from '../src/parts/HandlePullResultsFound/HandlePullResultsFound.ts'
 import * as SearchViewStates from '../src/parts/SearchViewStates/SearchViewStates.ts'
+import * as TextMeasurementWorker from '../src/parts/TextMeasurementWorker/TextMeasurementWorker.ts'
 import * as TextSearchResultType from '../src/parts/TextSearchResultType/TextSearchResultType.ts'
 
 test('handlePullResultsFound - ignores stale search id', async () => {
@@ -17,6 +18,9 @@ test('handlePullResultsFound - ignores stale search id', async () => {
 })
 
 test('handlePullResultsFound - merges results received from the text search worker', async () => {
+  using _mockTextMeasurementWorker = TextMeasurementWorker.registerMockRpc({
+    'TextMeasurement.measureTextBlockHeight': () => 13,
+  })
   using mockRendererWorker = RendererWorker.registerMockRpc({
     'Search.rerender': () => undefined,
   })

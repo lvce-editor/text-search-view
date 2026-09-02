@@ -6,6 +6,7 @@ import * as InputSource from '../InputSource/InputSource.ts'
 import * as MinimumSliderSize from '../MinimumSliderSize/MinimumSliderSize.ts'
 import * as ScrollBarFunctions from '../ScrollBarFunctions/ScrollBarFunctions.ts'
 import * as SearchFlags from '../SearchFlags/SearchFlags.ts'
+import * as SearchMessageHeight from '../SearchMessageHeight/SearchMessageHeight.ts'
 import * as ViewMode from '../ViewMode/ViewMode.ts'
 import * as VirtualList from '../VirtualList/VirtualList.ts'
 
@@ -64,6 +65,7 @@ export const createDefaultState = (): SearchState => {
     loaded: false,
     matchCount: 0,
     message: '',
+    messageHeight: SearchMessageHeight.Minimum,
     platform: 0,
     removeButtonRight: 0,
     removeButtonWidth: 20,

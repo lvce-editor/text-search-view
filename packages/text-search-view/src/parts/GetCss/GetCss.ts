@@ -32,17 +32,23 @@ export const getCss = (
   scrollBarY: number,
   treeItemsTop: number,
   headerHeight: number = 0,
+  messageHeight: number = 30,
 ): string => {
   const rules = [
     `.Search {
   --ScrollBarHeight: ${scrollBarHeight}px;
   --ScrollBarTop: ${scrollBarY}px;
   --TreeItemsTop: ${top}px;
+  --SearchMessageHeight: ${messageHeight}px;
 }
 
 .SearchHeader {
   contain: strict;
   height: ${headerHeight}px;
+}
+
+.Search .SearchHeaderDetails {
+  height: var(--SearchMessageHeight);
 }
 
 .SearchWorkspaceMessageAction {
