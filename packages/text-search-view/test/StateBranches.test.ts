@@ -1,12 +1,13 @@
 import { expect, test } from '@jest/globals'
 import { MouseEventType } from '@lvce-editor/constants'
-import { IconThemeWorker, TextMeasurementWorker } from '@lvce-editor/rpc-registry'
+import { IconThemeWorker } from '@lvce-editor/rpc-registry'
 import { WhenExpression } from '@lvce-editor/virtual-dom-worker'
 import { createDefaultState } from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
 import { handleHeaderFocusOut } from '../src/parts/HandleHeaderFocusOut/HandleHeaderFocusOut.ts'
 import { handleListFocus } from '../src/parts/HandleListFocus/HandleListFocus.ts'
 import { handleListPointerDown } from '../src/parts/ListHandlePointerDown/ListHandlePointerDown.ts'
 import { removeCurrent } from '../src/parts/RemoveCurrent/RemoveCurrent.ts'
+import * as TextMeasurementWorker from '../src/parts/TextMeasurementWorker/TextMeasurementWorker.ts'
 import * as TextSearchResultType from '../src/parts/TextSearchResultType/TextSearchResultType.ts'
 
 test('handleHeaderFocusOut preserves an unfocused state', () => {
@@ -82,7 +83,6 @@ test('removeCurrent falls back to the list focus index', async () => {
   })
   using mockRpc = IconThemeWorker.registerMockRpc({
     'IconTheme.getIcons': () => [],
-    'TextMeasurement.measureTextBlockHeight': () => 13,
   })
   const state = {
     ...createDefaultState(),
@@ -96,7 +96,7 @@ test('removeCurrent falls back to the list focus index', async () => {
 
   expect(result.items).toEqual([])
   expect(result.fileCount).toBe(0)
-  expect(mockRpc.invocations.filter(([command]) => command === 'IconTheme.getIcons')).toEqual([])
+  expect(mockRpc.invocations).toEqual([])
 })
 
 test('removeCurrent prefers the focused index', async () => {
@@ -105,7 +105,6 @@ test('removeCurrent prefers the focused index', async () => {
   })
   using mockRpc = IconThemeWorker.registerMockRpc({
     'IconTheme.getIcons': () => [],
-    'TextMeasurement.measureTextBlockHeight': () => 13,
   })
   const items = [
     { end: 0, lineNumber: 0, start: 0, text: 'one.txt', type: TextSearchResultType.File },
@@ -123,5 +122,5 @@ test('removeCurrent prefers the focused index', async () => {
   const result = await removeCurrent(state)
 
   expect(result.items).toEqual([items[0]])
-  expect(mockRpc.invocations.filter(([command]) => command === 'IconTheme.getIcons')).toEqual([])
+  expect(mockRpc.invocations).toEqual([])
 })

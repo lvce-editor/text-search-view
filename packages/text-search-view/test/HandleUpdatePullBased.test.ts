@@ -1,5 +1,5 @@
 import { expect, test } from '@jest/globals'
-import { RendererWorker, TextMeasurementWorker, TextSearchWorker } from '@lvce-editor/rpc-registry'
+import { RendererWorker, TextSearchWorker } from '@lvce-editor/rpc-registry'
 import type { SearchResult } from '../src/parts/SearchResult/SearchResult.ts'
 import type { SearchState } from '../src/parts/SearchState/SearchState.ts'
 import * as CreateDefaultState from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
@@ -7,6 +7,7 @@ import { handleUpdatePullBased } from '../src/parts/HandleUpdatePullBased/Handle
 import * as SearchFlags from '../src/parts/SearchFlags/SearchFlags.ts'
 import * as SearchStrings from '../src/parts/SearchStrings/SearchStrings.ts'
 import * as SearchViewStates from '../src/parts/SearchViewStates/SearchViewStates.ts'
+import * as TextMeasurementWorker from '../src/parts/TextMeasurementWorker/TextMeasurementWorker.ts'
 import * as TextSearchResultType from '../src/parts/TextSearchResultType/TextSearchResultType.ts'
 
 test('handleUpdatePullBased - enables pull-based mode for file protocol and computes summary from latest state', async () => {

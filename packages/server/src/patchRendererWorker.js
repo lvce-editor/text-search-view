@@ -1,4 +1,4 @@
-export const patchRendererWorker = (content, remoteUrl = '', useRemoteUrl = true) => {
+export const patchRendererWorker = (content, remoteUrl = '', useRemoteUrl = true, textMeasurementWorkerUrl = '') => {
   let newContent = content
 
   newContent = newContent.replaceAll('http://localhost:3001/tests/', '/tests/')
@@ -15,6 +15,14 @@ const textSearchWorkerUrl = \`${remoteUrl}\``
     const occurrence = `// const textSearchWorkerUrl = \`\${assetDir}/packages/text-search-view/dist/textSearchViewMain.js\`
 const textSearchWorkerUrl = \`${remoteUrl}\``
     const replacement = `const textSearchWorkerUrl = \`\${assetDir}/packages/text-search-view/dist/textSearchViewMain.js\``
+    newContent = newContent.replace(occurrence, replacement)
+  }
+
+  if (textMeasurementWorkerUrl && !newContent.includes('// const textMeasurementWorkerUrl = ')) {
+    const occurrence = `const textMeasurementWorkerUrl = \`\${assetDir}/packages/text-measurement-worker/dist/textMeasurementWorkerMain.js\``
+    const replacement = `// const textMeasurementWorkerUrl = \`\${assetDir}/packages/text-measurement-worker/dist/textMeasurementWorkerMain.js\`
+const textMeasurementWorkerUrl = \`${textMeasurementWorkerUrl}\``
+
     newContent = newContent.replace(occurrence, replacement)
   }
 

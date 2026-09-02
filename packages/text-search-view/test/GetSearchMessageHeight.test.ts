@@ -1,7 +1,7 @@
 import { expect, test } from '@jest/globals'
-import { TextMeasurementWorker } from '@lvce-editor/rpc-registry'
 import { getSearchMessageHeight } from '../src/parts/GetSearchMessageHeight/GetSearchMessageHeight.ts'
 import * as SearchFlags from '../src/parts/SearchFlags/SearchFlags.ts'
+import * as TextMeasurementWorker from '../src/parts/TextMeasurementWorker/TextMeasurementWorker.ts'
 
 test('returns the minimum height for an empty message', async () => {
   expect(await getSearchMessageHeight('', 200, 0)).toBe(30)

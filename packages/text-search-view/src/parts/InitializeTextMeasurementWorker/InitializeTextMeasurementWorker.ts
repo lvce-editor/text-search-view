@@ -1,5 +1,6 @@
 import { LazyTransferMessagePortRpcParent } from '@lvce-editor/rpc'
-import { RendererWorker, TextMeasurementWorker } from '@lvce-editor/rpc-registry'
+import { RendererWorker } from '@lvce-editor/rpc-registry'
+import * as TextMeasurementWorker from '../TextMeasurementWorker/TextMeasurementWorker.ts'
 
 const send = (port: MessagePort): Promise<void> => {
   return RendererWorker.sendMessagePortToTextMeasurementWorker(port)

@@ -1,10 +1,11 @@
 import { expect, jest, test } from '@jest/globals'
-import { TextMeasurementWorker, TextSearchWorker } from '@lvce-editor/rpc-registry'
+import { TextSearchWorker } from '@lvce-editor/rpc-registry'
 import type { SearchResult } from '../src/parts/SearchResult/SearchResult.ts'
 import type { SearchState } from '../src/parts/SearchState/SearchState.ts'
 import * as CreateDefaultState from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
 import { handleUpdate } from '../src/parts/HandleUpdate/HandleUpdate.ts'
 import * as SearchFlags from '../src/parts/SearchFlags/SearchFlags.ts'
+import * as TextMeasurementWorker from '../src/parts/TextMeasurementWorker/TextMeasurementWorker.ts'
 
 test('handleUpdate - empty search value returns cleared state', async () => {
   const state: SearchState = {
