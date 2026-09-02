@@ -1,17 +1,15 @@
 import type { SearchState } from '../SearchState/SearchState.ts'
-import * as GetSearchExcludes from '../GetSearchExcludes/GetSearchExcludes.ts'
 import * as GetSearchHeaderHeight from '../GetSearchHeaderHeight/GetSearchHeaderHeight.ts'
 import * as GetSearchWarningMessageHeight from '../GetSearchWarningMessageHeight/GetSearchWarningMessageHeight.ts'
-import * as GetUsePullBasedSearch from '../GetUsePullBasedSearch/GetUsePullBasedSearch.ts'
 import * as ViewletSearchHandleUpdate from '../HandleUpdate/HandleUpdate.ts'
 import * as InputSource from '../InputSource/InputSource.ts'
+import { loadPreferences } from '../LoadPreferences/LoadPreferences.ts'
 import * as RestoreState from '../RestoreState/RestoreState.ts'
 
 export const loadContent = async (state: SearchState, savedState: unknown): Promise<SearchState> => {
   const { defaultExcludes: currentDefaultExcludes, limitHitWarning, messageHeight, width } = state
   const { excludeValue, flags, includeValue, replacement, savedCollapsedPaths, savedValue, threads } = RestoreState.restoreState(savedState)
-  const defaultExcludes = await GetSearchExcludes.getSearchExcludes(currentDefaultExcludes)
-  const usePullBasedSearch = await GetUsePullBasedSearch.getUsePullBasedSearch()
+  const { defaultExcludes, usePullBasedSearch } = await loadPreferences(currentDefaultExcludes)
   const warningHeight = await GetSearchWarningMessageHeight.getSearchWarningMessageHeight(limitHitWarning, width)
   const headerHeight = GetSearchHeaderHeight.getSearchHeaderHeight(flags, messageHeight, warningHeight)
 
