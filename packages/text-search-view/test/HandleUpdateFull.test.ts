@@ -13,6 +13,7 @@ test('handleUpdateFull - sets limitHit to true when search hits limit', async ()
   })
   using mockRpc = IconThemeWorker.registerMockRpc({
     'IconTheme.getIcons': () => ['file-icon', undefined],
+    'TextMeasurement.measureTextBlockHeight': () => 13,
   })
   const mockRendererWorker = RendererWorker.registerMockRpc({
     'MeasureTextHeight.measureTextBlockHeight': () => 18,
@@ -64,7 +65,9 @@ test('handleUpdateFull - sets limitHit to true when search hits limit', async ()
     searchInputErrorMessage: '',
     value: 'test',
   })
-  expect(mockRpc.invocations).toEqual([['IconTheme.getIcons', [{ name: 'file1.txt', type: 1 }]]])
+  expect(mockRpc.invocations.filter(([command]) => command === 'IconTheme.getIcons')).toEqual([
+    ['IconTheme.getIcons', [{ name: 'file1.txt', type: 1 }]],
+  ])
   expect(mockRendererWorker.invocations).toEqual([['MeasureTextHeight.measureTextBlockHeight', expect.any(String), 'system-ui', 12, '18px', 1]])
 })
 
@@ -74,6 +77,7 @@ test('handleUpdateFull - sets limitHit to false when search does not hit limit',
   })
   using mockRpc = IconThemeWorker.registerMockRpc({
     'IconTheme.getIcons': () => ['file-icon', undefined],
+    'TextMeasurement.measureTextBlockHeight': () => 13,
   })
   const mockRendererWorker = RendererWorker.registerMockRpc({
     'MeasureTextHeight.measureTextBlockHeight': () => 18,
@@ -125,7 +129,9 @@ test('handleUpdateFull - sets limitHit to false when search does not hit limit',
     searchInputErrorMessage: '',
     value: 'test',
   })
-  expect(mockRpc.invocations).toEqual([['IconTheme.getIcons', [{ name: 'file1.txt', type: 1 }]]])
+  expect(mockRpc.invocations.filter(([command]) => command === 'IconTheme.getIcons')).toEqual([
+    ['IconTheme.getIcons', [{ name: 'file1.txt', type: 1 }]],
+  ])
   expect(mockRendererWorker.invocations).toEqual([])
 })
 

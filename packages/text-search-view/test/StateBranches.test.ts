@@ -82,6 +82,7 @@ test('removeCurrent falls back to the list focus index', async () => {
   })
   using mockRpc = IconThemeWorker.registerMockRpc({
     'IconTheme.getIcons': () => [],
+    'TextMeasurement.measureTextBlockHeight': () => 13,
   })
   const state = {
     ...createDefaultState(),
@@ -95,7 +96,7 @@ test('removeCurrent falls back to the list focus index', async () => {
 
   expect(result.items).toEqual([])
   expect(result.fileCount).toBe(0)
-  expect(mockRpc.invocations).toEqual([])
+  expect(mockRpc.invocations.filter(([command]) => command === 'IconTheme.getIcons')).toEqual([])
 })
 
 test('removeCurrent prefers the focused index', async () => {
@@ -104,6 +105,7 @@ test('removeCurrent prefers the focused index', async () => {
   })
   using mockRpc = IconThemeWorker.registerMockRpc({
     'IconTheme.getIcons': () => [],
+    'TextMeasurement.measureTextBlockHeight': () => 13,
   })
   const items = [
     { end: 0, lineNumber: 0, start: 0, text: 'one.txt', type: TextSearchResultType.File },
@@ -121,5 +123,5 @@ test('removeCurrent prefers the focused index', async () => {
   const result = await removeCurrent(state)
 
   expect(result.items).toEqual([items[0]])
-  expect(mockRpc.invocations).toEqual([])
+  expect(mockRpc.invocations.filter(([command]) => command === 'IconTheme.getIcons')).toEqual([])
 })

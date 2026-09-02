@@ -25,6 +25,7 @@ test('handlePullResultsFound - merges results received from the text search work
   })
   IconThemeWorker.registerMockRpc({
     'IconTheme.getIcons': () => ['file-icon'],
+    'TextMeasurement.measureTextBlockHeight': () => 13,
   })
 
   const state = {
