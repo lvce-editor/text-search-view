@@ -7,8 +7,10 @@ export const test: Test = async ({ expect, FileSystem, Locator, Search, SideBar,
   const tmpDir = await FileSystem.getTmpDir()
   await FileSystem.mkdir(`${tmpDir}/one`)
   await FileSystem.mkdir(`${tmpDir}/two`)
-  await FileSystem.writeFile(`${tmpDir}/one/test.txt`, `needle`)
-  await FileSystem.writeFile(`${tmpDir}/two/test.txt`, `needle`)
+  await FileSystem.setFiles([
+    { content: `needle`, uri: `${tmpDir}/one/test.txt` },
+    { content: `needle`, uri: `${tmpDir}/two/test.txt` },
+  ])
   await Workspace.setPath(tmpDir)
   await SideBar.open('Search')
 

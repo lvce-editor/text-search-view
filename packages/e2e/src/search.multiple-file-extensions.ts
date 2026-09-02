@@ -4,9 +4,11 @@ export const name = 'search.multiple-file-extensions'
 
 export const test: Test = async ({ expect, FileSystem, Locator, Search, SideBar, Workspace }) => {
   const tmpDir = await FileSystem.getTmpDir()
-  await FileSystem.writeFile(`${tmpDir}/a.ts`, `needle`)
-  await FileSystem.writeFile(`${tmpDir}/b.css`, `needle`)
-  await FileSystem.writeFile(`${tmpDir}/c.md`, `needle`)
+  await FileSystem.setFiles([
+    { content: `needle`, uri: `${tmpDir}/a.ts` },
+    { content: `needle`, uri: `${tmpDir}/b.css` },
+    { content: `needle`, uri: `${tmpDir}/c.md` },
+  ])
   await Workspace.setPath(tmpDir)
   await SideBar.open('Search')
 
