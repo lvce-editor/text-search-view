@@ -6,8 +6,10 @@ export const skip = 1
 export const test: Test = async ({ expect, FileSystem, Locator, Main, Search, SideBar, Workspace }) => {
   // arrange
   const tmpDir = await FileSystem.getTmpDir()
-  await FileSystem.writeFile(`${tmpDir}/a.css`, `abc`)
-  await FileSystem.writeFile(`${tmpDir}/b.css`, `abc`)
+  await FileSystem.setFiles([
+    { content: `abc`, uri: `${tmpDir}/a.css` },
+    { content: `abc`, uri: `${tmpDir}/b.css` },
+  ])
   await Workspace.setPath(tmpDir)
   await SideBar.open('Search')
   await Search.setValue('ab')

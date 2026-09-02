@@ -4,6 +4,7 @@ import * as DomEventListenerFunctions from '../DomEventListenerFunctions/DomEven
 import * as GetSearchFieldButtonVirtualDom from '../GetSearchFieldButtonVirtualDom/GetSearchFieldButtonVirtualDom.ts'
 import * as InputActionFlag from '../InputActionFlag/InputActionFlag.ts'
 import * as InputName from '../InputName/InputName.ts'
+import * as MergeClassNames from '../MergeClassNames/MergeClassNames.ts'
 import * as SearchStrings from '../SearchStrings/SearchStrings.ts'
 
 export const getSearchEditorContextLinesVirtualDom = (contextLines: number, contextLinesEnabled: boolean): readonly VirtualDomNode[] => {
@@ -17,13 +18,13 @@ export const getSearchEditorContextLinesVirtualDom = (contextLines: number, cont
     {
       ariaLabel: SearchStrings.contextLines(),
       childCount: 0,
-      className: `${ClassNames.InputBox} SearchEditorContextLinesInput`,
+      className: MergeClassNames.mergeClassNames(ClassNames.InputBox, 'SearchEditorContextLinesInput'),
       inputType: 'number',
       min: 0,
       name: InputName.ContextLines,
       onInput: DomEventListenerFunctions.HandleInput2,
       type: VirtualDomElements.Input,
-      value: `${contextLines}`,
+      value: String(contextLines),
     },
     ...GetSearchFieldButtonVirtualDom.getSearchFieldButtonVirtualDom(button),
   ]

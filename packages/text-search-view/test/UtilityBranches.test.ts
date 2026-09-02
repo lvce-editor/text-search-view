@@ -54,6 +54,16 @@ test('createViewModel computes non-zero scrollbar values', () => {
   expect(result.scrollBarY).toBeGreaterThan(0)
 })
 
+test('createViewModel outlines an empty focused list', () => {
+  const result = createViewModel({
+    ...createDefaultState(),
+    listFocused: true,
+    listFocusedIndex: -1,
+  })
+
+  expect(result.focusOutline).toBe(true)
+})
+
 test('diff replacement detects a programmatic replacement change', () => {
   const oldState = {
     ...createDefaultState(),

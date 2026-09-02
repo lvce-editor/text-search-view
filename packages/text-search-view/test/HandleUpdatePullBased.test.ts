@@ -3,6 +3,7 @@ import { RendererWorker, TextSearchWorker } from '@lvce-editor/rpc-registry'
 import type { SearchResult } from '../src/parts/SearchResult/SearchResult.ts'
 import type { SearchState } from '../src/parts/SearchState/SearchState.ts'
 import * as CreateDefaultState from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
+import { handleUpdate } from '../src/parts/HandleUpdate/HandleUpdate.ts'
 import { handleUpdatePullBased } from '../src/parts/HandleUpdatePullBased/HandleUpdatePullBased.ts'
 import * as SearchFlags from '../src/parts/SearchFlags/SearchFlags.ts'
 import * as SearchStrings from '../src/parts/SearchStrings/SearchStrings.ts'
@@ -10,7 +11,7 @@ import * as SearchViewStates from '../src/parts/SearchViewStates/SearchViewState
 import * as TextMeasurementWorker from '../src/parts/TextMeasurementWorker/TextMeasurementWorker.ts'
 import * as TextSearchResultType from '../src/parts/TextSearchResultType/TextSearchResultType.ts'
 
-test('handleUpdatePullBased - enables pull-based mode for file protocol and computes summary from latest state', async () => {
+test('handleUpdate - routes to pull-based mode for file protocol and computes summary from latest state', async () => {
   using _mockTextMeasurementWorker = TextMeasurementWorker.registerMockRpc({
     'TextMeasurement.measureTextBlockHeight': () => 13,
   })
@@ -64,7 +65,7 @@ test('handleUpdatePullBased - enables pull-based mode for file protocol and comp
     },
   })
 
-  const result = await handleUpdatePullBased(state, { value: 'test' })
+  const result = await handleUpdate(state, { value: 'test' })
 
   expect(result).toMatchObject({
     items: pulledResults,

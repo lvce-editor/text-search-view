@@ -4,8 +4,10 @@ export const name = 'search.case-insensitive-multiple-files'
 
 export const test: Test = async ({ expect, FileSystem, Locator, Search, SideBar, Workspace }) => {
   const tmpDir = await FileSystem.getTmpDir()
-  await FileSystem.writeFile(`${tmpDir}/a.txt`, `ALPHA`)
-  await FileSystem.writeFile(`${tmpDir}/b.txt`, `Alpha`)
+  await FileSystem.setFiles([
+    { content: `ALPHA`, uri: `${tmpDir}/a.txt` },
+    { content: `Alpha`, uri: `${tmpDir}/b.txt` },
+  ])
   await Workspace.setPath(tmpDir)
   await SideBar.open('Search')
 

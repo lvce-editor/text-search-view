@@ -37,6 +37,15 @@ test('getSearchEditorContextLinesVirtualDom - enabled', () => {
   ])
 })
 
+test('getSearchEditorContextLinesVirtualDom - disabled', () => {
+  const result = getSearchEditorContextLinesVirtualDom(0, false)
+
+  expect(result[1]).toMatchObject({
+    ariaChecked: false,
+    className: 'SearchFieldButton',
+  })
+})
+
 test('getSearchHeaderTopVirtualDom - includes context line controls only for search editors', () => {
   const searchEditorDom = getSearchHeaderTopVirtualDom(0, '', 0, 0, true, 1, true)
   const sideBarDom = getSearchHeaderTopVirtualDom(0, '', 0, 0)
