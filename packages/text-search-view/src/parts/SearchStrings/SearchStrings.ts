@@ -102,10 +102,20 @@ export const replacedOneOccurrenceInOneFile = (replacement: string): string => {
   })
 }
 
+export const replacedOneOccurrenceInOneFileNoValue = (): string => {
+  return I18nString.i18nString(UiStrings.ReplacedOneOccurrenceInOneFileNoValue)
+}
+
 export const replacedManyOccurrencesInOneFile = (matchCount: number, replacement: string): string => {
-  return I18nString.i18nString(UiStrings.ReplacedOneOccurrenceInOneFile, {
+  return I18nString.i18nString(UiStrings.ReplacedManyOccurrencesInOneFile, {
     PH1: matchCount,
     PH2: replacement,
+  })
+}
+
+export const replacedManyOccurrencesInOneFileNoValue = (matchCount: number): string => {
+  return I18nString.i18nString(UiStrings.ReplacedManyOccurrencesInOneFileNoValue, {
+    PH1: matchCount,
   })
 }
 
@@ -114,6 +124,13 @@ export const replacedManyOccurrencesInManyFiles = (matchCount: number, fileCount
     PH1: matchCount,
     PH2: fileCount,
     PH3: replacement,
+  })
+}
+
+export const replacedManyOccurrencesInManyFilesNoValue = (matchCount: number, fileCount: number): string => {
+  return I18nString.i18nString(UiStrings.ReplacedManyOccurrencesInManyFilesNoValue, {
+    PH1: matchCount,
+    PH2: fileCount,
   })
 }
 
