@@ -12,7 +12,11 @@ const item = (type: number, text: string): SearchResult => ({
 })
 
 test('removeItemFromItems - removes a context result', () => {
-  const items = [item(TextSearchResultType.File, 'file.txt'), item(TextSearchResultType.Context, 'context'), item(TextSearchResultType.Match, 'match')]
+  const items = [
+    item(TextSearchResultType.File, 'file.txt'),
+    item(TextSearchResultType.Context, 'context'),
+    item(TextSearchResultType.Match, 'match'),
+  ]
 
   expect(removeItemFromItems(items, 1, 1, 1)).toEqual({
     newFileCount: 1,
@@ -23,7 +27,11 @@ test('removeItemFromItems - removes a context result', () => {
 })
 
 test('removeItemFromItems - ignores context results when counting matches in a file', () => {
-  const items = [item(TextSearchResultType.File, 'file.txt'), item(TextSearchResultType.Context, 'context'), item(TextSearchResultType.Match, 'match')]
+  const items = [
+    item(TextSearchResultType.File, 'file.txt'),
+    item(TextSearchResultType.Context, 'context'),
+    item(TextSearchResultType.Match, 'match'),
+  ]
 
   expect(removeItemFromItems(items, 0, 1, 1)).toEqual({
     newFileCount: 0,
