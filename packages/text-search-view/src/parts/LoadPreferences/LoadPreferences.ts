@@ -7,10 +7,7 @@ interface Preferences {
 }
 
 export const loadPreferences = async (currentDefaultExcludes: readonly string[]): Promise<Preferences> => {
-  const [defaultExcludes, usePullBasedSearch] = await Promise.all([
-    getSearchExcludes(currentDefaultExcludes),
-    getUsePullBasedSearch(),
-  ])
+  const [defaultExcludes, usePullBasedSearch] = await Promise.all([getSearchExcludes(currentDefaultExcludes), getUsePullBasedSearch()])
   return {
     defaultExcludes,
     usePullBasedSearch,
