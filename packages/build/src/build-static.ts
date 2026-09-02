@@ -1,8 +1,8 @@
 import { cp, mkdir, readFile, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { pathToFileURL } from 'node:url'
-import { patchRendererWorker } from './patchRendererWorker.js'
-import { root } from './root.js'
+import { patchRendererWorker } from './patchRendererWorker.ts'
+import { root } from './root.ts'
 
 const sharedProcessPath = join(root, 'node_modules', '@lvce-editor', 'shared-process', 'index.js')
 
@@ -25,7 +25,7 @@ const serverRendererWorkerPath = join(serverStaticPath, 'packages', 'renderer-wo
 const serverTextSearchWorkerPath = join(serverStaticPath, 'packages', 'text-search-view', 'dist', 'textSearchViewMain.js')
 const serverExtensionHostWorkerTestsPath = join(serverStaticPath, 'packages', 'extension-host-worker-tests')
 
-export const getRemoteUrl = (path) => {
+export const getRemoteUrl = (path: string): string => {
   const url = pathToFileURL(path).toString().slice(8)
   return `/remote/${url}`
 }
@@ -33,7 +33,7 @@ export const getRemoteUrl = (path) => {
 const workerPath = join(root, '.tmp', 'dist', 'dist', 'textSearchViewMain.js')
 const remoteUrl = getRemoteUrl(workerPath)
 
-const patchRendererWorkerPath = async (path, useRemoteUrl) => {
+const patchRendererWorkerPath = async (path: string, useRemoteUrl: boolean): Promise<void> => {
   const content = await readFile(path, 'utf8')
   const newContent = patchRendererWorker(content, remoteUrl, useRemoteUrl)
 
@@ -53,7 +53,7 @@ const staticPath = join(root, '.tmp', 'static')
 const staticPrefixPath = join(staticPath, 'text-search-view')
 const serverMainPath = join(root, 'node_modules', '@lvce-editor', 'server', 'src', 'server.js')
 
-const patchServerStaticPrefix = async () => {
+const patchServerStaticPrefix = async (): Promise<void> => {
   const content = await readFile(serverMainPath, 'utf-8')
   const occurrence = `  if (url.startsWith('/995dbd2')) {
     return true

@@ -1,4 +1,4 @@
-import { expect, test } from '@jest/globals'
+import { expect, jest, test } from '@jest/globals'
 import { UseRegularExpression } from '../src/parts/SearchFlags/SearchFlags.ts'
 import * as ValidateSearchInput from '../src/parts/ValidateSearchInput/ValidateSearchInput.ts'
 
@@ -25,6 +25,14 @@ const getExpectedMessage = (): string => {
 test('validateSearchInput - invalid regular expression returns error message', () => {
   const expectedMessage = getExpectedMessage()
   expect(ValidateSearchInput.validateSearchInput('[', UseRegularExpression)).toBe(expectedMessage)
+})
+
+test('validateSearchInput - non-error exception returns empty error message', () => {
+  using _mockRegExp = jest.spyOn(globalThis, 'RegExp').mockImplementation(() => {
+    throw 'invalid regular expression'
+  })
+
+  expect(ValidateSearchInput.validateSearchInput('[', UseRegularExpression)).toBe('')
 })
 
 test('validateSearchInput - complex valid regex returns empty error message', () => {
