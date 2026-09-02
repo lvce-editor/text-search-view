@@ -3,6 +3,8 @@ export const patchRendererWorker = (content, remoteUrl = '', useRemoteUrl = true
 
   newContent = newContent.replaceAll('http://localhost:3001/tests/', '/tests/')
 
+  newContent = newContent.replace(`  await invoke$H(ipc, 'TextSearch.initialize', getPlatform$2());\n`, '')
+
   if (useRemoteUrl && remoteUrl && !newContent.includes('// const textSearchWorkerUrl = ')) {
     const occurrence = `const textSearchWorkerUrl = \`\${assetDir}/packages/text-search-view/dist/textSearchViewMain.js\``
     const replacement = `// const textSearchWorkerUrl = \`\${assetDir}/packages/text-search-view/dist/textSearchViewMain.js\`
