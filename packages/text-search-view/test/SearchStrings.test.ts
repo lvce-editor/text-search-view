@@ -63,7 +63,19 @@ test('replacedOneOccurrenceInOneFile', () => {
 test('replacedManyOccurrencesInOneFile', () => {
   const matchCount = 2
   const replacement = 'b'
-  expect(SearchStrings.replacedManyOccurrencesInOneFile(matchCount, replacement)).toBe("Replaced 1 occurrence across 1 file with '2'")
+  expect(SearchStrings.replacedManyOccurrencesInOneFile(matchCount, replacement)).toBe("Replaced 2 occurrences across 1 file with 'b'")
+})
+
+test('replacedOneOccurrenceInOneFileNoValue', () => {
+  expect(SearchStrings.replacedOneOccurrenceInOneFileNoValue()).toBe('Replaced 1 occurrence across 1 file')
+})
+
+test('replacedManyOccurrencesInOneFileNoValue', () => {
+  expect(SearchStrings.replacedManyOccurrencesInOneFileNoValue(2)).toBe('Replaced 2 occurrences across 1 file')
+})
+
+test('replacedManyOccurrencesInManyFilesNoValue', () => {
+  expect(SearchStrings.replacedManyOccurrencesInManyFilesNoValue(2, 2)).toBe('Replaced 2 occurrences across 2 files')
 })
 
 test('replacedManyOccurrencesInManyFiles', () => {
