@@ -4,7 +4,7 @@
     "description": "Configures glob patterns for excluding files and folders from text search results.",
     "heading": "Exclude",
     "id": "search.exclude",
-    "type": 4,
+    "type": "array",
     "value": {}
   },
   {
@@ -13,7 +13,7 @@
     "heading": "Search Threads",
     "id": "search.threads",
     "minimum": 1,
-    "type": 5,
+    "type": "number",
     "value": 1
   }
 ]
