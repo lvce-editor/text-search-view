@@ -4,8 +4,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "measure": "node src/measureMemory.js",
-    "measure:visible": "node src/measureMemory.js --no-headless"
+    "measure": "node src/measureMemory.ts",
+    "measure:visible": "node src/measureMemory.ts --no-headless"
   },
   "keywords": [],
   "author": "",

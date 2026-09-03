@@ -1,5 +1,5 @@
 import { execa } from 'execa'
-import { root } from './root.js'
+import { root } from './root.ts'
 
 const watchArgs = [
   'exec',
@@ -17,7 +17,7 @@ const watchArgs = [
   '--outfile=../../.tmp/dist/dist/textSearchViewMain.js',
 ]
 
-const main = async () => {
+const main = async (): Promise<void> => {
   execa('npm', watchArgs, {
     cwd: root,
     stdio: 'inherit',

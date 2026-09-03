@@ -1,7 +1,7 @@
 import { cp, mkdir, readFile, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { pathToFileURL } from 'node:url'
-import { root } from './root.js'
+import { root } from './root.ts'
 
 const sharedProcessPath = join(root, 'node_modules', '@lvce-editor', 'shared-process', 'index.js')
 
@@ -32,7 +32,7 @@ const staticPath = join(root, '.tmp', 'static')
 const staticPrefixPath = join(staticPath, 'text-search-view')
 const serverMainPath = join(root, 'node_modules', '@lvce-editor', 'server', 'src', 'server.js')
 
-const patchServerStaticPrefix = async () => {
+const patchServerStaticPrefix = async (): Promise<void> => {
   const content = await readFile(serverMainPath, 'utf-8')
   const occurrence = `  if (url.startsWith('/995dbd2')) {
     return true
