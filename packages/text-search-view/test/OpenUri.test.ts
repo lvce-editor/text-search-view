@@ -8,7 +8,7 @@ test('openUri - without options', async () => {
   })
 
   await OpenUri.openUri('/test/file.txt')
-  expect(mockRpc.invocations).toEqual([['Main.openUri', '/test/file.txt', true, {}]])
+  expect(mockRpc.invocations).toEqual([['Main.openUri', { focus: true, uri: '/test/file.txt' }]])
 })
 
 test('openUri - with preview', async () => {
@@ -17,7 +17,7 @@ test('openUri - with preview', async () => {
   })
 
   await OpenUri.openUri('/test/file.txt', true)
-  expect(mockRpc.invocations).toEqual([['Main.openUri', '/test/file.txt', true, {}]])
+  expect(mockRpc.invocations).toEqual([['Main.openUri', { focus: true, uri: '/test/file.txt' }]])
 })
 
 test('openUri - with options', async () => {
@@ -29,7 +29,7 @@ test('openUri - with options', async () => {
     selections: new Uint32Array([1, 0, 1, 0]),
   }
   await OpenUri.openUri('/test/file.txt', false, options)
-  expect(mockRpc.invocations).toEqual([['Main.openUri', '/test/file.txt', false, options]])
+  expect(mockRpc.invocations).toEqual([['Main.openUri', { focus: false, selections: options.selections, uri: '/test/file.txt' }]])
 })
 
 test('openUri - error', async () => {
@@ -40,5 +40,5 @@ test('openUri - error', async () => {
   })
 
   await expect(OpenUri.openUri('/test/file.txt')).rejects.toThrow('Failed to open file')
-  expect(mockRpc.invocations).toEqual([['Main.openUri', '/test/file.txt', true, {}]])
+  expect(mockRpc.invocations).toEqual([['Main.openUri', { focus: true, uri: '/test/file.txt' }]])
 })
