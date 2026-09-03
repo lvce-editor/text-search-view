@@ -16,5 +16,13 @@
     "minimum": 1,
     "type": "number",
     "value": 1
+  },
+  {
+    "category": "features",
+    "description": "Uses pull-based search to retrieve text search results",
+    "heading": "Pull Based Search",
+    "id": "Search.usePullBasedSearch",
+    "type": "boolean",
+    "value": false
   }
 ]
