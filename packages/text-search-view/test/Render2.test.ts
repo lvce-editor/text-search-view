@@ -33,7 +33,7 @@ test('render2 queues renderer commands and returns a lightweight commit marker',
   expect(result).toEqual([['Viewlet.commitPending', directUid, 17]])
 })
 
-test('render2 leaves focus context management with the renderer worker', async () => {
+test('render2 leaves focus context management with the renderer worker without queuing an empty renderer transaction', async () => {
   const queueCommands = jest.fn((_uid: number, _commands: readonly unknown[]) => 23)
   RendererProcess.set(createMockRpc({ commandMap: { 'Viewlet.queueCommands': queueCommands } }))
   const directUid = 789
@@ -43,9 +43,6 @@ test('render2 leaves focus context management with the renderer worker', async (
 
   const result = await Render2.render2(directUid, [DiffType.RenderFocusContext])
 
-  expect(queueCommands).toHaveBeenCalledWith(directUid, [])
-  expect(result).toEqual([
-    ['Viewlet.setFocusContext', directUid, WhenExpression.FocusSearch, WhenExpression.FocusSearchResults],
-    ['Viewlet.commitPending', directUid, 23],
-  ])
+  expect(queueCommands).not.toHaveBeenCalled()
+  expect(result).toEqual([['Viewlet.setFocusContext', directUid, WhenExpression.FocusSearch, WhenExpression.FocusSearchResults]])
 })
