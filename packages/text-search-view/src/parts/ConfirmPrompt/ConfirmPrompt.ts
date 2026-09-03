@@ -1,3 +1,3 @@
 import { DialogWorker } from '@lvce-editor/rpc-registry'
 
-export const prompt = DialogWorker.prompt
+export const { prompt } = DialogWorker
