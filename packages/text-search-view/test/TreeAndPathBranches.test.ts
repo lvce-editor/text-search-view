@@ -27,7 +27,7 @@ test('createParentFolderTree groups files and ignores matches', () => {
   const result = createParentFolderTree([file('src/one.ts'), file('src/two.ts'), match('value')])
 
   expect({ ...result }).toEqual({
-    src: [file('src/one.ts'), file('src/two.ts')],
+    src: [file('one.ts'), file('two.ts')],
   })
 })
 
@@ -51,21 +51,23 @@ test('mergeTrees appends existing children and adds new keys', () => {
 test('treeToList handles missing roots, matches, files, and nested children', () => {
   const tree = {
     '': [file('src'), match('root match')],
-    '/src': [file('index.ts'), match('source match')],
+    src: [file('index.ts')],
+    'src/index.ts': [match('source match')],
   }
 
-  expect(treeToList({}, '/workspace')).toEqual([])
-  expect(treeToList(tree, '/workspace')).toEqual([
-    file('/workspace/src'),
-    file('/workspace/src/index.ts'),
-    match('source match'),
-    match('root match'),
+  expect(treeToList({})).toEqual([])
+  expect(treeToList(tree)).toEqual([
+    { ...file('src'), depth: 0 },
+    { ...file('src/index.ts'), depth: 1 },
+    { ...match('source match'), depth: 2 },
+    { ...match('root match'), depth: 0 },
   ])
 })
 
 test('path helpers support paths with and without separators', () => {
-  expect(dirname2('file.txt')).toBe('file.txt')
+  expect(dirname2('file.txt')).toBe('')
   expect(dirname2('src/file.txt')).toBe('src')
+  expect(join2('', 'file.txt')).toBe('file.txt')
   expect(join2('src/', 'file.txt')).toBe('src/file.txt')
   expect(join2('src', 'file.txt')).toBe('src/file.txt')
 })

@@ -3,13 +3,16 @@ import type { SearchState } from '../SearchState/SearchState.ts'
 import * as Clamp from '../Clamp/Clamp.ts'
 import * as GetFilteredResults from '../GetFilteredResults/GetFilteredResults.ts'
 import * as GetNumberOfVisibleItems from '../GetNumberOfVisibleItems/GetNumberOfVisibleItems.ts'
+import * as GetTreeListItems from '../GetTreeListItems/GetTreeListItems.ts'
 import * as InputSource from '../InputSource/InputSource.ts'
 import * as ScrollBarFunctions from '../ScrollBarFunctions/ScrollBarFunctions.ts'
 import * as UpdateVisibleFileIcons from '../UpdateVisibleFileIcons/UpdateVisibleFileIcons.ts'
+import * as ViewMode from '../ViewMode/ViewMode.ts'
 
 export const applyCollapsedPaths = async (state: SearchState, collapsedPaths: readonly string[], listFocusedIndex: number): Promise<SearchState> => {
-  const { deltaY: oldDeltaY, headerHeight, height, itemHeight, items, minimumSliderSize } = state
-  const filteredResults = GetFilteredResults.getFilteredResults(items, collapsedPaths)
+  const { deltaY: oldDeltaY, headerHeight, height, itemHeight, items, minimumSliderSize, viewMode } = state
+  const sourceItems = viewMode === ViewMode.Tree ? GetTreeListItems.getTreeListItems(items) : items
+  const filteredResults = GetFilteredResults.getFilteredResults(sourceItems, collapsedPaths)
   const total = filteredResults.length
   const listHeight = height - headerHeight
   const contentHeight = total * itemHeight
