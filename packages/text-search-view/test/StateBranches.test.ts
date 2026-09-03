@@ -1,13 +1,12 @@
 import { expect, test } from '@jest/globals'
 import { MouseEventType } from '@lvce-editor/constants'
-import { IconThemeWorker } from '@lvce-editor/rpc-registry'
+import { IconThemeWorker, TextMeasurementWorker } from '@lvce-editor/rpc-registry'
 import { WhenExpression } from '@lvce-editor/virtual-dom-worker'
 import { createDefaultState } from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
 import { handleHeaderFocusOut } from '../src/parts/HandleHeaderFocusOut/HandleHeaderFocusOut.ts'
 import { handleListFocus } from '../src/parts/HandleListFocus/HandleListFocus.ts'
 import { handleListPointerDown } from '../src/parts/ListHandlePointerDown/ListHandlePointerDown.ts'
 import { removeCurrent } from '../src/parts/RemoveCurrent/RemoveCurrent.ts'
-import * as TextMeasurementWorker from '../src/parts/TextMeasurementWorker/TextMeasurementWorker.ts'
 import * as TextSearchResultType from '../src/parts/TextSearchResultType/TextSearchResultType.ts'
 
 test('handleHeaderFocusOut preserves an unfocused state', () => {

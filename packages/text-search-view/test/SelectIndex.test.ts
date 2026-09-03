@@ -96,7 +96,7 @@ test('getFileIndex - finds closest file above match', async () => {
   state.listItems = state.items
 
   await SelectIndex.selectIndex(state, 2) // Select second match
-  expect(mockRpc.invocations).toEqual([['Main.openUri', '/test/file1.ts', true, { selections: new Uint32Array([9, 311, 9, 313]) }]])
+  expect(mockRpc.invocations).toEqual([['Main.openUri', { focus: true, selections: new Uint32Array([9, 311, 9, 313]), uri: '/test/file1.ts' }]])
 })
 
 test('getFileIndex - returns -1 when no file found', async () => {
@@ -142,7 +142,7 @@ test('selectIndexPreview - uses extension search result coordinates as fallback'
     listFocused: false,
     listFocusedIndex: 2,
   })
-  expect(mockRpc.invocations).toEqual([['Main.openUri', '/test/file1.ts', true, { selections: new Uint32Array([10, 4, 10, 8]) }]])
+  expect(mockRpc.invocations).toEqual([['Main.openUri', { focus: true, selections: new Uint32Array([10, 4, 10, 8]), uri: '/test/file1.ts' }]])
 })
 
 test('selectIndexPreview - opens the correct file after an earlier result is collapsed', async () => {
@@ -169,5 +169,5 @@ test('selectIndexPreview - opens the correct file after an earlier result is col
 
   await SelectIndex.selectIndex(state, 2)
 
-  expect(mockRpc.invocations).toEqual([['Main.openUri', '/test/file2.ts', true, { selections: new Uint32Array([3, 3, 3, 7]) }]])
+  expect(mockRpc.invocations).toEqual([['Main.openUri', { focus: true, selections: new Uint32Array([3, 3, 3, 7]), uri: '/test/file2.ts' }]])
 })
