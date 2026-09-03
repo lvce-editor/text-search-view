@@ -11,7 +11,7 @@ export const test: Test = async ({ Command, expect, FileSystem, Locator, Search,
     { content: `needle`, uri: `${tmpDir}/excluded/excluded.txt` },
     { content: `needle`, uri: `${tmpDir}/included/included.txt` },
   ])
-  await Settings.update({ 'search.exclude': {} })
+  await Settings.update({ 'search.exclude': [] })
   await Workspace.setPath(tmpDir)
   await SideBar.open('Search')
   await Search.setValue('needle')
@@ -25,7 +25,7 @@ export const test: Test = async ({ Command, expect, FileSystem, Locator, Search,
   await expect(includedResult).toBeVisible()
 
   // act
-  await Settings.update({ 'search.exclude': { '**/excluded': true } })
+  await Settings.update({ 'search.exclude': ['**/excluded'] })
   await Command.execute('Search.refresh')
 
   // assert
