@@ -5,15 +5,27 @@ import type { SearchState } from '../src/parts/SearchState/SearchState.ts'
 import * as CreateDefaultState from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
 import { handleUpdate } from '../src/parts/HandleUpdate/HandleUpdate.ts'
 import * as SearchFlags from '../src/parts/SearchFlags/SearchFlags.ts'
+import * as SearchViewStates from '../src/parts/SearchViewStates/SearchViewStates.ts'
 
 test('handleUpdate - empty search value returns cleared state', async () => {
   const state: SearchState = {
     ...CreateDefaultState.createDefaultState(),
+    scrollBarHeight: 20,
+    searchId: 'active-search',
+    uid: 901,
     value: '',
   }
   const update = { value: '' }
+  SearchViewStates.set(state.uid, state, state)
 
-  const result = await handleUpdate(state, update)
+  const resultPromise = handleUpdate(state, update)
+
+  expect(SearchViewStates.get(state.uid).newState).toMatchObject({
+    scrollBarHeight: 0,
+    searchId: '',
+  })
+
+  const result = await resultPromise
 
   expect(result).toEqual({
     ...state,
@@ -27,6 +39,8 @@ test('handleUpdate - empty search value returns cleared state', async () => {
     maxLineY: 0,
     message: '',
     minLineY: 0,
+    scrollBarHeight: 0,
+    searchId: '',
     searchInputErrorMessage: '',
   })
 })

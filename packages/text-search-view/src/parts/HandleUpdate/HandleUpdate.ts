@@ -7,6 +7,7 @@ import { handleUpdateIncremental } from '../HandleUpdateIncremental/HandleUpdate
 import { handleUpdatePullBased } from '../HandleUpdatePullBased/HandleUpdatePullBased.ts'
 import { handleUpdateValidationError } from '../HandleUpdateValidationError/HandleUpdateValidationError.ts'
 import * as IsEmptyString from '../IsEmptyString/IsEmptyString.ts'
+import * as SearchViewStates from '../SearchViewStates/SearchViewStates.ts'
 import * as ValidateSearchInput from '../ValidateSearchInput/ValidateSearchInput.ts'
 
 export const handleUpdate = async (state: SearchState, update: Partial<SearchState>): Promise<SearchState> => {
@@ -15,7 +16,12 @@ export const handleUpdate = async (state: SearchState, update: Partial<SearchSta
   try {
     const { flags, value, workspacePath } = partialNewState
     if (IsEmptyString.isEmptyString(value) || IsEmptyString.isEmptyString(workspacePath)) {
-      return handleUpdateEmpty(state, update)
+      const newState = handleUpdateEmpty(state, update)
+      const current = SearchViewStates.get(newState.uid)
+      if (current) {
+        SearchViewStates.set(newState.uid, current.oldState, newState)
+      }
+      return newState
     }
     const searchInputErrorMessage = ValidateSearchInput.validateSearchInput(value, flags)
     if (searchInputErrorMessage) {
