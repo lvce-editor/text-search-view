@@ -160,3 +160,33 @@ test('handleUpdatePullBased - returns previous state when latest state cannot be
   expect(result).toBe(state)
   expect(seenUid).toBe(104)
 })
+
+test('handleUpdatePullBased - does not overwrite state after the active search changes', async () => {
+  const state: SearchState = {
+    ...CreateDefaultState.createDefaultState(),
+    uid: 105,
+    value: 'before',
+    workspacePath: '/test',
+  }
+  let latestState: SearchState | undefined
+  using _mockTextSearchWorker = TextSearchWorker.registerMockRpc({
+    async 'TextSearch.search'() {
+      const latest = SearchViewStates.get(state.uid)
+      latestState = {
+        ...latest.newState,
+        message: "Replaced 0 occurrences across 0 files with 'new-text'",
+        searchId: '',
+      }
+      SearchViewStates.set(state.uid, latest.oldState, latestState)
+      return {
+        limitHit: false,
+        results: [],
+      }
+    },
+  })
+
+  const result = await handleUpdatePullBased(state, { value: 'test' })
+
+  expect(result).toBe(state)
+  expect(SearchViewStates.get(state.uid).newState).toBe(latestState)
+})

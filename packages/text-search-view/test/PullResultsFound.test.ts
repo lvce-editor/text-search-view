@@ -6,15 +6,53 @@ import * as SearchViewStates from '../src/parts/SearchViewStates/SearchViewState
 import * as TextMeasurementWorker from '../src/parts/TextMeasurementWorker/TextMeasurementWorker.ts'
 import * as TextSearchResultType from '../src/parts/TextSearchResultType/TextSearchResultType.ts'
 
-test('handlePullResultsFound - ignores stale search id', async () => {
+test('handlePullResultsFound - ignores a result after the active search changes', async () => {
   const state = {
     ...CreateDefaultState.createDefaultState(),
     searchId: 'active-search',
   }
+  const latestState = {
+    ...state,
+    searchId: 'new-search',
+  }
+  SearchViewStates.set(state.uid, state, latestState)
 
-  const result = await handlePullResultsFound(state, 'stale-search', [])
+  const result = await handlePullResultsFound(state, 'active-search', [])
 
   expect(result).toBe(state)
+  expect(SearchViewStates.get(state.uid).newState).toBe(latestState)
+})
+
+test('handlePullResultsFound - ignores a result when the active search changes while loading icons', async () => {
+  using mockRendererWorker = RendererWorker.registerMockRpc({
+    'Search.rerender': () => undefined,
+  })
+  const state = {
+    ...CreateDefaultState.createDefaultState(),
+    searchId: 'active-search',
+    uid: 602,
+  }
+  const latestState = {
+    ...state,
+    searchId: 'new-search',
+  }
+  SearchViewStates.set(state.uid, state, state)
+  using _mockTextMeasurementWorker = TextMeasurementWorker.registerMockRpc({
+    'TextMeasurement.measureTextBlockHeight'() {
+      SearchViewStates.set(state.uid, state, latestState)
+      return 13
+    },
+  })
+  IconThemeWorker.registerMockRpc({
+    'IconTheme.getIcons': () => ['file-icon'],
+  })
+  const newResults = [{ end: 0, lineNumber: 0, start: 0, text: 'file1.txt', type: TextSearchResultType.File }]
+
+  const result = await handlePullResultsFound(state, 'active-search', newResults)
+
+  expect(result).toBe(state)
+  expect(SearchViewStates.get(state.uid).newState).toBe(latestState)
+  expect(mockRendererWorker.invocations).toEqual([])
 })
 
 test('handlePullResultsFound - merges results received from the text search worker', async () => {

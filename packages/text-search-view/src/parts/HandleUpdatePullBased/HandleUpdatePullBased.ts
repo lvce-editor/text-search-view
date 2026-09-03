@@ -69,6 +69,9 @@ export const handleUpdatePullBased = async (state: SearchState, update: Partial<
   if (!latest) {
     return state
   }
+  if (latest.newState.searchId !== searchId) {
+    return state
+  }
   const limitHitWarning = limitHit ? SearchStrings.theResultSetOnlyContainsASubSetOfMatches() : ''
   const { fileCount, resultCount } = getTextSearchResultCounts(latest.newState.items)
   const message = getStatusMessage(resultCount, fileCount)
@@ -76,9 +79,13 @@ export const handleUpdatePullBased = async (state: SearchState, update: Partial<
     GetSearchMessageHeight.getSearchMessageHeight(message, width, flags),
     GetSearchWarningMessageHeight.getSearchWarningMessageHeight(limitHitWarning, width),
   ])
+  const current = get(uid)
+  if (current.newState.searchId !== searchId) {
+    return state
+  }
   const headerHeight = GetSearchHeaderHeight.getSearchHeaderHeight(flags, messageHeight, warningHeight)
   return {
-    ...latest.newState,
+    ...current.newState,
     headerHeight,
     limitHit,
     limitHitWarning,
