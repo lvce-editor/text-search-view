@@ -40,10 +40,7 @@ export default defineConfig([
     },
   },
   {
-    files: [
-      'packages/text-search-view/src/parts/TextMeasurementWorker/TextMeasurementWorker.ts',
-      'packages/text-search-view/src/parts/WaitForNextFrame/WaitForNextFrame.ts',
-    ],
+    files: ['packages/text-search-view/src/parts/WaitForNextFrame/WaitForNextFrame.ts'],
     rules: {
       '@typescript-eslint/prefer-readonly-parameter-types': 'off',
     },
