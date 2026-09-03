@@ -1,9 +1,9 @@
+import { RendererWorker } from '@lvce-editor/rpc-registry'
 import { WhenExpression } from '@lvce-editor/virtual-dom-worker'
 import type { SearchResult } from '../SearchResult/SearchResult.ts'
 import type { SearchState } from '../SearchState/SearchState.ts'
 import * as GetFileIndex from '../GetFileIndex/GetFileIndex.ts'
 import * as InputSource from '../InputSource/InputSource.ts'
-import * as OpenUri from '../OpenUri/OpenUri.ts'
 import * as Workspace from '../Workspace/Workspace.ts'
 
 export const selectIndexPreview = async (state: SearchState, searchResult: SearchResult, index: number): Promise<SearchState> => {
@@ -16,8 +16,10 @@ export const selectIndexPreview = async (state: SearchState, searchResult: Searc
   const fileResult = listItems[fileIndex]
   const relativePath = Workspace.getRelativePath(fileResult.text)
   const absolutePath = `${workspacePath}${relativePath}`
-  await OpenUri.openUri(absolutePath, true, {
+  await RendererWorker.openUri2({
+    focus: true,
     selections: new Uint32Array([rowIndex, startColumnIndex, rowIndex, endColumnIndex]),
+    uri: absolutePath,
   })
   return {
     ...state,
