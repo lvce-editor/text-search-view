@@ -2,7 +2,25 @@ import { expect, test } from '@jest/globals'
 import { RendererWorker } from '@lvce-editor/rpc-registry'
 import * as GetSearchExcludes from '../src/parts/GetSearchExcludes/GetSearchExcludes.ts'
 
-test('getSearchExcludes - returns enabled search exclude patterns', async () => {
+test('getSearchExcludes - returns search exclude patterns', async () => {
+  using mockRpc = RendererWorker.registerMockRpc({
+    'Preferences.get': () => ['**/excluded', '**/result.txt'],
+  })
+
+  await expect(GetSearchExcludes.getSearchExcludes()).resolves.toEqual(['**/excluded', '**/result.txt'])
+  expect(mockRpc.invocations).toEqual([['Preferences.get', 'search.exclude']])
+})
+
+test('getSearchExcludes - ignores invalid array entries', async () => {
+  using mockRpc = RendererWorker.registerMockRpc({
+    'Preferences.get': () => ['**/excluded', false, undefined, 1],
+  })
+
+  await expect(GetSearchExcludes.getSearchExcludes()).resolves.toEqual(['**/excluded'])
+  expect(mockRpc.invocations).toEqual([['Preferences.get', 'search.exclude']])
+})
+
+test('getSearchExcludes - supports legacy object settings', async () => {
   using mockRpc = RendererWorker.registerMockRpc({
     'Preferences.get': () => ({
       '**/*.tmp': false,
@@ -16,7 +34,7 @@ test('getSearchExcludes - returns enabled search exclude patterns', async () => 
 })
 
 test('getSearchExcludes - returns no patterns for invalid values', async () => {
-  const values = [undefined, null, '', [], true]
+  const values = [undefined, null, '', true]
   for (const value of values) {
     using mockRpc = RendererWorker.registerMockRpc({
       'Preferences.get': () => value,

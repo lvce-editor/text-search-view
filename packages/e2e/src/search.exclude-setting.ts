@@ -11,7 +11,7 @@ export const test: Test = async ({ expect, FileSystem, Locator, Search, Settings
     { content: `needle`, uri: `${tmpDir}/excluded/excluded.txt` },
     { content: `needle`, uri: `${tmpDir}/included/included.txt` },
   ])
-  await Settings.update({ 'search.exclude': { '**/excluded': true } })
+  await Settings.update({ 'search.exclude': ['**/excluded'] })
   await Workspace.setPath(tmpDir)
 
   // act

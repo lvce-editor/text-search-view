@@ -5,7 +5,7 @@
     "heading": "Exclude",
     "id": "search.exclude",
     "type": "array",
-    "value": {}
+    "value": []
   },
   {
     "category": "features",
