@@ -354,7 +354,7 @@ test('replaceAllWithProgress - renders completion directly when there are no mat
 
   expect(SearchViewStates.get(currentState.uid).newState.message).toBe("Replaced 0 occurrences across 0 files with 'new-text'")
   expect(SearchViewStates.get(currentState.uid).newState.searchId).toBe('')
-  expect(mockRpc.invocations).toEqual([['BulkReplacement.applyBulkReplacement', []], ['Layout.handleWorkspaceRefresh']])
+  expect(mockRpc.invocations).toEqual([])
 })
 
 test('replaceAll - replaces all matches in focused file only and updates state', async () => {

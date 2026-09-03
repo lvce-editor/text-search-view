@@ -118,9 +118,11 @@ const replaceAllConfirmed = async (state: SearchState, fileIndex: number): Promi
   }
   const { items, matchCount, replacement, workspacePath } = state
   const bulkEdits = GetReplaceElements.getReplaceElements(items, workspacePath, replacement)
-  // TODO this function should return an error message if an error occurred during bulk edit
-  await ApplyBulkReplacement.applyBulkReplacement(bulkEdits)
-  await RendererWorker.handleWorkspaceRefresh()
+  if (bulkEdits.length > 0) {
+    // TODO this function should return an error message if an error occurred during bulk edit
+    await ApplyBulkReplacement.applyBulkReplacement(bulkEdits)
+    await RendererWorker.handleWorkspaceRefresh()
+  }
   const fileCount = bulkEdits.length
   const message = GetReplacedMessage.getReplacedMessage(fileCount, matchCount, replacement)
   const { headerHeight, messageHeight } = await GetSearchMessageLayout.getSearchMessageLayout(state, message)
