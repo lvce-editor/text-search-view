@@ -20,7 +20,7 @@ export const test: Test = async ({ expect, Extension, FileSystem, IconTheme, Loc
   await Search.setValue('ab')
   const viewletSearch = Locator('.Search')
   await expect(viewletSearch.locator('[role="status"]')).toHaveText('60 results in 60 files')
-  await Search.focusIndex(119)
+  await Search.handleWheel(1, 10_000)
   const lastFile = viewletSearch.locator('.TreeItem[aria-label="/059.js"]')
   await expect(lastFile).toBeVisible()
   await expect(lastFile.locator('.FileIcon[src$="/javascript.svg"]')).toHaveCount(1)
@@ -32,7 +32,7 @@ export const test: Test = async ({ expect, Extension, FileSystem, IconTheme, Loc
   await expect(lastFile.locator('.FileIcon[src$="/javascript-alternate.svg"]')).toHaveCount(1)
 
   // act
-  await Search.focusIndex(0)
+  await Search.handleWheel(1, -10_000)
 
   // assert
   const firstFile = viewletSearch.locator('.TreeItem[aria-label="/000.css"]')
