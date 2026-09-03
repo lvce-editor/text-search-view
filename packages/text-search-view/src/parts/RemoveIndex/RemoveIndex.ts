@@ -1,13 +1,13 @@
 import type { SearchState } from '../SearchState/SearchState.ts'
-import * as GetFileIcons from '../GetFileIcons/GetFileIcons.ts'
 import { getNewMinMax } from '../GetNewMinMax/GetNewMinMax.ts'
 import * as GetSearchMessageLayout from '../GetSearchMessageLayout/GetSearchMessageLayout.ts'
 import { removeItemFromItems } from '../RemoveItemFromItems/RemoveItemFromItems.ts'
 import * as ScrollBarFunctions from '../ScrollBarFunctions/ScrollBarFunctions.ts'
 import * as ViewletSearchStatusMessage from '../SearchStatusMessage/SearchStatusMessage.ts'
+import * as UpdateVisibleFileIcons from '../UpdateVisibleFileIcons/UpdateVisibleFileIcons.ts'
 
 export const removeIndex = async (state: SearchState, index: number): Promise<SearchState> => {
-  const { deltaY, fileCount, fileIconCache, height, itemHeight, items, matchCount, maxLineY, minimumSliderSize, minLineY } = state
+  const { deltaY, fileCount, height, itemHeight, items, matchCount, maxLineY, minimumSliderSize, minLineY } = state
   if (index === -1) {
     return state
   }
@@ -20,17 +20,12 @@ export const removeIndex = async (state: SearchState, index: number): Promise<Se
   const listHeight = height - headerHeight
   const scrollBarHeight = ScrollBarFunctions.getScrollBarSize(height, contentHeight, minimumSliderSize)
   const finalDeltaY = Math.max(contentHeight - listHeight, 0)
-  const visible = newItems.slice(0, maxLineY)
-  const { icons, newFileIconCache } = await GetFileIcons.getFileIcons(visible, fileIconCache)
-
-  return {
+  const updatedState = {
     ...state,
     deltaY: newDeltaY,
     fileCount: newFileCount,
-    fileIconCache: newFileIconCache,
     finalDeltaY,
     headerHeight,
-    icons,
     items: newItems,
     listFocusedIndex: newFocusedIndex,
     listItems: newItems,
@@ -41,4 +36,5 @@ export const removeIndex = async (state: SearchState, index: number): Promise<Se
     minLineY: newMinLineY,
     scrollBarHeight,
   }
+  return UpdateVisibleFileIcons.updateVisibleFileIcons(updatedState)
 }
