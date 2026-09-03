@@ -161,4 +161,5 @@ export const replaceAllWithProgress = async (context: AsyncCommandContext<Search
   await RendererWorker.invoke('Search.rerender')
   const updatedState = await replaceAllConfirmed(context.getState(), fileIndex)
   await context.updateState(() => updatedState)
+  await RendererWorker.invoke('Search.rerender')
 }

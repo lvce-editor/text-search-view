@@ -78,7 +78,6 @@ import * as ReplaceAllAndPrompt from '../ReplaceAllAndPrompt/ReplaceAllAndPrompt
 import { replaceAllInFile } from '../ReplaceAllInFile/ReplaceAllInFile.ts'
 import * as Rerender from '../Rerender/Rerender.ts'
 import * as RestoreState from '../RestoreState/RestoreState.ts'
-import * as RevealInExplorer from '../RevealInExplorer/RevealInExplorer.ts'
 import * as SaveState from '../SaveState/SaveState.ts'
 import * as SearchFocus from '../SearchFocus/SearchFocus.ts'
 import * as WrapCommand from '../SearchViewStates/SearchViewStates.ts'
@@ -194,7 +193,6 @@ export const commandMap = {
   'TextSearch.replaceAllInFile': WrapCommand.wrapCommand(replaceAllInFile),
   'TextSearch.rerender': Rerender.rerender,
   'TextSearch.restoreState': RestoreState.restoreState,
-  'TextSearch.revealInExplorer': WrapCommand.wrapCommand(RevealInExplorer.revealInExplorer),
   'TextSearch.saveState': WrapCommand.wrapGetter(SaveState.saveState),
 
   'TextSearch.selectIndex': WrapCommand.wrapCommand(SelectIndex.selectIndex),
