@@ -102,6 +102,8 @@ const handleDirectMessagePort = (port: MessagePort, setAsRendererProcess?: boole
   HandleMessagePort.handleMessagePort(port, commandMap, setAsRendererProcess)
 
 export const commandMap = {
+  'TextSearch.assertReplacementCompleted': WrapCommand.wrapCommand(GetDebugState.assertReplacementCompleted),
+  'TextSearch.captureBeforeReplacement': WrapCommand.wrapCommand(GetDebugState.captureBeforeReplacement),
   'TextSearch.clearSearchResults': WrapCommand.wrapCommand(ClearSearchResults.clearSearchResults),
   'TextSearch.collapseAll': WrapCommand.wrapCommand(CollapseAll.collapseAll),
   'TextSearch.collapseCurrent': WrapCommand.wrapCommand(CollapseCurrent.collapseCurrent),
@@ -140,7 +142,6 @@ export const commandMap = {
   'TextSearch.focusSearchValue': WrapCommand.wrapCommand(FocusSearchValue.focusSearchValue),
   'TextSearch.focusSearchValueNext': WrapCommand.wrapCommand(FocusSearchValueNext.focusSearchValueNext),
   'TextSearch.getCommandIds': WrapCommand.getCommandIds,
-  'TextSearch.getDebugState': WrapCommand.wrapGetter(GetDebugState.getDebugState),
   'TextSearch.getKeyBindings': GetKeyBindings.getKeyBindings,
   'TextSearch.getMenuEntries': WrapCommand.wrapGetter(getMenuEntries),
   'TextSearch.getMenuEntryIds': getMenuEntryIds,

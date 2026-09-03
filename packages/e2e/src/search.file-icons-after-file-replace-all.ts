@@ -28,21 +28,14 @@ export const test: Test = async ({ Command, Dialog, expect, Extension, FileSyste
   await expect(fileToReplace).toBeVisible()
   await expect(fileToReplace.locator('.FileIcon[src$="/javascript.svg"]')).toHaveCount(1)
   await Dialog.mockConfirm(() => true)
-  const beforeReplace = await Command.execute('Search.getDebugState')
+  await Command.execute('Search.captureBeforeReplacement')
 
   // act
   await Search.replaceAll()
 
   // assert
-  const afterReplace = await Command.execute('Search.getDebugState')
-  try {
-    await expect(message).toHaveText("Replaced 1 occurrence across 1 file with 'd'")
-  } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : String(error)
-    throw new Error(
-      `File replacement state mismatch. Before: ${JSON.stringify(beforeReplace)}. After: ${JSON.stringify(afterReplace)}. Assertion: ${errorMessage}`,
-    )
-  }
+  await Command.execute('Search.assertReplacementCompleted')
+  await expect(message).toHaveText("Replaced 1 occurrence across 1 file with 'd'")
   const visibleFile = viewletSearch.locator('.TreeItem[aria-expanded="true"]').first()
   await expect(visibleFile).toBeVisible()
   await expect(visibleFile.locator('.FileIcon[src$="/javascript.svg"]')).toHaveCount(1)
