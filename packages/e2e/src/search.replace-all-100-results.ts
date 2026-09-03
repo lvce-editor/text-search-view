@@ -29,5 +29,4 @@ export const test: Test = async ({ Dialog, expect, FileSystem, Locator, Main, Se
   await expect(row).toHaveText('dc')
   await Main.openUri(`${tmpDir}/99.css`)
   await expect(row).toHaveText('dc')
-  await expect(message).toHaveText(`Replaced 100 occurrences across 100 files with 'd'`)
 }

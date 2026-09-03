@@ -25,7 +25,7 @@ test('handlePullResultsFound - ignores a result after the active search changes'
 
 test('handlePullResultsFound - ignores a result when the active search changes while loading icons', async () => {
   using mockRendererWorker = RendererWorker.registerMockRpc({
-    'Search.rerender': () => undefined,
+    'Viewlet.requestRender': () => undefined,
   })
   const state = {
     ...CreateDefaultState.createDefaultState(),
@@ -60,7 +60,7 @@ test('handlePullResultsFound - merges results received from the text search work
     'TextMeasurement.measureTextBlockHeight': () => 13,
   })
   using mockRendererWorker = RendererWorker.registerMockRpc({
-    'Search.rerender': () => undefined,
+    'Viewlet.requestRender': () => undefined,
   })
   IconThemeWorker.registerMockRpc({
     'IconTheme.getIcons': () => ['file-icon'],
@@ -137,5 +137,5 @@ test('handlePullResultsFound - merges results received from the text search work
     maxLineY: 2,
     message: '1 result in 1 file',
   })
-  expect(mockRendererWorker.invocations).toEqual([['Search.rerender']])
+  expect(mockRendererWorker.invocations).toEqual([['Viewlet.requestRender', state.uid]])
 })

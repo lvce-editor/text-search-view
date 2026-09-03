@@ -12,7 +12,6 @@ import * as GetSearchMessageLayout from '../GetSearchMessageLayout/GetSearchMess
 import { removeItemFromItems } from '../RemoveItemFromItems/RemoveItemFromItems.ts'
 import * as ReplaceAllAndPrompt from '../ReplaceAllAndPrompt/ReplaceAllAndPrompt.ts'
 import * as ScrollBarFunctions from '../ScrollBarFunctions/ScrollBarFunctions.ts'
-import * as SearchViewStates from '../SearchViewStates/SearchViewStates.ts'
 import * as TextSearchResultType from '../TextSearchResultType/TextSearchResultType.ts'
 
 const getActualIndex = (state: SearchState): number => {
@@ -158,6 +157,9 @@ export const replaceAllWithProgress = async (context: AsyncCommandContext<Search
   if (!shouldReplace) {
     return
   }
+  if (context.getState().searchId !== activeSearchId) {
+    return
+  }
   const replacementSearchId = crypto.randomUUID()
   let progressUpdate: Partial<SearchState> = {}
   if (matchCount > 0) {
@@ -166,23 +168,7 @@ export const replaceAllWithProgress = async (context: AsyncCommandContext<Search
     progressUpdate = { ...messageLayout, message }
   }
   await context.updateState((latestState) => ({ ...latestState, ...progressUpdate, searchId: replacementSearchId }))
-  const currentBeforeReplacement = SearchViewStates.get(uid)
-  let replacementState = context.getState()
-  if (currentBeforeReplacement && currentBeforeReplacement.newState.searchId !== replacementSearchId) {
-    if (currentBeforeReplacement.newState.searchId !== activeSearchId) {
-      return
-    }
-    replacementState = {
-      ...currentBeforeReplacement.newState,
-      ...progressUpdate,
-      searchId: replacementSearchId,
-    }
-  }
-  const generationState = { ...replacementState }
-  SearchViewStates.set(uid, generationState, generationState)
-  const updatedState = await replaceAllConfirmed(generationState, fileIndex)
-  const completedGenerationState = { ...updatedState }
-  SearchViewStates.set(uid, completedGenerationState, completedGenerationState)
-  SearchViewStates.set(uid, generationState, updatedState)
-  await RendererWorker.invoke('Search.rerender')
+  const updatedState = await replaceAllConfirmed(context.getState(), fileIndex)
+  await context.updateState(() => updatedState)
+  await RendererWorker.invoke('Viewlet.requestRender', uid)
 }

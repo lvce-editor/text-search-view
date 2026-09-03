@@ -57,6 +57,6 @@ export const handlePullResultsFound = async (
     scrollBarHeight,
   }
   SearchViewStates.set(uid, latest.oldState, updatedState)
-  await RendererWorker.invoke('Search.rerender')
+  await RendererWorker.invoke('Viewlet.requestRender', uid)
   return state
 }
