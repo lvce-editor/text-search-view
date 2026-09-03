@@ -3,13 +3,14 @@ import type { ConfirmPromptOptions } from '../ConfirmPromptOptions/ConfirmPrompt
 
 const missingDialogWorkerRelay = 'Command "SendMessagePortToExtensionHostWorker.sendMessagePortToDialogWorker" not found'
 
-export const prompt = async (text: string, options: ConfirmPromptOptions): Promise<boolean> => {
+export const prompt = async (options: ConfirmPromptOptions): Promise<boolean> => {
   try {
-    return await DialogWorker.invoke('ConfirmPrompt.prompt', text, options)
+    return await DialogWorker.invoke('ConfirmPrompt.prompt2', options)
   } catch (error) {
     if (!String(error).includes(missingDialogWorkerRelay)) {
       throw error
     }
-    return RendererWorker.invoke('ConfirmPrompt.prompt', text, options)
+    const { confirmMessage, text, title } = options
+    return RendererWorker.invoke('ConfirmPrompt.prompt', text, { confirmMessage, title })
   }
 }
