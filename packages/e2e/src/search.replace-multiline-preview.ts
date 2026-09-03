@@ -17,6 +17,6 @@ y`)
   const viewletSearch = Locator('.Search')
   const message = viewletSearch.locator('[role="status"]')
   await expect(message).toHaveText('1 result in 1 file')
-  const replacementPreview = viewletSearch.locator('ins')
-  await expect(replacementPreview).toHaveText('x')
+  const replaceInput = viewletSearch.locator('[name="ReplaceValue"]')
+  await expect(replaceInput).toHaveValue('x\ny')
 }

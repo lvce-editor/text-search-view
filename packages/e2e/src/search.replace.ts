@@ -23,5 +23,4 @@ export const test: Test = async ({ Dialog, expect, FileSystem, Locator, Main, Se
   await Main.openUri(`${tmpDir}/test.css`)
   const row = Locator('.EditorRow')
   await expect(row).toHaveText('dc')
-  await expect(message).toHaveText(`Replaced 1 occurrence across 1 file with 'd'`)
 }

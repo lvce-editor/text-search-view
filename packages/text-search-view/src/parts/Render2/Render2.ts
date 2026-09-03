@@ -6,6 +6,9 @@ import * as SearchViewStates from '../SearchViewStates/SearchViewStates.ts'
 const renderDirect = async (uid: number, commands: readonly any[]): Promise<readonly any[]> => {
   const rendererWorkerCommands = commands.filter((command) => command[0] === ViewletCommand.SetFocusContext)
   const rendererProcessCommands = commands.filter((command) => command[0] !== ViewletCommand.SetFocusContext)
+  if (rendererProcessCommands.length === 0) {
+    return rendererWorkerCommands
+  }
   const transactionId = await RendererProcess.invoke('Viewlet.queueCommands', uid, rendererProcessCommands)
   return [...rendererWorkerCommands, ['Viewlet.commitPending', uid, transactionId]]
 }
