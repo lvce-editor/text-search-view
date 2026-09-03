@@ -15,11 +15,11 @@ test('getTreeListItems transforms flat results into tree structure', () => {
 
   expect(treeResults).toEqual([
     { depth: 0, end: 0, isDirectory: true, lineNumber: 0, start: 0, text: 'src', type: TextSearchResultType.File },
+    { depth: 1, end: 0, lineNumber: 0, start: 0, text: 'src/file1.ts', type: TextSearchResultType.File },
+    { depth: 2, end: 6, lineNumber: 1, start: 0, text: 'match1', type: TextSearchResultType.Match },
     { depth: 1, end: 0, isDirectory: true, lineNumber: 0, start: 0, text: 'src/folder', type: TextSearchResultType.File },
     { depth: 2, end: 0, lineNumber: 2, start: 0, text: 'src/folder/file2.ts', type: TextSearchResultType.File },
     { depth: 3, end: 6, lineNumber: 3, start: 0, text: 'match2', type: TextSearchResultType.Match },
-    { depth: 1, end: 0, lineNumber: 0, start: 0, text: 'src/file1.ts', type: TextSearchResultType.File },
-    { depth: 2, end: 6, lineNumber: 1, start: 0, text: 'match1', type: TextSearchResultType.Match },
   ])
 })
 
