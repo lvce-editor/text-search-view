@@ -12,7 +12,7 @@
   "license": "MIT",
   "description": "",
   "dependencies": {
-    "@lvce-editor/server": "^0.112.20",
+    "@lvce-editor/server": "^0.112.21",
     "@lvce-editor/text-measurement-worker": "^1.24.1"
   }
 }

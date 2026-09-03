@@ -19,7 +19,6 @@ import * as FocusPreviousInput from '../FocusPreviousInput/FocusPreviousInput.ts
 import * as FocusReplaceValue from '../FocusReplaceValue/FocusReplaceValue.ts'
 import * as FocusSearchValue from '../FocusSearchValue/FocusSearchValue.ts'
 import * as FocusSearchValueNext from '../FocusSearchValueNext/FocusSearchValueNext.ts'
-import * as GetDebugState from '../GetDebugState/GetDebugState.ts'
 import * as GetKeyBindings from '../GetKeyBindings/GetKeyBindings.ts'
 import { getMenuEntries } from '../GetMenuEntries/GetMenuEntries.ts'
 import { getMenuEntryIds } from '../GetMenuEntryIds/GetMenuEntryIds.ts'
@@ -102,8 +101,6 @@ const handleDirectMessagePort = (port: MessagePort, setAsRendererProcess?: boole
   HandleMessagePort.handleMessagePort(port, commandMap, setAsRendererProcess)
 
 export const commandMap = {
-  'TextSearch.assertReplacementCompleted': WrapCommand.wrapCommand(GetDebugState.assertReplacementCompleted),
-  'TextSearch.captureBeforeReplacement': WrapCommand.wrapCommand(GetDebugState.captureBeforeReplacement),
   'TextSearch.clearSearchResults': WrapCommand.wrapCommand(ClearSearchResults.clearSearchResults),
   'TextSearch.collapseAll': WrapCommand.wrapCommand(CollapseAll.collapseAll),
   'TextSearch.collapseCurrent': WrapCommand.wrapCommand(CollapseCurrent.collapseCurrent),

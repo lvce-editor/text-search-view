@@ -2,7 +2,7 @@ import type { Test } from '@lvce-editor/test-with-playwright'
 
 export const name = 'search.file-icons-after-file-replace-all'
 
-export const test: Test = async ({ Command, Dialog, expect, Extension, FileSystem, IconTheme, Locator, Search, SideBar, Workspace }) => {
+export const test: Test = async ({ Dialog, expect, Extension, FileSystem, IconTheme, Locator, Search, SideBar, Workspace }) => {
   // arrange
   const iconThemeUri = import.meta.resolve('../fixtures/search-icon-theme')
   await Extension.addWebExtension(iconThemeUri)
@@ -28,13 +28,11 @@ export const test: Test = async ({ Command, Dialog, expect, Extension, FileSyste
   await expect(fileToReplace).toBeVisible()
   await expect(fileToReplace.locator('.FileIcon[src$="/javascript.svg"]')).toHaveCount(1)
   await Dialog.mockConfirm(() => true)
-  await Command.execute('Search.captureBeforeReplacement')
 
   // act
   await Search.replaceAll()
 
   // assert
-  await Command.execute('Search.assertReplacementCompleted')
   await expect(message).toHaveText("Replaced 1 occurrence across 1 file with 'd'")
   const visibleFile = viewletSearch.locator('.TreeItem[aria-expanded="true"]').first()
   await expect(visibleFile).toBeVisible()
