@@ -8,21 +8,19 @@ export const test: Test = async ({ expect, Extension, FileSystem, IconTheme, Loc
   await Extension.addWebExtension(iconThemeUri)
   await IconTheme.setIconTheme('search-test-icon-theme')
   const tmpDir = await FileSystem.getTmpDir()
-  const promises: Promise<void>[] = []
   for (let i = 0; i < 40; i++) {
     const extension = i < 20 ? 'css' : 'js'
     const fileName = `${String(i).padStart(3, '0')}.${extension}`
-    promises.push(FileSystem.writeFile(`${tmpDir}/${fileName}`, 'abc'))
+    await FileSystem.writeFile(`${tmpDir}/${fileName}`, 'abc')
   }
-  await Promise.all(promises)
   await Workspace.setPath(tmpDir)
   await SideBar.open('Search')
   await Search.setValue('ab')
   const viewletSearch = Locator('.Search')
   const message = viewletSearch.locator('[role="status"]')
   await expect(message).toHaveText('40 results in 40 files')
-  await Search.focusIndex(50)
-  const dismissedFile = viewletSearch.locator('.TreeItem[aria-label="/025.js"]')
+  await Search.focusIndex(78)
+  const dismissedFile = viewletSearch.locator('.TreeItem[aria-label="/039.js"]')
   await expect(dismissedFile).toBeVisible()
 
   // act
@@ -31,7 +29,7 @@ export const test: Test = async ({ expect, Extension, FileSystem, IconTheme, Loc
   // assert
   await expect(message).toHaveText('39 results in 39 files')
   await expect(dismissedFile).toBeHidden()
-  const nextFile = viewletSearch.locator('.TreeItem[aria-label="/026.js"]')
-  await expect(nextFile).toBeVisible()
-  await expect(nextFile.locator('.FileIcon[src$="/javascript.svg"]')).toHaveCount(1)
+  const previousFile = viewletSearch.locator('.TreeItem[aria-label="/038.js"]')
+  await expect(previousFile).toBeVisible()
+  await expect(previousFile.locator('.FileIcon[src$="/javascript.svg"]')).toHaveCount(1)
 }

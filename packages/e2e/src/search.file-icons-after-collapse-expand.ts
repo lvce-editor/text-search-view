@@ -8,13 +8,11 @@ export const test: Test = async ({ expect, Extension, FileSystem, IconTheme, Loc
   await Extension.addWebExtension(iconThemeUri)
   await IconTheme.setIconTheme('search-test-icon-theme')
   const tmpDir = await FileSystem.getTmpDir()
-  const promises: Promise<void>[] = []
   for (let i = 0; i < 40; i++) {
     const extension = i < 10 ? 'css' : 'js'
     const fileName = `${String(i).padStart(3, '0')}.${extension}`
-    promises.push(FileSystem.writeFile(`${tmpDir}/${fileName}`, 'abc'))
+    await FileSystem.writeFile(`${tmpDir}/${fileName}`, 'abc')
   }
-  await Promise.all(promises)
   await Workspace.setPath(tmpDir)
   await SideBar.open('Search')
   await Search.setValue('ab')
