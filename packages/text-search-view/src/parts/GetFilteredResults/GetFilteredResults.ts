@@ -6,14 +6,18 @@ export const getFilteredResults = (results: readonly SearchResult[], collapsedPa
     return results
   }
   const filteredResults: SearchResult[] = []
-  let isExcluded = false
+  let collapsedDepth = -1
   for (const result of results) {
-    if (result.type === TextSearchResultType.File) {
-      filteredResults.push(result)
-      isExcluded = collapsedPaths.includes(result.text) ? true : false
+    const depth = result.depth ?? (result.type === TextSearchResultType.File ? 0 : 1)
+    if (collapsedDepth !== -1) {
+      if (depth > collapsedDepth) {
+        continue
+      }
+      collapsedDepth = -1
     }
-    if ((result.type === TextSearchResultType.Match || result.type === TextSearchResultType.Context) && !isExcluded) {
-      filteredResults.push(result)
+    filteredResults.push(result)
+    if (result.type === TextSearchResultType.File && collapsedPaths.includes(result.text)) {
+      collapsedDepth = depth
     }
   }
   return filteredResults

@@ -5,7 +5,7 @@ import * as TextSearchResultType from '../TextSearchResultType/TextSearchResultT
 
 export const getIconsCached = (dirents: readonly SearchResult[], fileIconCache: FileIconCache): string[] => {
   return dirents.map((dirent) => {
-    if (dirent.type !== TextSearchResultType.File) {
+    if (dirent.type !== TextSearchResultType.File || dirent.isDirectory) {
       return ''
     }
     const path = getFilePath(dirent.text)

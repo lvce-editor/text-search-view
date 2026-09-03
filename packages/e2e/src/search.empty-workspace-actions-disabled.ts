@@ -13,7 +13,7 @@ export const test: Test = async ({ expect, Locator, SideBar, Workspace }) => {
   const actions = Locator('.SideBarTitleArea')
   await expect(actions.locator('[name="Refresh"]')).toHaveAttribute('disabled', '')
   await expect(actions.locator('[name="ClearAll"]')).toHaveAttribute('disabled', '')
-  await expect(actions.locator('[name="ViewAsTree"]')).toHaveAttribute('disabled', '')
+  await expect(actions.locator('[name="ViewAsTree"]')).toHaveAttribute('disabled', null)
   await expect(actions.locator('[name="CollapseAll"]')).toHaveAttribute('disabled', '')
   await expect(actions.locator('[name="OpenSearchEditor"]')).toHaveAttribute('disabled', null)
 }

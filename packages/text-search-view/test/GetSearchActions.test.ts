@@ -33,7 +33,7 @@ test('getSearchActions - should return array of search actions', () => {
     },
     {
       command: '',
-      enabled: false,
+      enabled: true,
       icon: 'ListFlat',
       id: 'ViewAsTree',
       label: 'View as Tree',
