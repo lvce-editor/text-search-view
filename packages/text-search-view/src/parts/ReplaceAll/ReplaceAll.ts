@@ -3,7 +3,6 @@ import { RendererWorker } from '@lvce-editor/rpc-registry'
 import type { SearchResult } from '../SearchResult/SearchResult.ts'
 import type { SearchState } from '../SearchState/SearchState.ts'
 import * as ApplyBulkReplacement from '../ApplyBulkReplacement/ApplyBulkReplacement.ts'
-import * as GetFileIcons from '../GetFileIcons/GetFileIcons.ts'
 import { getNewMinMax } from '../GetNewMinMax/GetNewMinMax.ts'
 import * as GetReplacedMessage from '../GetReplacedMessage/GetReplacedMessage.ts'
 import * as GetReplaceElements from '../GetReplaceElements/GetReplaceElements.ts'
@@ -13,6 +12,7 @@ import { removeItemFromItems } from '../RemoveItemFromItems/RemoveItemFromItems.
 import * as ReplaceAllAndPrompt from '../ReplaceAllAndPrompt/ReplaceAllAndPrompt.ts'
 import * as ScrollBarFunctions from '../ScrollBarFunctions/ScrollBarFunctions.ts'
 import * as TextSearchResultType from '../TextSearchResultType/TextSearchResultType.ts'
+import * as UpdateVisibleFileIcons from '../UpdateVisibleFileIcons/UpdateVisibleFileIcons.ts'
 
 const getActualIndex = (state: SearchState): number => {
   const { focusedIndex, listFocusedIndex } = state
@@ -47,7 +47,6 @@ const replaceAllInFocusedFile = async (state: SearchState, fileIndex: number): P
   const {
     deltaY,
     fileCount,
-    fileIconCache,
     height,
     itemHeight,
     items,
@@ -76,17 +75,12 @@ const replaceAllInFocusedFile = async (state: SearchState, fileIndex: number): P
   const listHeight = height - headerHeight
   const scrollBarHeight = ScrollBarFunctions.getScrollBarSize(height, contentHeight, minimumSliderSize)
   const finalDeltaY = Math.max(contentHeight - listHeight, 0)
-  const visible = newItems.slice(0, newMaxLineY)
-  const { icons, newFileIconCache } = await GetFileIcons.getFileIcons(visible, fileIconCache)
-
-  return {
+  const updatedState = {
     ...state,
     deltaY: newDeltaY,
     fileCount: newFileCount,
-    fileIconCache: newFileIconCache,
     finalDeltaY,
     headerHeight,
-    icons,
     items: newItems,
     listFocusedIndex: newFocusedIndex,
     listItems: newItems,
@@ -97,6 +91,7 @@ const replaceAllInFocusedFile = async (state: SearchState, fileIndex: number): P
     minLineY: newMinLineY,
     scrollBarHeight,
   }
+  return UpdateVisibleFileIcons.updateVisibleFileIcons(updatedState)
 }
 
 const confirmReplaceAll = async (state: SearchState, fileIndex: number): Promise<boolean> => {

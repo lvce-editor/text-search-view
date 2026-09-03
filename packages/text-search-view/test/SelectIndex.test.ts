@@ -31,6 +31,9 @@ test('selectIndex - select file item', async () => {
   const state: SearchState = {
     ...CreateDefaultState.createDefaultState(),
     collapsedPaths: [],
+    headerHeight: 0,
+    height: 44,
+    itemHeight: 22,
     items: [{ end: 0, lineNumber: 0, start: 0, text: 'file1.txt', type: TextSearchResultType.File }],
     listFocused: false,
     listFocusedIndex: -1,
@@ -55,6 +58,9 @@ test('selectIndex - select match item', async () => {
   const state: SearchState = {
     ...CreateDefaultState.createDefaultState(),
     collapsedPaths: [],
+    headerHeight: 0,
+    height: 44,
+    itemHeight: 22,
     items: [{ end: 0, lineNumber: 0, start: 0, text: 'file1.txt', type: TextSearchResultType.File }],
     listFocused: false,
     listFocusedIndex: -1,
