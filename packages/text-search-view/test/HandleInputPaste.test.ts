@@ -1,5 +1,5 @@
 import { expect, test } from '@jest/globals'
-import { RendererWorker } from '@lvce-editor/rpc-registry'
+import { ClipBoardWorker } from '@lvce-editor/rpc-registry'
 import type { SearchState } from '../src/parts/SearchState/SearchState.ts'
 import * as CreateDefaultState from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
 import * as HandleInputPaste from '../src/parts/HandleInputPaste/HandleInputPaste.ts'
@@ -17,7 +17,7 @@ test('handleInputPaste - returns state unchanged when name is not a valid select
 })
 
 test('handleInputPaste - pastes text into SearchValue at cursor position', async () => {
-  using mockRpc = RendererWorker.registerMockRpc({
+  using mockRpc = ClipBoardWorker.registerMockRpc({
     'ClipBoard.readText': () => 'pasted',
   })
 
@@ -53,7 +53,7 @@ test('handleInputPaste - pastes text into SearchValue at cursor position', async
 })
 
 test('handleInputPaste - replaces selected text in SearchValue', async () => {
-  using mockRpc = RendererWorker.registerMockRpc({
+  using mockRpc = ClipBoardWorker.registerMockRpc({
     'ClipBoard.readText': () => 'new',
   })
 
@@ -89,7 +89,7 @@ test('handleInputPaste - replaces selected text in SearchValue', async () => {
 })
 
 test('handleInputPaste - pastes text into ReplaceValue', async () => {
-  using mockRpc = RendererWorker.registerMockRpc({
+  using mockRpc = ClipBoardWorker.registerMockRpc({
     'ClipBoard.readText': () => 'replacement',
   })
 
@@ -125,7 +125,7 @@ test('handleInputPaste - pastes text into ReplaceValue', async () => {
 })
 
 test('handleInputPaste - pastes text into FilesToInclude', async () => {
-  using mockRpc = RendererWorker.registerMockRpc({
+  using mockRpc = ClipBoardWorker.registerMockRpc({
     'ClipBoard.readText': () => '*.ts',
   })
 
@@ -161,7 +161,7 @@ test('handleInputPaste - pastes text into FilesToInclude', async () => {
 })
 
 test('handleInputPaste - pastes text into FilesToExclude', async () => {
-  using mockRpc = RendererWorker.registerMockRpc({
+  using mockRpc = ClipBoardWorker.registerMockRpc({
     'ClipBoard.readText': () => 'node_modules',
   })
 
@@ -197,7 +197,7 @@ test('handleInputPaste - pastes text into FilesToExclude', async () => {
 })
 
 test('handleInputPaste - handles empty clipboard text', async () => {
-  using mockRpc = RendererWorker.registerMockRpc({
+  using mockRpc = ClipBoardWorker.registerMockRpc({
     'ClipBoard.readText': () => '',
   })
 

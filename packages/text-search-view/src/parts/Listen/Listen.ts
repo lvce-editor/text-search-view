@@ -1,6 +1,7 @@
 import { WebWorkerRpcClient } from '@lvce-editor/rpc'
 import { RendererWorker } from '@lvce-editor/rpc-registry'
 import * as CommandMap from '../CommandMap/CommandMap.ts'
+import { initializeClipBoardWorker } from '../InitializeClipBoardWorker/InitializeClipBoardWorker.ts'
 import { initializeDialogWorker } from '../InitializeDialogWorker/InitializeDialogWorker.ts'
 import { initializeIconThemeWorker } from '../InitializeIconThemeWorker/InitializeIconThemeWorker.ts'
 import { initializeTextMeasurementWorker } from '../InitializeTextMeasurementWorker/InitializeTextMeasurementWorker.ts'
@@ -13,5 +14,11 @@ export const listen = async (): Promise<void> => {
     commandMap: CommandMap.commandMap,
   })
   RendererWorker.set(rpc)
-  await Promise.all([initializeDialogWorker(), initializeIconThemeWorker(), initializeTextMeasurementWorker(), initializeTextSearchWorker()])
+  await Promise.all([
+    initializeClipBoardWorker(),
+    initializeDialogWorker(),
+    initializeIconThemeWorker(),
+    initializeTextMeasurementWorker(),
+    initializeTextSearchWorker(),
+  ])
 }
