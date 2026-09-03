@@ -12,6 +12,7 @@ import * as GetSearchMessageLayout from '../GetSearchMessageLayout/GetSearchMess
 import { removeItemFromItems } from '../RemoveItemFromItems/RemoveItemFromItems.ts'
 import * as ReplaceAllAndPrompt from '../ReplaceAllAndPrompt/ReplaceAllAndPrompt.ts'
 import * as ScrollBarFunctions from '../ScrollBarFunctions/ScrollBarFunctions.ts'
+import * as SearchViewStates from '../SearchViewStates/SearchViewStates.ts'
 import * as TextSearchResultType from '../TextSearchResultType/TextSearchResultType.ts'
 
 const getActualIndex = (state: SearchState): number => {
@@ -96,6 +97,7 @@ const replaceAllInFocusedFile = async (state: SearchState, fileIndex: number): P
     messageHeight,
     minLineY: newMinLineY,
     scrollBarHeight,
+    searchId: '',
   }
 }
 
@@ -131,6 +133,7 @@ const replaceAllConfirmed = async (state: SearchState, fileIndex: number): Promi
     message,
     messageHeight,
     minLineY: 0,
+    searchId: '',
   }
 }
 
@@ -146,7 +149,7 @@ export const replaceAll = async (state: SearchState): Promise<SearchState> => {
 
 export const replaceAllWithProgress = async (context: AsyncCommandContext<SearchState>): Promise<void> => {
   const state = context.getState()
-  const { fileCount: totalFileCount, matchCount: totalMatchCount } = state
+  const { fileCount: totalFileCount, matchCount: totalMatchCount, searchId: activeSearchId, uid } = state
   const actualIndex = getActualIndex(state)
   const fileIndex = getFileIndex(state, actualIndex)
   const fileCount = fileIndex === -1 ? totalFileCount : 1
@@ -155,10 +158,31 @@ export const replaceAllWithProgress = async (context: AsyncCommandContext<Search
   if (!shouldReplace) {
     return
   }
-  const message = GetReplacingMessage.getReplacingMessage(fileCount, matchCount)
-  const messageLayout = await GetSearchMessageLayout.getSearchMessageLayout(state, message)
-  await context.updateState((latestState) => ({ ...latestState, ...messageLayout, message }))
+  const replacementSearchId = crypto.randomUUID()
+  let progressUpdate: Partial<SearchState> = {}
+  if (matchCount > 0) {
+    const message = GetReplacingMessage.getReplacingMessage(fileCount, matchCount)
+    const messageLayout = await GetSearchMessageLayout.getSearchMessageLayout(state, message)
+    progressUpdate = { ...messageLayout, message }
+  }
+  await context.updateState((latestState) => ({ ...latestState, ...progressUpdate, searchId: replacementSearchId }))
+  const currentBeforeReplacement = SearchViewStates.get(uid)
+  let replacementState = context.getState()
+  if (currentBeforeReplacement && currentBeforeReplacement.newState.searchId !== replacementSearchId) {
+    if (currentBeforeReplacement.newState.searchId !== activeSearchId) {
+      return
+    }
+    replacementState = {
+      ...currentBeforeReplacement.newState,
+      ...progressUpdate,
+      searchId: replacementSearchId,
+    }
+  }
+  const generationState = { ...replacementState }
+  SearchViewStates.set(uid, generationState, generationState)
+  const updatedState = await replaceAllConfirmed(generationState, fileIndex)
+  const completedGenerationState = { ...updatedState }
+  SearchViewStates.set(uid, completedGenerationState, completedGenerationState)
+  SearchViewStates.set(uid, generationState, updatedState)
   await RendererWorker.invoke('Search.rerender')
-  const updatedState = await replaceAllConfirmed(context.getState(), fileIndex)
-  await context.updateState(() => updatedState)
 }
