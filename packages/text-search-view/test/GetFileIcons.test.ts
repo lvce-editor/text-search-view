@@ -1,12 +1,12 @@
 import { expect, test } from '@jest/globals'
-import { RendererWorker } from '@lvce-editor/rpc-registry'
+import { IconThemeWorker } from '@lvce-editor/rpc-registry'
 import type { SearchResult } from '../src/parts/SearchResult/SearchResult.ts'
 import * as GetFileIcons from '../src/parts/GetFileIcons/GetFileIcons.ts'
 import * as TextSearchResultType from '../src/parts/TextSearchResultType/TextSearchResultType.ts'
 
-test.skip('GetFileIcons', async () => {
-  using mockRpc = RendererWorker.registerMockRpc({
-    'IconTheme.getFileIcon': () => 'file-icon',
+test('GetFileIcons', async () => {
+  using mockRpc = IconThemeWorker.registerMockRpc({
+    'IconTheme.getIcons': () => ['file-icon', 'css-icon'],
   })
 
   const mockFiles: readonly SearchResult[] = [
@@ -35,9 +35,20 @@ test.skip('GetFileIcons', async () => {
 
   const result = await GetFileIcons.getFileIcons(mockFiles, {})
 
-  expect(result).toEqual(['file-icon', '', 'file-icon'])
+  expect(result).toEqual({
+    icons: ['file-icon', '', 'css-icon'],
+    newFileIconCache: {
+      'file1.txt': 'file-icon',
+      'file3.css': 'css-icon',
+    },
+  })
   expect(mockRpc.invocations).toEqual([
-    ['IconTheme.getFileIcon', { name: 'file1.txt' }],
-    ['IconTheme.getFileIcon', { name: 'file3.css' }],
+    [
+      'IconTheme.getIcons',
+      [
+        { name: 'file1.txt', type: 1 },
+        { name: 'file3.css', type: 1 },
+      ],
+    ],
   ])
 })

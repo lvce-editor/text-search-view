@@ -86,3 +86,39 @@ test('collapseAll updates list items and file icons', async () => {
     ],
   ])
 })
+
+test('collapseAll only requests file icons for the visible range', async () => {
+  using mockRpc = IconThemeWorker.registerMockRpc({
+    'IconTheme.getIcons': () => ['file-0-icon', 'file-1-icon', 'file-2-icon'],
+  })
+  const items = Array.from({ length: 100 }, (_, index) => [
+    { end: 0, lineNumber: index, start: 0, text: `file-${index}.css`, type: TextSearchResultType.File },
+    { end: 3, lineNumber: index, start: 0, text: 'abc', type: TextSearchResultType.Match },
+  ]).flat()
+  const state: SearchState = {
+    ...CreateDefaultState.createDefaultState(),
+    headerHeight: 0,
+    height: 44,
+    itemHeight: 22,
+    items,
+    listItems: items,
+  }
+
+  const result = await collapseAll(state)
+
+  expect(result.listItems).toHaveLength(100)
+  expect(result.minLineY).toBe(0)
+  expect(result.maxLineY).toBe(3)
+  expect(result.icons).toEqual(['file-0-icon', 'file-1-icon', 'file-2-icon'])
+  expect(Object.keys(result.fileIconCache)).toHaveLength(3)
+  expect(mockRpc.invocations).toEqual([
+    [
+      'IconTheme.getIcons',
+      [
+        { name: 'file-0.css', type: 1 },
+        { name: 'file-1.css', type: 1 },
+        { name: 'file-2.css', type: 1 },
+      ],
+    ],
+  ])
+})
