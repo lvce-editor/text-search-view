@@ -14,6 +14,8 @@ export const test: Test = async ({ expect, FileSystem, Locator, Search, SideBar,
   await SideBar.open('Search')
   await Search.setValue('ab')
 
+  const searchInput = Locator('[name="SearchValue"]')
+  await expect(searchInput).toHaveValue('ab')
   const scrollBar = Locator('[role="scrollbar"]')
   await expect(scrollBar).toHaveCount(1)
 
@@ -21,5 +23,6 @@ export const test: Test = async ({ expect, FileSystem, Locator, Search, SideBar,
   await Search.setValue('')
 
   // assert
+  await expect(searchInput).toHaveValue('')
   await expect(scrollBar).toHaveCount(0)
 }
