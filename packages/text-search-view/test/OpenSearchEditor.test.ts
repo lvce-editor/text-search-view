@@ -17,8 +17,10 @@ test('openSearchEditor - opens a search editor in the main area', async () => {
   expect(result).toBe(state)
   expect(mockRpc.invocations).toHaveLength(1)
   expect(mockRpc.invocations[0][0]).toBe('Main.openUri')
-  expect(mockRpc.invocations[0][1]).toMatch(/^search-editor:\/\/42-[\da-f-]+\/Search$/)
-  expect(mockRpc.invocations[0].slice(2)).toEqual([true, {}])
+  expect(mockRpc.invocations[0][1]).toEqual({
+    focus: true,
+    uri: expect.stringMatching(/^search-editor:\/\/42-[\da-f-]+\/Search$/),
+  })
 })
 
 test('openSearchEditor - opens a new editor on every invocation', async () => {
@@ -33,8 +35,8 @@ test('openSearchEditor - opens a new editor on every invocation', async () => {
   await openSearchEditor(state)
   await openSearchEditor(state)
 
-  const firstUri = mockRpc.invocations[0][1]
-  const secondUri = mockRpc.invocations[1][1]
+  const firstUri = mockRpc.invocations[0][1].uri
+  const secondUri = mockRpc.invocations[1][1].uri
   expect(firstUri).not.toBe(secondUri)
   expect(firstUri).toMatch(/^search-editor:\/\/7-[\da-f-]+\/Search$/)
   expect(secondUri).toMatch(/^search-editor:\/\/7-[\da-f-]+\/Search$/)
