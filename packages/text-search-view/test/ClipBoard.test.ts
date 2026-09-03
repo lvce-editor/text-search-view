@@ -1,9 +1,9 @@
 import { expect, test } from '@jest/globals'
-import { RendererWorker } from '@lvce-editor/rpc-registry'
+import { ClipBoardWorker } from '@lvce-editor/rpc-registry'
 import * as ClipBoard from '../src/parts/ClipBoard/ClipBoard.ts'
 
 test('writeText - writes text to clipboard', async () => {
-  using mockRpc = RendererWorker.registerMockRpc({
+  using mockRpc = ClipBoardWorker.registerMockRpc({
     'ClipBoard.writeText': () => undefined,
   })
 
@@ -13,7 +13,7 @@ test('writeText - writes text to clipboard', async () => {
 })
 
 test('writeText - writes empty string to clipboard', async () => {
-  using mockRpc = RendererWorker.registerMockRpc({
+  using mockRpc = ClipBoardWorker.registerMockRpc({
     'ClipBoard.writeText': () => undefined,
   })
 
@@ -23,7 +23,7 @@ test('writeText - writes empty string to clipboard', async () => {
 })
 
 test('readText - reads text from clipboard', async () => {
-  using mockRpc = RendererWorker.registerMockRpc({
+  using mockRpc = ClipBoardWorker.registerMockRpc({
     'ClipBoard.readText': () => 'clipboard content',
   })
 
@@ -34,7 +34,7 @@ test('readText - reads text from clipboard', async () => {
 })
 
 test('readText - reads empty string from clipboard', async () => {
-  using mockRpc = RendererWorker.registerMockRpc({
+  using mockRpc = ClipBoardWorker.registerMockRpc({
     'ClipBoard.readText': () => '',
   })
 
