@@ -20,12 +20,11 @@ export const test: Test = async ({ expect, Extension, FileSystem, IconTheme, Loc
   const viewletSearch = Locator('.Search')
   const message = viewletSearch.locator('[role="status"]')
   await expect(message).toHaveText('40 results in 40 files')
+  await Search.focusIndex(0)
   await Search.handleWheel(1, 10_000)
   const fileToDismiss = viewletSearch.locator('.TreeItem[aria-expanded="true"]').first()
   await expect(fileToDismiss).toBeVisible()
   await expect(fileToDismiss.locator('.FileIcon[src$="/javascript.svg"]')).toHaveCount(1)
-  await Search.focusIndex(-1)
-  await Search.selectIndex(0)
 
   // act
   await Search.dismissItem()

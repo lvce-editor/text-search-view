@@ -2,7 +2,7 @@ import type { Test } from '@lvce-editor/test-with-playwright'
 
 export const name = 'search.file-icons-after-file-replace-all'
 
-export const test: Test = async ({ Dialog, expect, Extension, FileSystem, IconTheme, Locator, Search, SideBar, Workspace }) => {
+export const test: Test = async ({ Command, Dialog, expect, Extension, FileSystem, IconTheme, Locator, Search, SideBar, Workspace }) => {
   // arrange
   const iconThemeUri = import.meta.resolve('../fixtures/search-icon-theme')
   await Extension.addWebExtension(iconThemeUri)
@@ -22,19 +22,27 @@ export const test: Test = async ({ Dialog, expect, Extension, FileSystem, IconTh
   const viewletSearch = Locator('.Search')
   const message = viewletSearch.locator('[role="status"]')
   await expect(message).toHaveText('40 results in 40 files')
+  await Search.focusIndex(0)
   await Search.handleWheel(1, 10_000)
   const fileToReplace = viewletSearch.locator('.TreeItem[aria-expanded="true"]').first()
   await expect(fileToReplace).toBeVisible()
   await expect(fileToReplace.locator('.FileIcon[src$="/javascript.svg"]')).toHaveCount(1)
-  await Search.focusIndex(-1)
-  await Search.selectIndex(0)
   await Dialog.mockConfirm(() => true)
+  const beforeReplace = await Command.execute('Search.getDebugState')
 
   // act
   await Search.replaceAll()
 
   // assert
-  await expect(message).toHaveText("Replaced 1 occurrence across 1 file with 'd'")
+  const afterReplace = await Command.execute('Search.getDebugState')
+  try {
+    await expect(message).toHaveText("Replaced 1 occurrence across 1 file with 'd'")
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error)
+    throw new Error(
+      `File replacement state mismatch. Before: ${JSON.stringify(beforeReplace)}. After: ${JSON.stringify(afterReplace)}. Assertion: ${errorMessage}`,
+    )
+  }
   const visibleFile = viewletSearch.locator('.TreeItem[aria-expanded="true"]').first()
   await expect(visibleFile).toBeVisible()
   await expect(visibleFile.locator('.FileIcon[src$="/javascript.svg"]')).toHaveCount(1)
