@@ -6,6 +6,7 @@ import type { TextSearchOptions } from '../src/parts/TextSearchOptions/TextSearc
 import * as CreateDefaultState from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
 import { handleUpdateFull } from '../src/parts/HandleUpdateFull/HandleUpdateFull.ts'
 import * as SearchFlags from '../src/parts/SearchFlags/SearchFlags.ts'
+import * as SearchViewStates from '../src/parts/SearchViewStates/SearchViewStates.ts'
 
 test('handleUpdateFull - sets limitHit to true when search hits limit', async () => {
   using _mockTextMeasurementWorker = TextMeasurementWorker.registerMockRpc({
@@ -237,4 +238,34 @@ test('handleUpdateFull - rejects a provider result that is not an array', async 
   }
 
   await expect(handleUpdateFull(state, {})).rejects.toThrow('results must be of type array')
+})
+
+test('handleUpdateFull - does not overwrite state after the active search changes', async () => {
+  const state = {
+    ...CreateDefaultState.createDefaultState(),
+    uid: 106,
+    workspacePath: '/test',
+  }
+  SearchViewStates.set(state.uid, state, state)
+  let latestState: typeof state | undefined
+  using _mockTextSearchWorker = TextSearchWorker.registerMockRpc({
+    async 'TextSearch.search'() {
+      const latest = SearchViewStates.get(state.uid)
+      latestState = {
+        ...latest.newState,
+        message: "Replaced 1 occurrence across 1 file with 'new-text'",
+        searchId: '',
+      }
+      SearchViewStates.set(state.uid, latest.oldState, latestState)
+      return {
+        limitHit: false,
+        results: [],
+      }
+    },
+  })
+
+  const result = await handleUpdateFull(state, { value: 'test' })
+
+  expect(result).toBe(state)
+  expect(SearchViewStates.get(state.uid).newState).toBe(latestState)
 })

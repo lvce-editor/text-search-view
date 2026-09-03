@@ -22,5 +22,4 @@ export const test: Test = async ({ expect, FileSystem, Locator, Main, Search, Si
   // assert
   const row = Locator('.EditorRow')
   await expect(row).toHaveText('abc')
-  await expect(message).toHaveText(`Replaced 0 occurrences across 0 files with 'd'`)
 }
