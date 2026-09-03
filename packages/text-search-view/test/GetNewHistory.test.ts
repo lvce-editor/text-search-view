@@ -6,6 +6,6 @@ test('appends the new value', () => {
 })
 
 test('limits the history to 100 entries', () => {
-  const history = Array.from({ length: 100 }, (_, index) => `${index}`)
+  const history = Array.from({ length: 100 }, (_, index) => String(index))
   expect(GetNewHistory.getNewHistory(history, 'new value')).toEqual(history)
 })
