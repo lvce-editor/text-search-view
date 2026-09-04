@@ -5,7 +5,7 @@
       "project": ["*.js"]
     },
     "packages/build": {
-      "project": ["src/**/*.js"],
+      "project": ["src/**/*.ts"],
       "ignoreDependencies": ["@lvce-editor/verror", "esbuild", "playwright"]
     },
     "packages/e2e": {

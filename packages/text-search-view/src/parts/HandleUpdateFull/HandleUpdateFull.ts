@@ -10,6 +10,7 @@ import * as ScrollBarFunctions from '../ScrollBarFunctions/ScrollBarFunctions.ts
 import * as SearchFlags from '../SearchFlags/SearchFlags.ts'
 import * as SearchStatusMessage from '../SearchStatusMessage/SearchStatusMessage.ts'
 import * as SearchStrings from '../SearchStrings/SearchStrings.ts'
+import * as SearchViewStates from '../SearchViewStates/SearchViewStates.ts'
 import * as TextSearch from '../TextSearch/TextSearch.ts'
 
 export const handleUpdateFull = async (state: SearchState, update: Partial<SearchState>): Promise<SearchState> => {
@@ -38,7 +39,10 @@ export const handleUpdateFull = async (state: SearchState, update: Partial<Searc
   const scheme = GetProtocol.getProtocol(root)
   const isFileSearch = scheme === '' || scheme === 'file'
   const shouldUsePullBasedSearch = usePullBasedSearch && isFileSearch
-  const searchId = shouldUsePullBasedSearch ? crypto.randomUUID() : ''
+  const searchId = crypto.randomUUID()
+  const current = SearchViewStates.get(uid)
+  const oldState = current ? current.oldState : state
+  SearchViewStates.set(uid, oldState, { ...partialNewState, searchId })
   const { limitHit, results } = await TextSearch.textSearch(
     root,
     value,
@@ -65,6 +69,10 @@ export const handleUpdateFull = async (state: SearchState, update: Partial<Searc
     searchId,
     uid,
   )
+  const latestAfterSearch = SearchViewStates.get(uid)
+  if (latestAfterSearch.newState.searchId !== searchId) {
+    return state
+  }
   if (!Array.isArray(results)) {
     throw new TypeError('results must be of type array')
   }
@@ -85,8 +93,12 @@ export const handleUpdateFull = async (state: SearchState, update: Partial<Searc
   const finalDeltaY = Math.max(contentHeight - listHeight, 0)
   const visible = results.slice(0, maxLineY)
   const { icons, newFileIconCache } = await GetFileIcons.getFileIcons(visible, fileIconCache)
-  return {
-    ...partialNewState,
+  const latest = SearchViewStates.get(uid)
+  if (latest.newState.searchId !== searchId) {
+    return state
+  }
+  const updatedState = {
+    ...latest.newState,
     collapsedPaths: [],
     deltaY: 0,
     fileCount,
@@ -110,4 +122,6 @@ export const handleUpdateFull = async (state: SearchState, update: Partial<Searc
     threads,
     value,
   }
+  SearchViewStates.set(uid, latest.oldState, updatedState)
+  return state
 }

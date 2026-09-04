@@ -34,8 +34,7 @@ export const textSearchIncremental = async (
       minLineY: 0,
     }
     SearchViewStates.set(uid, latest2.oldState, updatedState2)
-    // @ts-ignore
-    await RendererWorker.invoke('Search.rerender')
+    await RendererWorker.invoke('Viewlet.requestRender', uid)
     await waitForNextFrame()
   }
   await resultPromise

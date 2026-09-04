@@ -217,3 +217,36 @@ test('getDisplayResults - should render relative folder path next to file name w
 
   expect(displayResults[0].text).toBe('index.kt — languages')
 })
+
+test('getDisplayResults - renders tree depths and directory rows', () => {
+  const results: readonly SearchResult[] = [
+    { depth: 0, end: 0, isDirectory: true, lineNumber: 0, start: 0, text: 'src', type: TextSearchResultType.File },
+    { depth: 1, end: 0, lineNumber: 0, start: 0, text: 'src/file.ts', type: TextSearchResultType.File },
+    { depth: 2, end: 6, lineNumber: 1, start: 0, text: 'needle', type: TextSearchResultType.Match },
+  ]
+  const originalResults: readonly SearchResult[] = [
+    { end: 0, lineNumber: 0, start: 0, text: './src/file.ts', type: TextSearchResultType.File },
+    { end: 6, lineNumber: 1, start: 0, text: 'needle', type: TextSearchResultType.Match },
+  ]
+
+  const displayResults = GetSearchDisplayResults.getDisplayResults(
+    results,
+    20,
+    1,
+    'needle',
+    0,
+    3,
+    '',
+    ['', 'file-icon', ''],
+    -1,
+    [],
+    true,
+    originalResults,
+  )
+
+  expect(displayResults).toMatchObject([
+    { badgeText: '', depth: 0, icon: '', indent: 16, text: 'src', title: '/src' },
+    { badgeText: '1', depth: 1, icon: 'file-icon', indent: 28, text: 'file.ts — src', title: '/src/file.ts' },
+    { badgeText: '', depth: 2, icon: '', indent: 40, text: 'needle', title: 'needle' },
+  ])
+})

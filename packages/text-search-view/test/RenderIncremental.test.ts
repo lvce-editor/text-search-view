@@ -2,6 +2,7 @@ import { expect, test } from '@jest/globals'
 import type { SearchState } from '../src/parts/SearchState/SearchState.ts'
 import * as CreateDefaultState from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
 import * as RenderIncremental from '../src/parts/RenderIncremental/RenderIncremental.ts'
+import * as SearchFlags from '../src/parts/SearchFlags/SearchFlags.ts'
 import * as TextSearchResultType from '../src/parts/TextSearchResultType/TextSearchResultType.ts'
 
 test('renderIncremental - returns non-empty patches when dom changes', () => {
@@ -21,6 +22,26 @@ test('renderIncremental - returns non-empty patches when dom changes', () => {
 
   const result = RenderIncremental.renderIncremental(oldState, newState)
   expect(result[0]).toBe('Viewlet.setPatches')
+  expect(result[1]).toBe(1)
+  expect(Array.isArray(result[2])).toBe(true)
+  expect(result[2].length).toBeGreaterThan(0)
+})
+
+test('renderIncremental - renders a complete dom when the replacement preview changes', () => {
+  const oldState: SearchState = {
+    ...CreateDefaultState.createDefaultState(),
+    flags: SearchFlags.ReplaceExpanded,
+    initial: false,
+    uid: 1,
+  }
+  const newState: SearchState = {
+    ...oldState,
+    replacement: 'new text',
+  }
+
+  const result = RenderIncremental.renderIncremental(oldState, newState)
+
+  expect(result[0]).toBe('Viewlet.setDom2')
   expect(result[1]).toBe(1)
   expect(Array.isArray(result[2])).toBe(true)
   expect(result[2].length).toBeGreaterThan(0)

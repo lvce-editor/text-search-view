@@ -1,12 +1,12 @@
 import { expect, test } from '@jest/globals'
-import { RendererWorker } from '@lvce-editor/rpc-registry'
+import { ClipBoardWorker } from '@lvce-editor/rpc-registry'
 import type { SearchState } from '../src/parts/SearchState/SearchState.ts'
 import * as CopyAll from '../src/parts/CopyAll/CopyAll.ts'
 import * as CreateDefaultState from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
 import * as TextSearchResultType from '../src/parts/TextSearchResultType/TextSearchResultType.ts'
 
 test('copyAll - no focused item returns same state', async () => {
-  using mockRpc = RendererWorker.registerMockRpc({})
+  using mockRpc = ClipBoardWorker.registerMockRpc({})
 
   const state: SearchState = {
     ...CreateDefaultState.createDefaultState(),
@@ -20,7 +20,7 @@ test('copyAll - no focused item returns same state', async () => {
 })
 
 test('copyAll - copies all matches for focused file item', async () => {
-  using mockRpc = RendererWorker.registerMockRpc({
+  using mockRpc = ClipBoardWorker.registerMockRpc({
     'ClipBoard.writeText': () => undefined,
   })
 
@@ -40,7 +40,7 @@ test('copyAll - copies all matches for focused file item', async () => {
 })
 
 test('copyAll - copies all matches for focused match item', async () => {
-  using mockRpc = RendererWorker.registerMockRpc({
+  using mockRpc = ClipBoardWorker.registerMockRpc({
     'ClipBoard.writeText': () => undefined,
   })
 

@@ -1,12 +1,12 @@
 import { expect, test } from '@jest/globals'
-import { RendererWorker } from '@lvce-editor/rpc-registry'
+import { ClipBoardWorker } from '@lvce-editor/rpc-registry'
 import type { SearchState } from '../src/parts/SearchState/SearchState.ts'
 import * as CreateDefaultState from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
 import * as HandleInputCut from '../src/parts/HandleInputCut/HandleInputCut.ts'
 import * as InputName from '../src/parts/InputName/InputName.ts'
 
 test('handleInputCut - returns same state when name is not a selection key', async () => {
-  using mockRpc = RendererWorker.registerMockRpc({})
+  using mockRpc = ClipBoardWorker.registerMockRpc({})
 
   const state: SearchState = {
     ...CreateDefaultState.createDefaultState(),
@@ -19,7 +19,7 @@ test('handleInputCut - returns same state when name is not a selection key', asy
 })
 
 test('handleInputCut - cuts text from SearchValue', async () => {
-  using mockRpc = RendererWorker.registerMockRpc({
+  using mockRpc = ClipBoardWorker.registerMockRpc({
     'ClipBoard.writeText': () => undefined,
   })
 
@@ -43,7 +43,7 @@ test('handleInputCut - cuts text from SearchValue', async () => {
 })
 
 test('handleInputCut - cuts text from ReplaceValue', async () => {
-  using mockRpc = RendererWorker.registerMockRpc({
+  using mockRpc = ClipBoardWorker.registerMockRpc({
     'ClipBoard.writeText': () => undefined,
   })
 
@@ -67,7 +67,7 @@ test('handleInputCut - cuts text from ReplaceValue', async () => {
 })
 
 test('handleInputCut - cuts text from FilesToInclude', async () => {
-  using mockRpc = RendererWorker.registerMockRpc({
+  using mockRpc = ClipBoardWorker.registerMockRpc({
     'ClipBoard.writeText': () => undefined,
   })
 
@@ -91,7 +91,7 @@ test('handleInputCut - cuts text from FilesToInclude', async () => {
 })
 
 test('handleInputCut - cuts text from FilesToExclude', async () => {
-  using mockRpc = RendererWorker.registerMockRpc({
+  using mockRpc = ClipBoardWorker.registerMockRpc({
     'ClipBoard.writeText': () => undefined,
   })
 
@@ -115,7 +115,7 @@ test('handleInputCut - cuts text from FilesToExclude', async () => {
 })
 
 test('handleInputCut - cuts entire text when selection spans full length', async () => {
-  using mockRpc = RendererWorker.registerMockRpc({
+  using mockRpc = ClipBoardWorker.registerMockRpc({
     'ClipBoard.writeText': () => undefined,
   })
 
@@ -139,7 +139,7 @@ test('handleInputCut - cuts entire text when selection spans full length', async
 })
 
 test('handleInputCut - cuts empty selection', async () => {
-  using mockRpc = RendererWorker.registerMockRpc({
+  using mockRpc = ClipBoardWorker.registerMockRpc({
     'ClipBoard.writeText': () => undefined,
   })
 

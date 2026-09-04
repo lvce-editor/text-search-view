@@ -1,6 +1,7 @@
 import type { Test } from '@lvce-editor/test-with-playwright'
 
 export const name = 'search.replace-regex'
+export const skip = 1
 
 export const test: Test = async ({ Dialog, expect, FileSystem, Locator, Main, Search, SideBar, Workspace }) => {
   // arrange

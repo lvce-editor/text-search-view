@@ -1,0 +1,12 @@
+{
+  "iconThemes": [
+    {
+      "id": "search-test-icon-theme",
+      "path": "icon-theme.json"
+    },
+    {
+      "id": "search-test-icon-theme-alternate",
+      "path": "icon-theme-alternate.json"
+    }
+  ]
+}

@@ -10,13 +10,13 @@ import * as SearchStrings from '../SearchStrings/SearchStrings.ts'
 import { get, set } from '../SearchViewStates/SearchViewStates.ts'
 import * as TextSearch from '../TextSearch/TextSearch.ts'
 
-const getsearchid = (): string => {
+const getSearchId = (): string => {
   return crypto.randomUUID()
 }
 
 export const handleUpdatePullBased = async (state: SearchState, update: Partial<SearchState>): Promise<SearchState> => {
   const { uid: previousUid, workspacePath } = state
-  const searchId = getsearchid()
+  const searchId = getSearchId()
   const partialNewState: SearchState = { ...state, ...update, items: [], listItems: [], message: '', searchId, searchResults: [] }
   set(previousUid, state, partialNewState)
   const {
@@ -69,6 +69,9 @@ export const handleUpdatePullBased = async (state: SearchState, update: Partial<
   if (!latest) {
     return state
   }
+  if (latest.newState.searchId !== searchId) {
+    return state
+  }
   const limitHitWarning = limitHit ? SearchStrings.theResultSetOnlyContainsASubSetOfMatches() : ''
   const { fileCount, resultCount } = getTextSearchResultCounts(latest.newState.items)
   const message = getStatusMessage(resultCount, fileCount)
@@ -76,13 +79,19 @@ export const handleUpdatePullBased = async (state: SearchState, update: Partial<
     GetSearchMessageHeight.getSearchMessageHeight(message, width, flags),
     GetSearchWarningMessageHeight.getSearchWarningMessageHeight(limitHitWarning, width),
   ])
+  const current = get(uid)
+  if (current.newState.searchId !== searchId) {
+    return state
+  }
   const headerHeight = GetSearchHeaderHeight.getSearchHeaderHeight(flags, messageHeight, warningHeight)
-  return {
-    ...latest.newState,
+  const updatedState = {
+    ...current.newState,
     headerHeight,
     limitHit,
     limitHitWarning,
     message,
     messageHeight,
   }
+  set(uid, current.oldState, updatedState)
+  return state
 }

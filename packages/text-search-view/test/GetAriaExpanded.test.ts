@@ -11,5 +11,5 @@ test('getAriaExpanded - expanded', () => {
 })
 
 test('getAriaExpanded - undefined for unknown value', () => {
-  expect(GetAriaExpanded.getAriaExpanded(-1)).toBe(undefined)
+  expect(GetAriaExpanded.getAriaExpanded(-1)).toBeUndefined()
 })

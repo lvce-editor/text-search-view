@@ -1,16 +1,16 @@
 import { expect, test } from '@jest/globals'
-import { RendererWorker, TextSearchWorker } from '@lvce-editor/rpc-registry'
+import { RendererWorker, TextMeasurementWorker, TextSearchWorker } from '@lvce-editor/rpc-registry'
 import type { SearchResult } from '../src/parts/SearchResult/SearchResult.ts'
 import type { SearchState } from '../src/parts/SearchState/SearchState.ts'
 import * as CreateDefaultState from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
+import { handleUpdate } from '../src/parts/HandleUpdate/HandleUpdate.ts'
 import { handleUpdatePullBased } from '../src/parts/HandleUpdatePullBased/HandleUpdatePullBased.ts'
 import * as SearchFlags from '../src/parts/SearchFlags/SearchFlags.ts'
 import * as SearchStrings from '../src/parts/SearchStrings/SearchStrings.ts'
 import * as SearchViewStates from '../src/parts/SearchViewStates/SearchViewStates.ts'
-import * as TextMeasurementWorker from '../src/parts/TextMeasurementWorker/TextMeasurementWorker.ts'
 import * as TextSearchResultType from '../src/parts/TextSearchResultType/TextSearchResultType.ts'
 
-test('handleUpdatePullBased - enables pull-based mode for file protocol and computes summary from latest state', async () => {
+test('handleUpdate - routes to pull-based mode for file protocol and computes summary from latest state', async () => {
   using _mockTextMeasurementWorker = TextMeasurementWorker.registerMockRpc({
     'TextMeasurement.measureTextBlockHeight': () => 13,
   })
@@ -64,7 +64,8 @@ test('handleUpdatePullBased - enables pull-based mode for file protocol and comp
     },
   })
 
-  const result = await handleUpdatePullBased(state, { value: 'test' })
+  await handleUpdate(state, { value: 'test' })
+  const result = SearchViewStates.get(state.uid).newState
 
   expect(result).toMatchObject({
     items: pulledResults,
@@ -113,7 +114,8 @@ test('handleUpdatePullBased - disables pull-based mode for non-file protocol and
     },
   })
 
-  const result = await handleUpdatePullBased(state, { value: 'test' })
+  await handleUpdatePullBased(state, { value: 'test' })
+  const result = SearchViewStates.get(state.uid).newState
 
   expect(result).toMatchObject({
     items: [],
@@ -158,4 +160,34 @@ test('handleUpdatePullBased - returns previous state when latest state cannot be
 
   expect(result).toBe(state)
   expect(seenUid).toBe(104)
+})
+
+test('handleUpdatePullBased - does not overwrite state after the active search changes', async () => {
+  const state: SearchState = {
+    ...CreateDefaultState.createDefaultState(),
+    uid: 105,
+    value: 'before',
+    workspacePath: '/test',
+  }
+  let latestState: SearchState | undefined
+  using _mockTextSearchWorker = TextSearchWorker.registerMockRpc({
+    async 'TextSearch.search'() {
+      const latest = SearchViewStates.get(state.uid)
+      latestState = {
+        ...latest.newState,
+        message: "Replaced 0 occurrences across 0 files with 'new-text'",
+        searchId: '',
+      }
+      SearchViewStates.set(state.uid, latest.oldState, latestState)
+      return {
+        limitHit: false,
+        results: [],
+      }
+    },
+  })
+
+  const result = await handleUpdatePullBased(state, { value: 'test' })
+
+  expect(result).toBe(state)
+  expect(SearchViewStates.get(state.uid).newState).toBe(latestState)
 })
