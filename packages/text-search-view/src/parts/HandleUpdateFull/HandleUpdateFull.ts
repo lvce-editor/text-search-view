@@ -97,7 +97,7 @@ export const handleUpdateFull = async (state: SearchState, update: Partial<Searc
   if (latest.newState.searchId !== searchId) {
     return state
   }
-  return {
+  const updatedState = {
     ...latest.newState,
     collapsedPaths: [],
     deltaY: 0,
@@ -122,4 +122,6 @@ export const handleUpdateFull = async (state: SearchState, update: Partial<Searc
     threads,
     value,
   }
+  SearchViewStates.set(uid, latest.oldState, updatedState)
+  return state
 }

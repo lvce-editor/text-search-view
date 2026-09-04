@@ -1,7 +1,6 @@
 import { cp, mkdir, readFile, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { pathToFileURL } from 'node:url'
-import { patchRendererWorker } from './patchRendererWorker.ts'
 import { root } from './root.ts'
 
 const sharedProcessPath = join(root, 'node_modules', '@lvce-editor', 'shared-process', 'index.js')
@@ -17,33 +16,13 @@ const { commitHash } = await sharedProcess.exportStatic({
   testPath: 'packages/e2e',
 })
 
-const rendererWorkerPath = join(root, 'dist', commitHash, 'packages', 'renderer-worker', 'dist', 'rendererWorkerMain.js')
 const textSearchWorkerPath = join(root, 'dist', commitHash, 'packages', 'text-search-view', 'dist', 'textSearchViewMain.js')
 const extensionHostWorkerTestsPath = join(root, 'dist', commitHash, 'packages', 'extension-host-worker-tests')
 const serverStaticPath = join(root, 'node_modules', '@lvce-editor', 'static-server', 'static', commitHash)
-const serverRendererWorkerPath = join(serverStaticPath, 'packages', 'renderer-worker', 'dist', 'rendererWorkerMain.js')
 const serverTextSearchWorkerPath = join(serverStaticPath, 'packages', 'text-search-view', 'dist', 'textSearchViewMain.js')
 const serverExtensionHostWorkerTestsPath = join(serverStaticPath, 'packages', 'extension-host-worker-tests')
 
-export const getRemoteUrl = (path: string): string => {
-  const url = pathToFileURL(path).toString().slice(8)
-  return `/remote/${url}`
-}
-
 const workerPath = join(root, '.tmp', 'dist', 'dist', 'textSearchViewMain.js')
-const remoteUrl = getRemoteUrl(workerPath)
-
-const patchRendererWorkerPath = async (path: string, useRemoteUrl: boolean): Promise<void> => {
-  const content = await readFile(path, 'utf8')
-  const newContent = patchRendererWorker(content, remoteUrl, useRemoteUrl)
-
-  if (newContent !== content) {
-    await writeFile(path, newContent)
-  }
-}
-
-await patchRendererWorkerPath(rendererWorkerPath, false)
-await patchRendererWorkerPath(serverRendererWorkerPath, false)
 
 await cp(workerPath, textSearchWorkerPath)
 await cp(workerPath, serverTextSearchWorkerPath)

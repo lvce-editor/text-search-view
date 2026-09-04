@@ -43,7 +43,7 @@ export const getMenuEntriesFile = (state: SearchState, props: ContextMenuPropsLi
     menuEntrySeparator,
     {
       args: [uri],
-      command: 'Search.revealInExplorer',
+      command: 'RevealInExplorer.reveal',
       flags: MenuItemFlags.None,
       id: 'revealInExplorerView',
       label: SearchStrings.revealInExplorerView(),
