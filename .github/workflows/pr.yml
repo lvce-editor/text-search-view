@@ -9,11 +9,8 @@ jobs:
   pr:
     strategy:
       fail-fast: false
-      max-parallel: 5
       matrix:
-        os: [ubuntu-24.04]
-        attempt: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
-    name: pr (${{ matrix.os }}, attempt ${{ matrix.attempt }})
+        os: [ubuntu-24.04, macos-15, windows-2025]
     runs-on: ${{ matrix.os }}
     timeout-minutes: 15
     steps:
@@ -35,6 +32,10 @@ jobs:
         if: steps.npm-cache.outputs.cache-hit != 'true'
       - run: npm run build
       - run: npm run build:static
+      - run: npm test
+      - run: npm run test-integration
+      - run: npm run type-check
+      - run: npm run lint
       - name: install playwright dependencies
         working-directory: ./packages/e2e
         run: npx playwright install chromium
@@ -43,14 +44,11 @@ jobs:
           PLAYWRIGHT_BROWSERS_PATH: 0
       - name: e2e
         working-directory: ./packages/e2e
-        shell: bash
-        run: npm run e2e:headless -- --filter=file-icons-after-file-replace-all 2>&1 | tee e2e-attempt-${{ matrix.attempt }}.log
+        run: npm run e2e:headless
         env:
           PLAYWRIGHT_BROWSERS_PATH: 0
-      - name: Upload e2e diagnostics
-        if: always()
-        uses: actions/upload-artifact@v7
-        with:
-          name: file-icon-replace-all-${{ matrix.attempt }}
-          path: packages/e2e/e2e-attempt-${{ matrix.attempt }}.log
-          if-no-files-found: warn
+      - name: measure
+        working-directory: ./packages/build
+        run: npm run measure
+        env:
+          PLAYWRIGHT_BROWSERS_PATH: 0
