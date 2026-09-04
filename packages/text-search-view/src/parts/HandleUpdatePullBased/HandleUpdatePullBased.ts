@@ -84,7 +84,7 @@ export const handleUpdatePullBased = async (state: SearchState, update: Partial<
     return state
   }
   const headerHeight = GetSearchHeaderHeight.getSearchHeaderHeight(flags, messageHeight, warningHeight)
-  return {
+  const updatedState = {
     ...current.newState,
     headerHeight,
     limitHit,
@@ -92,4 +92,6 @@ export const handleUpdatePullBased = async (state: SearchState, update: Partial<
     message,
     messageHeight,
   }
+  set(uid, current.oldState, updatedState)
+  return state
 }

@@ -1,6 +1,8 @@
 export interface SearchResult {
+  readonly depth?: number
   readonly end: number
   readonly endColumnIndex?: number
+  readonly isDirectory?: boolean
   readonly lineNumber: number
   readonly rowIndex?: number
   readonly start: number

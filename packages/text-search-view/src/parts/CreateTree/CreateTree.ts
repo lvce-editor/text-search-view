@@ -8,13 +8,13 @@ export const createParentFolderTree = (items: readonly SearchResult[]): Tree => 
   for (const item of items) {
     const { text, type } = item
     if (type === TextSearchResultType.File) {
-      const relativePath = text
+      const relativePath = Path.normalizeRelativePath(text)
       const dirname = Path.dirname2(relativePath)
       tree[dirname] ||= []
-      tree[dirname].push(item)
-    } else {
-      // tree[text] ||= []
-      // tree[text].push(item)
+      tree[dirname].push({
+        ...item,
+        text: Path.basename2(relativePath),
+      })
     }
   }
   return tree

@@ -64,7 +64,8 @@ test('handleUpdate - routes to pull-based mode for file protocol and computes su
     },
   })
 
-  const result = await handleUpdate(state, { value: 'test' })
+  await handleUpdate(state, { value: 'test' })
+  const result = SearchViewStates.get(state.uid).newState
 
   expect(result).toMatchObject({
     items: pulledResults,
@@ -113,7 +114,8 @@ test('handleUpdatePullBased - disables pull-based mode for non-file protocol and
     },
   })
 
-  const result = await handleUpdatePullBased(state, { value: 'test' })
+  await handleUpdatePullBased(state, { value: 'test' })
+  const result = SearchViewStates.get(state.uid).newState
 
   expect(result).toMatchObject({
     items: [],

@@ -4,7 +4,7 @@ import { join2 } from '../Path/Path.ts'
 import * as TextSearchResultType from '../TextSearchResultType/TextSearchResultType.ts'
 
 // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
-const processChildren = (map: Tree, items: SearchResult[], root: string, path: string, depth: number): void => {
+const processChildren = (map: Tree, items: SearchResult[], path: string, depth: number): void => {
   const children = map[path]
   if (!children) {
     return
@@ -14,20 +14,23 @@ const processChildren = (map: Tree, items: SearchResult[], root: string, path: s
     const child = children[i]
     if (child.type === TextSearchResultType.File) {
       const childPath = join2(path, child.text)
-      const absolutePath = `${root}${childPath}`
       items.push({
         ...child,
-        text: absolutePath,
+        depth,
+        text: childPath,
       })
-      processChildren(map, items, root, childPath, depth + 1)
+      processChildren(map, items, childPath, depth + 1)
     } else {
-      items.push(child)
+      items.push({
+        ...child,
+        depth,
+      })
     }
   }
 }
 
-export const treeToList = (map: Tree, root: string): readonly SearchResult[] => {
+export const treeToList = (map: Tree): readonly SearchResult[] => {
   const items: SearchResult[] = []
-  processChildren(map, items, root, '', 0)
+  processChildren(map, items, '', 0)
   return items
 }

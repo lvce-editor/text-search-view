@@ -4,6 +4,7 @@ import { DialogWorker, RendererWorker, TextMeasurementWorker } from '@lvce-edito
 import type { SearchState } from '../src/parts/SearchState/SearchState.ts'
 import * as CreateDefaultState from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
 import { replaceAll, replaceAllWithProgress } from '../src/parts/ReplaceAll/ReplaceAll.ts'
+import * as SearchViewStates from '../src/parts/SearchViewStates/SearchViewStates.ts'
 import * as TextSearchResultType from '../src/parts/TextSearchResultType/TextSearchResultType.ts'
 
 test('replaceAll - replaces all matches and updates state', async () => {
@@ -121,19 +122,24 @@ test('replaceAll - user cancels replacement', async () => {
   ])
 })
 
-test('replaceAllWithProgress - publishes progress before applying replacements', async () => {
+test('replaceAllWithProgress - invalidates the active search before applying replacements', async () => {
   using _mockTextMeasurementRpc = TextMeasurementWorker.registerMockRpc({
     'TextMeasurement.measureTextBlockHeight': () => 13,
   })
   const { promise: replacementStarted, resolve: notifyReplacementStarted } = Promise.withResolvers<void>()
   const { promise: continueReplacement, resolve: finishReplacement } = Promise.withResolvers<void>()
+  let progressRendered = false
   using mockRpc = RendererWorker.registerMockRpc({
     async 'BulkReplacement.applyBulkReplacement'() {
+      expect(progressRendered).toBe(true)
       notifyReplacementStarted()
       await continueReplacement
     },
     'Layout.handleWorkspaceRefresh'() {},
-    'Viewlet.requestRender'() {},
+    'Viewlet.requestRender'() {
+      expect(currentState.message).toBe('Replacing 2 occurrences across 2 files…')
+      progressRendered = true
+    },
   })
   using mockDialogRpc = DialogWorker.registerMockRpc({
     'ConfirmPrompt.prompt': () => true,
@@ -154,12 +160,17 @@ test('replaceAllWithProgress - publishes progress before applying replacements',
     uid: 500,
     workspacePath: '/test',
   }
+  let updateCount = 0
   const context: AsyncCommandContext<SearchState> = {
     getState() {
       return currentState
     },
     async updateState(updater) {
       currentState = updater(currentState)
+      updateCount++
+      if (updateCount === 1) {
+        SearchViewStates.set(currentState.uid, currentState, currentState)
+      }
       return currentState
     },
   }
@@ -180,7 +191,8 @@ test('replaceAllWithProgress - publishes progress before applying replacements',
       },
     ],
   ])
-  expect(mockRpc.invocations[0]).toEqual([
+  expect(mockRpc.invocations[0]).toEqual(['Viewlet.requestRender', 500])
+  expect(mockRpc.invocations[1]).toEqual([
     'BulkReplacement.applyBulkReplacement',
     [
       {
@@ -213,9 +225,9 @@ test('replaceAllWithProgress - publishes progress before applying replacements',
   finishReplacement()
   await pendingReplacement
 
-  expect(currentState.message).toBe("Replaced 2 occurrences across 2 files with 'new-text'")
-  expect(currentState.searchId).toBe('')
-  expect(mockRpc.invocations.at(-1)).toEqual(['Viewlet.requestRender', 500])
+  expect(currentState.message).toBe('Replacing 2 occurrences across 2 files…')
+  expect(SearchViewStates.get(currentState.uid).newState.message).toBe("Replaced 2 occurrences across 2 files with 'new-text'")
+  expect(mockRpc.invocations.at(-1)).toEqual(['Layout.handleWorkspaceRefresh'])
 })
 
 test('replaceAllWithProgress - reports progress for the focused file', async () => {
@@ -263,7 +275,7 @@ test('replaceAllWithProgress - reports progress for the focused file', async () 
 
   await replaceAllWithProgress(context)
 
-  expect(currentState.message).toBe("Replaced 1 occurrence across 1 file with 'new-text'")
+  expect(SearchViewStates.get(currentState.uid).newState.message).toBe("Replaced 1 occurrence across 1 file with 'new-text'")
   expect(mockRpc.invocations.length).toBeGreaterThan(0)
   expect(mockDialogRpc.invocations[0]).toEqual([
     'ConfirmPrompt.prompt',
@@ -272,43 +284,6 @@ test('replaceAllWithProgress - reports progress for the focused file', async () 
       confirmMessage: 'Replace',
       title: 'Replace All',
     },
-  ])
-})
-
-test('replaceAllWithProgress - renders completion directly when there are no matches', async () => {
-  using _mockTextMeasurementRpc = TextMeasurementWorker.registerMockRpc({
-    'TextMeasurement.measureTextBlockHeight': () => 13,
-  })
-  using mockRpc = RendererWorker.registerMockRpc({
-    'BulkReplacement.applyBulkReplacement'() {},
-    'Layout.handleWorkspaceRefresh'() {},
-    'Viewlet.requestRender'() {},
-  })
-  let currentState: SearchState = {
-    ...CreateDefaultState.createDefaultState(),
-    message: 'No results found',
-    replacement: 'new-text',
-    searchId: 'active-search',
-    uid: 600,
-  }
-  const context: AsyncCommandContext<SearchState> = {
-    getState() {
-      return currentState
-    },
-    async updateState(updater) {
-      currentState = updater(currentState)
-      return currentState
-    },
-  }
-
-  await replaceAllWithProgress(context)
-
-  expect(currentState.message).toBe("Replaced 0 occurrences across 0 files with 'new-text'")
-  expect(currentState.searchId).toBe('')
-  expect(mockRpc.invocations).toEqual([
-    ['BulkReplacement.applyBulkReplacement', []],
-    ['Layout.handleWorkspaceRefresh'],
-    ['Viewlet.requestRender', 600],
   ])
 })
 
@@ -391,6 +366,39 @@ test('replaceAllWithProgress - user cancels before progress is rendered', async 
       },
     ],
   ])
+})
+
+test('replaceAllWithProgress - renders completion directly when there are no matches', async () => {
+  using _mockTextMeasurementRpc = TextMeasurementWorker.registerMockRpc({
+    'TextMeasurement.measureTextBlockHeight': () => 13,
+  })
+  using mockRpc = RendererWorker.registerMockRpc({
+    'BulkReplacement.applyBulkReplacement'() {},
+    'Layout.handleWorkspaceRefresh'() {},
+  })
+  let currentState: SearchState = {
+    ...CreateDefaultState.createDefaultState(),
+    message: 'No results found',
+    replacement: 'new-text',
+    searchId: 'active-search',
+    uid: 600,
+  }
+  SearchViewStates.set(currentState.uid, currentState, currentState)
+  const context: AsyncCommandContext<SearchState> = {
+    getState() {
+      return currentState
+    },
+    async updateState(updater) {
+      currentState = updater(currentState)
+      return currentState
+    },
+  }
+
+  await replaceAllWithProgress(context)
+
+  expect(SearchViewStates.get(currentState.uid).newState.message).toBe("Replaced 0 occurrences across 0 files with 'new-text'")
+  expect(SearchViewStates.get(currentState.uid).newState.searchId).toBe('')
+  expect(mockRpc.invocations).toEqual([])
 })
 
 test('replaceAll - replaces all matches in focused file only and updates state', async () => {

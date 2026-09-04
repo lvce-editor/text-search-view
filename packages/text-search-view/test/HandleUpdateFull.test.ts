@@ -49,7 +49,8 @@ test('handleUpdateFull - sets limitHit to true when search hits limit', async ()
     },
   })
 
-  const result = await handleUpdateFull(state, update)
+  await handleUpdateFull(state, update)
+  const result = SearchViewStates.get(state.uid).newState
 
   expect(result).toMatchObject({
     fileCount: 1,
@@ -110,7 +111,8 @@ test('handleUpdateFull - sets limitHit to false when search does not hit limit',
     },
   })
 
-  const result = await handleUpdateFull(state, update)
+  await handleUpdateFull(state, update)
+  const result = SearchViewStates.get(state.uid).newState
 
   expect(result).toMatchObject({
     fileCount: 1,
@@ -159,7 +161,8 @@ test('handleUpdateFull - passes enabled search options to the provider', async (
     workspacePath: '/test',
   }
 
-  const result = await handleUpdateFull(state, {})
+  await handleUpdateFull(state, {})
+  const result = SearchViewStates.get(state.uid).newState
 
   expect(receivedOptions).toMatchObject({
     contextLines: 2,
@@ -215,7 +218,8 @@ test('handleUpdateFull - enables pull-based search for an explicit file protocol
     workspacePath: 'file:///test',
   }
 
-  const result = await handleUpdateFull(state, {})
+  await handleUpdateFull(state, {})
+  const result = SearchViewStates.get(state.uid).newState
 
   expect(receivedOptions?.scheme).toBe('file')
   expect(receivedOptions?.usePullBasedSearch).toBe(true)
