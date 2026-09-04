@@ -83,8 +83,8 @@ import * as SaveState from '../SaveState/SaveState.ts'
 import * as SearchFocus from '../SearchFocus/SearchFocus.ts'
 import * as WrapCommand from '../SearchViewStates/SearchViewStates.ts'
 import * as SelectIndex from '../SelectIndex/SelectIndex.ts'
-import { setLimit } from '../SetLimit/SetLimit.ts'
 import * as SetComponentState from '../SetComponentState/SetComponentState.ts'
+import { setLimit } from '../SetLimit/SetLimit.ts'
 import * as Submit from '../Submit/Submit.ts'
 import * as TextSearch from '../TextSearch/TextSearch.ts'
 import * as ToggleDetailsExpanded from '../ToggleDetailsExpanded/ToggleDetailsExpanded.ts'
@@ -197,9 +197,9 @@ export const commandMap = {
   'TextSearch.rerender': Rerender.rerender,
   'TextSearch.restoreState': RestoreState.restoreState,
   'TextSearch.saveState': WrapCommand.wrapGetter(SaveState.saveState),
-  'TextSearch.setComponentState': SetComponentState.setComponentState,
-
   'TextSearch.selectIndex': WrapCommand.wrapCommand(SelectIndex.selectIndex),
+
+  'TextSearch.setComponentState': SetComponentState.setComponentState,
   'TextSearch.setLimit': WrapCommand.wrapSerialCommand(setLimit),
   'TextSearch.submit': WrapCommand.wrapSerialCommand(Submit.submit),
   'TextSearch.terminate': terminate,

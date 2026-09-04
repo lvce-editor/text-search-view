@@ -1,7 +1,6 @@
 import { expect, test } from '@jest/globals'
 import { createDefaultState } from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
 import { getComponentState } from '../src/parts/GetComponentState/GetComponentState.ts'
-import type { SearchState } from '../src/parts/SearchState/SearchState.ts'
 import * as SearchViewStates from '../src/parts/SearchViewStates/SearchViewStates.ts'
 import { setComponentState } from '../src/parts/SetComponentState/SetComponentState.ts'
 
@@ -23,5 +22,5 @@ test('rejects an invalid live component state', async () => {
   SearchViewStates.set(uid, state, state)
 
   await expect(setComponentState(uid, { ...state, uid: 103 })).rejects.toThrow('Text Search state uid must remain 102')
-  await expect(setComponentState(uid, [] as unknown as SearchState)).rejects.toThrow('Text Search state must be an object')
+  await expect(setComponentState(uid, [] as unknown)).rejects.toThrow('Text Search state must be an object')
 })
