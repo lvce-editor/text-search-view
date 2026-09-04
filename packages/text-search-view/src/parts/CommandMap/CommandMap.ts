@@ -19,6 +19,7 @@ import * as FocusPreviousInput from '../FocusPreviousInput/FocusPreviousInput.ts
 import * as FocusReplaceValue from '../FocusReplaceValue/FocusReplaceValue.ts'
 import * as FocusSearchValue from '../FocusSearchValue/FocusSearchValue.ts'
 import * as FocusSearchValueNext from '../FocusSearchValueNext/FocusSearchValueNext.ts'
+import * as GetComponentState from '../GetComponentState/GetComponentState.ts'
 import * as GetKeyBindings from '../GetKeyBindings/GetKeyBindings.ts'
 import { getMenuEntries } from '../GetMenuEntries/GetMenuEntries.ts'
 import { getMenuEntryIds } from '../GetMenuEntryIds/GetMenuEntryIds.ts'
@@ -83,6 +84,7 @@ import * as SearchFocus from '../SearchFocus/SearchFocus.ts'
 import * as WrapCommand from '../SearchViewStates/SearchViewStates.ts'
 import * as SelectIndex from '../SelectIndex/SelectIndex.ts'
 import { setLimit } from '../SetLimit/SetLimit.ts'
+import * as SetComponentState from '../SetComponentState/SetComponentState.ts'
 import * as Submit from '../Submit/Submit.ts'
 import * as TextSearch from '../TextSearch/TextSearch.ts'
 import * as ToggleDetailsExpanded from '../ToggleDetailsExpanded/ToggleDetailsExpanded.ts'
@@ -138,6 +140,7 @@ export const commandMap = {
   'TextSearch.focusSearchValue': WrapCommand.wrapCommand(FocusSearchValue.focusSearchValue),
   'TextSearch.focusSearchValueNext': WrapCommand.wrapCommand(FocusSearchValueNext.focusSearchValueNext),
   'TextSearch.getCommandIds': WrapCommand.getCommandIds,
+  'TextSearch.getComponentState': GetComponentState.getComponentState,
   'TextSearch.getKeyBindings': GetKeyBindings.getKeyBindings,
   'TextSearch.getMenuEntries': WrapCommand.wrapGetter(getMenuEntries),
   'TextSearch.getMenuEntryIds': getMenuEntryIds,
@@ -194,6 +197,7 @@ export const commandMap = {
   'TextSearch.rerender': Rerender.rerender,
   'TextSearch.restoreState': RestoreState.restoreState,
   'TextSearch.saveState': WrapCommand.wrapGetter(SaveState.saveState),
+  'TextSearch.setComponentState': SetComponentState.setComponentState,
 
   'TextSearch.selectIndex': WrapCommand.wrapCommand(SelectIndex.selectIndex),
   'TextSearch.setLimit': WrapCommand.wrapSerialCommand(setLimit),
