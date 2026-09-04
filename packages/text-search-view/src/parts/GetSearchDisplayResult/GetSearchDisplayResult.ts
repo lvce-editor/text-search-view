@@ -18,13 +18,13 @@ export const getDisplayResult = (
   originalResults: readonly SearchResult[],
 ): DisplaySearchResult => {
   const result = results[i]
-  const { start, text, type } = result
+  const { depth, isDirectory, start, text, type } = result
   const posInSet = i + 1
   const focused = i === focusedIndex
   const relativeIndex = i - minLineY
   switch (type) {
     case TextSearchResultType.Context:
-      return GetSearchDisplayResultMatch.getDisplayResultMatch(setSize, 0, '', text, posInSet, 0, focused)
+      return GetSearchDisplayResultMatch.getDisplayResultMatch(setSize, 0, '', text, posInSet, 0, focused, depth)
     case TextSearchResultType.File:
       return GetSearchDisplayResultFile.getSearchDisplayResultFile(
         results,
@@ -38,9 +38,11 @@ export const getDisplayResult = (
         focused,
         renderFolderPaths,
         originalResults,
+        depth,
+        isDirectory,
       )
     case TextSearchResultType.Match:
-      return GetSearchDisplayResultMatch.getDisplayResultMatch(setSize, searchTermLength, replacement, text, posInSet, start, focused)
+      return GetSearchDisplayResultMatch.getDisplayResultMatch(setSize, searchTermLength, replacement, text, posInSet, start, focused, depth)
     default:
       throw new Error('unexpected search result type')
   }

@@ -29,7 +29,7 @@ test('openUri - with options', async () => {
     selections: new Uint32Array([1, 0, 1, 0]),
   }
   await OpenUri.openUri('/test/file.txt', false, options)
-  expect(mockRpc.invocations).toEqual([['Main.openUri', { focus: false, selections: options.selections, uri: '/test/file.txt' }]])
+  expect(mockRpc.invocations).toEqual([['Main.openUri', { focus: false, ...options, uri: '/test/file.txt' }]])
 })
 
 test('openUri - error', async () => {

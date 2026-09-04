@@ -1,12 +1,12 @@
 import { expect, test } from '@jest/globals'
-import { RendererWorker } from '@lvce-editor/rpc-registry'
+import { ClipBoardWorker } from '@lvce-editor/rpc-registry'
 import type { SearchState } from '../src/parts/SearchState/SearchState.ts'
 import * as CreateDefaultState from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
 import { handleInputCopy } from '../src/parts/HandleInputCopy/HandleInputCopy.ts'
 import * as InputName from '../src/parts/InputName/InputName.ts'
 
 test('handleInputCopy - returns state unchanged when name is not a selection key', async () => {
-  using mockRpc = RendererWorker.registerMockRpc({})
+  using mockRpc = ClipBoardWorker.registerMockRpc({})
 
   const state: SearchState = {
     ...CreateDefaultState.createDefaultState(),
@@ -20,7 +20,7 @@ test('handleInputCopy - returns state unchanged when name is not a selection key
 })
 
 test('handleInputCopy - copies selected text from SearchValue', async () => {
-  using mockRpc = RendererWorker.registerMockRpc({
+  using mockRpc = ClipBoardWorker.registerMockRpc({
     'ClipBoard.writeText': () => undefined,
   })
 
@@ -43,7 +43,7 @@ test('handleInputCopy - copies selected text from SearchValue', async () => {
 })
 
 test('handleInputCopy - copies selected text from ReplaceValue', async () => {
-  using mockRpc = RendererWorker.registerMockRpc({
+  using mockRpc = ClipBoardWorker.registerMockRpc({
     'ClipBoard.writeText': () => undefined,
   })
 
@@ -66,7 +66,7 @@ test('handleInputCopy - copies selected text from ReplaceValue', async () => {
 })
 
 test('handleInputCopy - copies selected text from FilesToInclude', async () => {
-  using mockRpc = RendererWorker.registerMockRpc({
+  using mockRpc = ClipBoardWorker.registerMockRpc({
     'ClipBoard.writeText': () => undefined,
   })
 
@@ -89,7 +89,7 @@ test('handleInputCopy - copies selected text from FilesToInclude', async () => {
 })
 
 test('handleInputCopy - copies selected text from FilesToExclude', async () => {
-  using mockRpc = RendererWorker.registerMockRpc({
+  using mockRpc = ClipBoardWorker.registerMockRpc({
     'ClipBoard.writeText': () => undefined,
   })
 
@@ -112,7 +112,7 @@ test('handleInputCopy - copies selected text from FilesToExclude', async () => {
 })
 
 test('handleInputCopy - copies middle portion of text', async () => {
-  using mockRpc = RendererWorker.registerMockRpc({
+  using mockRpc = ClipBoardWorker.registerMockRpc({
     'ClipBoard.writeText': () => undefined,
   })
 
@@ -135,7 +135,7 @@ test('handleInputCopy - copies middle portion of text', async () => {
 })
 
 test('handleInputCopy - copies empty string when selection range is empty', async () => {
-  using mockRpc = RendererWorker.registerMockRpc({
+  using mockRpc = ClipBoardWorker.registerMockRpc({
     'ClipBoard.writeText': () => undefined,
   })
 

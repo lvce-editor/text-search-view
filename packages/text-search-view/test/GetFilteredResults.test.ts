@@ -110,3 +110,15 @@ test('getFilteredResults - handles only match results', () => {
   const filteredResults = GetFilteredResults.getFilteredResults(results, ['file1.txt'])
   expect(filteredResults).toEqual(results)
 })
+
+test('getFilteredResults - hides nested tree descendants of a collapsed folder', () => {
+  const results: readonly SearchResult[] = [
+    { depth: 0, end: 0, isDirectory: true, lineNumber: 0, start: 0, text: 'src', type: TextSearchResultType.File },
+    { depth: 1, end: 0, isDirectory: true, lineNumber: 0, start: 0, text: 'src/nested', type: TextSearchResultType.File },
+    { depth: 2, end: 0, lineNumber: 0, start: 0, text: 'src/nested/file.ts', type: TextSearchResultType.File },
+    { depth: 3, end: 6, lineNumber: 1, start: 0, text: 'needle', type: TextSearchResultType.Match },
+    { depth: 0, end: 0, lineNumber: 0, start: 0, text: 'root.ts', type: TextSearchResultType.File },
+  ]
+
+  expect(GetFilteredResults.getFilteredResults(results, ['src'])).toEqual([results[0], results[4]])
+})

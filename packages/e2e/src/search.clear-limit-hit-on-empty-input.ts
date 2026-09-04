@@ -11,6 +11,8 @@ export const test: Test = async ({ expect, FileSystem, Locator, Search, SideBar,
   await Search.setLimit(5)
   await Search.setValue('ab')
 
+  const searchInput = Locator('[name="SearchValue"]')
+  await expect(searchInput).toHaveValue('ab')
   const warningMessage = Locator('.SearchWarningMessage')
   await expect(warningMessage).toBeVisible()
 
@@ -18,5 +20,6 @@ export const test: Test = async ({ expect, FileSystem, Locator, Search, SideBar,
   await Search.setValue('')
 
   // assert
+  await expect(searchInput).toHaveValue('')
   await expect(warningMessage).toHaveCount(0)
 }

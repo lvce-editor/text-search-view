@@ -10,8 +10,9 @@ export const getDisplayResultMatch = (
   posInSet: number,
   start: number,
   focused: boolean,
+  resultDepth: number = 1,
 ): DisplaySearchResult => {
-  const depth = 1
+  const depth = resultDepth
   const indent = GetTreeItemIndent.getTreeItemIndent(depth)
   return {
     badgeText: '',

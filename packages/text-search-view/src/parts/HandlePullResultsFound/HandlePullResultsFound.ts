@@ -1,3 +1,4 @@
+import { RendererWorker } from '@lvce-editor/rpc-registry'
 import type { SearchResult } from '../SearchResult/SearchResult.ts'
 import type { SearchState } from '../SearchState/SearchState.ts'
 import * as GetFileIcons from '../GetFileIcons/GetFileIcons.ts'
@@ -22,7 +23,7 @@ export const handlePullResultsFound = async (
   const allResults = [...listItems, ...newResults]
   const { fileCount, resultCount } = GetTextSearchResultCounts.getTextSearchResultCounts(allResults)
   const message = SearchStatusMessage.getStatusMessage(resultCount, fileCount)
-  const { headerHeight, messageHeight } = await GetSearchMessageLayout.getSearchMessageLayout(state, message)
+  const { headerHeight, messageHeight } = await GetSearchMessageLayout.getSearchMessageLayout(current.newState, message)
   const total = allResults.length
   const contentHeight = total * itemHeight
   const listHeight = height - headerHeight
@@ -34,7 +35,7 @@ export const handlePullResultsFound = async (
   const { icons, newFileIconCache } = await GetFileIcons.getFileIcons(visible, fileIconCache)
 
   const latest = SearchViewStates.get(uid)
-  if (latest.newState.searchId !== resultSearchId) {
+  if (!latest || latest.newState.searchId !== resultSearchId) {
     return state
   }
 
@@ -56,5 +57,6 @@ export const handlePullResultsFound = async (
     scrollBarHeight,
   }
   SearchViewStates.set(uid, latest.oldState, updatedState)
+  await RendererWorker.invoke('Viewlet.requestRender', uid)
   return state
 }

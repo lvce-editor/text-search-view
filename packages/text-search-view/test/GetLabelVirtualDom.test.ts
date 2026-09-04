@@ -45,6 +45,48 @@ test('getLabelVirtualDom', () => {
   ])
 })
 
+test('getLabelVirtualDom - displays only the first line of a multiline replacement', () => {
+  const result = GetLabelVirtualDom.getLabelVirtualDom('abc', 1, 1, 'x\ny')
+
+  expect(result).toEqual([
+    {
+      childCount: 4,
+      className: 'Label Grow',
+      type: 4,
+    },
+    {
+      childCount: 0,
+      text: 'a',
+      type: 12,
+    },
+    {
+      childCount: 1,
+      className: 'HighlightDeleted',
+      type: 21,
+    },
+    {
+      childCount: 0,
+      text: 'b',
+      type: 12,
+    },
+    {
+      childCount: 1,
+      className: 'HighlightInserted',
+      type: 20,
+    },
+    {
+      childCount: 0,
+      text: 'x',
+      type: 12,
+    },
+    {
+      childCount: 0,
+      text: 'c',
+      type: 12,
+    },
+  ])
+})
+
 test('no match', () => {
   const displayText = 'abc'
   const matchLength = 0

@@ -1,9 +1,8 @@
 import { expect, test } from '@jest/globals'
-import { IconThemeWorker } from '@lvce-editor/rpc-registry'
+import { IconThemeWorker, RendererWorker, TextMeasurementWorker } from '@lvce-editor/rpc-registry'
 import * as CreateDefaultState from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
 import { handlePullResultsFound } from '../src/parts/HandlePullResultsFound/HandlePullResultsFound.ts'
 import * as SearchViewStates from '../src/parts/SearchViewStates/SearchViewStates.ts'
-import * as TextMeasurementWorker from '../src/parts/TextMeasurementWorker/TextMeasurementWorker.ts'
 import * as TextSearchResultType from '../src/parts/TextSearchResultType/TextSearchResultType.ts'
 
 test('handlePullResultsFound - ignores a result after the active search changes', async () => {
@@ -23,9 +22,44 @@ test('handlePullResultsFound - ignores a result after the active search changes'
   expect(SearchViewStates.get(state.uid).newState).toBe(latestState)
 })
 
+test('handlePullResultsFound - ignores a result when the active search changes while loading icons', async () => {
+  using mockRendererWorker = RendererWorker.registerMockRpc({
+    'Viewlet.requestRender': () => undefined,
+  })
+  const state = {
+    ...CreateDefaultState.createDefaultState(),
+    searchId: 'active-search',
+    uid: 602,
+  }
+  const latestState = {
+    ...state,
+    searchId: 'new-search',
+  }
+  SearchViewStates.set(state.uid, state, state)
+  using _mockTextMeasurementWorker = TextMeasurementWorker.registerMockRpc({
+    'TextMeasurement.measureTextBlockHeight'() {
+      SearchViewStates.set(state.uid, state, latestState)
+      return 13
+    },
+  })
+  IconThemeWorker.registerMockRpc({
+    'IconTheme.getIcons': () => ['file-icon'],
+  })
+  const newResults = [{ end: 0, lineNumber: 0, start: 0, text: 'file1.txt', type: TextSearchResultType.File }]
+
+  const result = await handlePullResultsFound(state, 'active-search', newResults)
+
+  expect(result).toBe(state)
+  expect(SearchViewStates.get(state.uid).newState).toBe(latestState)
+  expect(mockRendererWorker.invocations).toEqual([])
+})
+
 test('handlePullResultsFound - merges results received from the text search worker', async () => {
   using _mockTextMeasurementWorker = TextMeasurementWorker.registerMockRpc({
     'TextMeasurement.measureTextBlockHeight': () => 13,
+  })
+  using mockRendererWorker = RendererWorker.registerMockRpc({
+    'Viewlet.requestRender': () => undefined,
   })
   IconThemeWorker.registerMockRpc({
     'IconTheme.getIcons': () => ['file-icon'],
@@ -102,4 +136,5 @@ test('handlePullResultsFound - merges results received from the text search work
     maxLineY: 2,
     message: '1 result in 1 file',
   })
+  expect(mockRendererWorker.invocations).toEqual([['Viewlet.requestRender', state.uid]])
 })

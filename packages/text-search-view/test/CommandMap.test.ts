@@ -1,12 +1,11 @@
 import { expect, test } from '@jest/globals'
-import { IconThemeWorker, RendererWorker, TextSearchWorker } from '@lvce-editor/rpc-registry'
+import { IconThemeWorker, RendererWorker, TextMeasurementWorker, TextSearchWorker } from '@lvce-editor/rpc-registry'
 import type { SearchResult } from '../src/parts/SearchResult/SearchResult.ts'
 import type { TextSearchOptions } from '../src/parts/TextSearchOptions/TextSearchOptions.ts'
 import { commandMap } from '../src/parts/CommandMap/CommandMap.ts'
 import * as CreateDefaultState from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
 import * as SearchFlags from '../src/parts/SearchFlags/SearchFlags.ts'
 import * as SearchViewStates from '../src/parts/SearchViewStates/SearchViewStates.ts'
-import * as TextMeasurementWorker from '../src/parts/TextMeasurementWorker/TextMeasurementWorker.ts'
 
 test('runs overlapping search input commands in invocation order', async () => {
   using _mockTextMeasurementWorker = TextMeasurementWorker.registerMockRpc({

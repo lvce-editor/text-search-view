@@ -1,9 +1,20 @@
 import { expect, test } from '@jest/globals'
+import type { SearchResult } from '../src/parts/SearchResult/SearchResult.ts'
 import type { SearchState } from '../src/parts/SearchState/SearchState.ts'
 import * as CreateDefaultState from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
 import { setDeltaY } from '../src/parts/SetDeltaY/SetDeltaY.ts'
+import * as TextSearchResultType from '../src/parts/TextSearchResultType/TextSearchResultType.ts'
 
-test('setDeltaY - no change when same deltaY', () => {
+const createItems = (): readonly SearchResult[] =>
+  Array.from({ length: 100 }, (_value, index) => ({
+    end: 0,
+    lineNumber: index,
+    start: 0,
+    text: `match-${index}`,
+    type: TextSearchResultType.Match,
+  }))
+
+test('setDeltaY - no change when same deltaY', async () => {
   const state: SearchState = {
     ...CreateDefaultState.createDefaultState(),
     deltaY: 100,
@@ -11,14 +22,14 @@ test('setDeltaY - no change when same deltaY', () => {
     headerHeight: 40,
     height: 500,
     itemHeight: 20,
-    listItems: Array.from({ length: 100 }),
+    listItems: createItems(),
   }
 
-  const result = setDeltaY(state, 100)
+  const result = await setDeltaY(state, 100)
   expect(result).toBe(state)
 })
 
-test('setDeltaY - updates state with new deltaY', () => {
+test('setDeltaY - updates state with new deltaY', async () => {
   const state: SearchState = {
     ...CreateDefaultState.createDefaultState(),
     deltaY: 0,
@@ -26,12 +37,12 @@ test('setDeltaY - updates state with new deltaY', () => {
     headerHeight: 40,
     height: 500,
     itemHeight: 20,
-    listItems: Array.from({ length: 100 }),
+    listItems: createItems(),
     maxLineY: 23,
     minLineY: 0,
   }
 
-  const result = setDeltaY(state, 100)
+  const result = await setDeltaY(state, 100)
 
   expect(result).not.toBe(state)
   expect(result.deltaY).toBe(100)
@@ -39,7 +50,7 @@ test('setDeltaY - updates state with new deltaY', () => {
   expect(result.maxLineY).toBe(29) // minLineY + visible items (23)
 })
 
-test('setDeltaY - clamps value within bounds', () => {
+test('setDeltaY - clamps value within bounds', async () => {
   const state: SearchState = {
     ...CreateDefaultState.createDefaultState(),
     deltaY: 0,
@@ -47,12 +58,12 @@ test('setDeltaY - clamps value within bounds', () => {
     headerHeight: 40,
     height: 500,
     itemHeight: 20,
-    listItems: Array.from({ length: 100 }),
+    listItems: createItems(),
     maxLineY: 23,
     minLineY: 0,
   }
 
-  const result = setDeltaY(state, 1000)
+  const result = await setDeltaY(state, 1000)
 
   expect(result).not.toBe(state)
   expect(result.deltaY).toBe(200)

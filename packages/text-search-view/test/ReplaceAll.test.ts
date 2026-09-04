@@ -1,11 +1,10 @@
 import type { AsyncCommandContext } from '@lvce-editor/viewlet-registry'
 import { expect, test } from '@jest/globals'
-import { DialogWorker, RendererWorker } from '@lvce-editor/rpc-registry'
+import { DialogWorker, RendererWorker, TextMeasurementWorker } from '@lvce-editor/rpc-registry'
 import type { SearchState } from '../src/parts/SearchState/SearchState.ts'
 import * as CreateDefaultState from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
 import { replaceAll, replaceAllWithProgress } from '../src/parts/ReplaceAll/ReplaceAll.ts'
 import * as SearchViewStates from '../src/parts/SearchViewStates/SearchViewStates.ts'
-import * as TextMeasurementWorker from '../src/parts/TextMeasurementWorker/TextMeasurementWorker.ts'
 import * as TextSearchResultType from '../src/parts/TextSearchResultType/TextSearchResultType.ts'
 
 test('replaceAll - replaces all matches and updates state', async () => {
@@ -129,12 +128,18 @@ test('replaceAllWithProgress - invalidates the active search before applying rep
   })
   const { promise: replacementStarted, resolve: notifyReplacementStarted } = Promise.withResolvers<void>()
   const { promise: continueReplacement, resolve: finishReplacement } = Promise.withResolvers<void>()
+  let progressRendered = false
   using mockRpc = RendererWorker.registerMockRpc({
     async 'BulkReplacement.applyBulkReplacement'() {
+      expect(progressRendered).toBe(true)
       notifyReplacementStarted()
       await continueReplacement
     },
     'Layout.handleWorkspaceRefresh'() {},
+    'Viewlet.requestRender'() {
+      expect(currentState.message).toBe('Replacing 2 occurrences across 2 files…')
+      progressRendered = true
+    },
   })
   using mockDialogRpc = DialogWorker.registerMockRpc({
     'ConfirmPrompt.prompt': () => true,
@@ -186,7 +191,8 @@ test('replaceAllWithProgress - invalidates the active search before applying rep
       },
     ],
   ])
-  expect(mockRpc.invocations[0]).toEqual([
+  expect(mockRpc.invocations[0]).toEqual(['Viewlet.requestRender', 500])
+  expect(mockRpc.invocations[1]).toEqual([
     'BulkReplacement.applyBulkReplacement',
     [
       {
@@ -252,6 +258,7 @@ test('replaceAllWithProgress - reports progress for the focused file', async () 
   using mockRpc = RendererWorker.registerMockRpc({
     'BulkReplacement.applyBulkReplacement'() {},
     'Layout.handleWorkspaceRefresh'() {},
+    'Viewlet.requestRender'() {},
   })
   using mockDialogRpc = DialogWorker.registerMockRpc({
     'ConfirmPrompt.prompt': () => true,
@@ -278,6 +285,43 @@ test('replaceAllWithProgress - reports progress for the focused file', async () 
       title: 'Replace All',
     },
   ])
+})
+
+test('replaceAllWithProgress - stops when the active search changes while confirming', async () => {
+  let currentState: SearchState = {
+    ...CreateDefaultState.createDefaultState(),
+    fileCount: 1,
+    items: [
+      { end: 0, lineNumber: 0, start: 0, text: 'file1.txt', type: TextSearchResultType.File },
+      { end: 1, lineNumber: 1, start: 0, text: 'match1', type: TextSearchResultType.Match },
+    ],
+    matchCount: 1,
+    replacement: 'new-text',
+    searchId: 'active-search',
+    uid: 601,
+    workspacePath: '/test',
+  }
+  const newerState = { ...currentState, searchId: 'new-search' }
+  using mockDialogRpc = DialogWorker.registerMockRpc({
+    'ConfirmPrompt.prompt'() {
+      currentState = newerState
+      return true
+    },
+  })
+  const context: AsyncCommandContext<SearchState> = {
+    getState() {
+      return currentState
+    },
+    async updateState(updater) {
+      currentState = updater(currentState)
+      return currentState
+    },
+  }
+
+  await replaceAllWithProgress(context)
+
+  expect(currentState).toBe(newerState)
+  expect(mockDialogRpc.invocations).toHaveLength(1)
 })
 
 test('replaceAllWithProgress - user cancels before progress is rendered', async () => {

@@ -1,5 +1,5 @@
 import { expect, test } from '@jest/globals'
-import { IconThemeWorker, RendererWorker, TextSearchWorker } from '@lvce-editor/rpc-registry'
+import { IconThemeWorker, RendererWorker, TextMeasurementWorker, TextSearchWorker } from '@lvce-editor/rpc-registry'
 import type { SearchResult } from '../src/parts/SearchResult/SearchResult.ts'
 import type { SearchState } from '../src/parts/SearchState/SearchState.ts'
 import type { TextSearchOptions } from '../src/parts/TextSearchOptions/TextSearchOptions.ts'
@@ -7,7 +7,6 @@ import * as CreateDefaultState from '../src/parts/CreateDefaultState/CreateDefau
 import { handleUpdateFull } from '../src/parts/HandleUpdateFull/HandleUpdateFull.ts'
 import * as SearchFlags from '../src/parts/SearchFlags/SearchFlags.ts'
 import * as SearchViewStates from '../src/parts/SearchViewStates/SearchViewStates.ts'
-import * as TextMeasurementWorker from '../src/parts/TextMeasurementWorker/TextMeasurementWorker.ts'
 
 test('handleUpdateFull - sets limitHit to true when search hits limit', async () => {
   using _mockTextMeasurementWorker = TextMeasurementWorker.registerMockRpc({

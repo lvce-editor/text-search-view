@@ -5,15 +5,24 @@
     "heading": "Exclude",
     "id": "search.exclude",
     "type": "array",
-    "value": {}
+    "value": []
   },
   {
     "category": "features",
     "description": "Controls the number of worker threads used for search",
     "heading": "Search Threads",
     "id": "search.threads",
+    "maximum": 16,
     "minimum": 1,
     "type": "number",
     "value": 1
+  },
+  {
+    "category": "features",
+    "description": "Uses pull-based search to retrieve text search results",
+    "heading": "Pull Based Search",
+    "id": "Search.usePullBasedSearch",
+    "type": "boolean",
+    "value": false
   }
 ]

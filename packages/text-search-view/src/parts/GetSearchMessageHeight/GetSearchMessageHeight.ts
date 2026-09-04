@@ -1,6 +1,6 @@
+import { TextMeasurementWorker } from '@lvce-editor/rpc-registry'
 import * as SearchFlags from '../SearchFlags/SearchFlags.ts'
 import * as SearchMessageHeight from '../SearchMessageHeight/SearchMessageHeight.ts'
-import * as TextMeasurementWorker from '../TextMeasurementWorker/TextMeasurementWorker.ts'
 
 const SearchMessageFontFamily = 'system-ui'
 const SearchMessageFontSize = 13
