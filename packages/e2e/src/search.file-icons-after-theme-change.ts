@@ -1,6 +1,6 @@
 import type { Test } from '@lvce-editor/test-with-playwright'
 
-export const name = 'search.file-icons-after-scroll'
+export const name = 'search.file-icons-after-theme-change'
 
 export const test: Test = async ({ expect, Extension, FileSystem, IconTheme, Locator, Search, SideBar, Workspace }) => {
   // arrange
@@ -19,24 +19,23 @@ export const test: Test = async ({ expect, Extension, FileSystem, IconTheme, Loc
   await SideBar.open('Search')
   await Search.setValue('ab')
   const viewletSearch = Locator('.Search')
-  const message = viewletSearch.locator('[role="status"]')
-  await expect(message).toHaveText('60 results in 60 files')
-  const firstFile = viewletSearch.locator('.TreeItem[aria-label="/000.css"]')
-  await expect(firstFile).toBeVisible()
-  await expect(firstFile.locator('.FileIcon[src$="/css.svg"]')).toHaveCount(1)
-
-  // act
+  await expect(viewletSearch.locator('[role="status"]')).toHaveText('60 results in 60 files')
   await Search.handleWheel(1, 10_000)
-
-  // assert
   const lastFile = viewletSearch.locator('.TreeItem[aria-label="/059.js"]')
   await expect(lastFile).toBeVisible()
   await expect(lastFile.locator('.FileIcon[src$="/javascript.svg"]')).toHaveCount(1)
 
   // act
+  await IconTheme.setIconTheme('search-test-icon-theme-alternate')
+
+  // assert
+  await expect(lastFile.locator('.FileIcon[src$="/javascript-alternate.svg"]')).toHaveCount(1)
+
+  // act
   await Search.handleWheel(1, -10_000)
 
   // assert
+  const firstFile = viewletSearch.locator('.TreeItem[aria-label="/000.css"]')
   await expect(firstFile).toBeVisible()
-  await expect(firstFile.locator('.FileIcon[src$="/css.svg"]')).toHaveCount(1)
+  await expect(firstFile.locator('.FileIcon[src$="/css-alternate.svg"]')).toHaveCount(1)
 }
