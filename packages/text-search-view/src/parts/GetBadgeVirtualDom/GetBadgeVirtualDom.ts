@@ -6,7 +6,7 @@ import { text } from '../VirtualDomHelpers/VirtualDomHelpers.ts'
 
 const badge: VirtualDomNode = {
   childCount: 1,
-  className: MergeClassNames.mergeClassNames(ClassNames.Badge, ClassNames.SourceControlBadge),
+  className: MergeClassNames.mergeClassNames(ClassNames.Badge, 'SearchBadge'),
   type: VirtualDomElements.Div,
 }
 

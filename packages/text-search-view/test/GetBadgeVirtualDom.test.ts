@@ -7,7 +7,7 @@ test('getBadgeVirtualDom - returns correct structure with custom class and count
   expect(GetBadgeVirtualDom.getBadgeVirtualDom(count)).toEqual([
     {
       childCount: 1,
-      className: 'Badge SourceControlBadge',
+      className: 'Badge SearchBadge',
       type: VirtualDomElements.Div,
     },
     {
