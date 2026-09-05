@@ -5,13 +5,13 @@ export const name = 'search.workspace-uri'
 export const test: Test = async ({ Dialog, expect, FileSystem, Locator, Main, Search, SideBar, Workspace }) => {
   // arrange
   const tmpDir = await FileSystem.getTmpDir()
-  const workspacePath = `${tmpDir}/project files 100%`
-  const filePath = `${workspacePath}/file #100%.txt`
-  await FileSystem.mkdir(workspacePath)
+  const workspaceUri = `${tmpDir}/project%20files%20100%25`
+  const filePath = `${workspaceUri}/file.txt`
+  await FileSystem.mkdir(workspaceUri)
   await FileSystem.writeFile(filePath, 'needle')
   await Workspace.setPath(tmpDir)
   await SideBar.open('Search')
-  await Workspace.setPath(workspacePath)
+  await Workspace.setPath(workspaceUri)
 
   // act
   await Search.setValue('needle')
