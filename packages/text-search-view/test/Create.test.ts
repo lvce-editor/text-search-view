@@ -18,7 +18,7 @@ test('create', () => {
 })
 
 test('create - uses default optional values', () => {
-  const state = create(1, 2, 3, 400, 500, '/workspace', '/assets')
+  const state = create(1, 2, 3, 400, 500, 'file:///workspace', '/assets')
 
   expect(state).toMatchObject({
     assetDir: '/assets',
@@ -30,14 +30,14 @@ test('create - uses default optional values', () => {
     uid: 1,
     value: '',
     width: 400,
-    workspacePath: '/workspace',
+    workspaceUri: 'file:///workspace',
     x: 2,
     y: 3,
   })
 })
 
 test('create - preserves explicit optional values', () => {
-  const state = create(2, 3, 4, 500, 600, '/workspace', '/assets', 18, 'query', 'replacement', 7, true)
+  const state = create(2, 3, 4, 500, 600, 'file:///workspace', '/assets', 18, 'query', 'replacement', 7, true)
 
   expect(state).toMatchObject({
     isSearchEditor: true,
@@ -46,4 +46,10 @@ test('create - preserves explicit optional values', () => {
     replacement: 'replacement',
     value: 'query',
   })
+})
+
+test('create - normalizes a legacy workspace path before storing state', () => {
+  const state = create(3, 0, 0, 400, 500, '/project files/100%', '/assets')
+  expect(state.workspaceUri).toBe('file:///project%20files/100%25')
+  expect(state).not.toHaveProperty('workspacePath')
 })

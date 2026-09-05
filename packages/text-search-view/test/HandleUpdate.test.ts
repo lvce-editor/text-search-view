@@ -66,7 +66,7 @@ test('handleUpdate - empty workspace path does not search', async () => {
     matchCount: 0,
     message: '',
     value: 'test',
-    workspacePath: '',
+    workspaceUri: '',
   })
   expect(mockTextSearchWorker.invocations).toEqual([])
 })
@@ -79,7 +79,7 @@ test.skip('handleUpdate - performs search with valid input', async () => {
     itemHeight: 20,
     minimumSliderSize: 20,
     value: 'test',
-    workspacePath: '/test',
+    workspaceUri: 'file:///test',
   }
   const update = { value: 'test' }
   const searchResults: readonly SearchResult[] = [
@@ -119,7 +119,7 @@ test('handleUpdate - handles search error', async () => {
   const state: SearchState = {
     ...CreateDefaultState.createDefaultState(),
     value: 'test',
-    workspacePath: '/test',
+    workspaceUri: 'file:///test',
   }
   const update = { value: 'test' }
 
@@ -154,7 +154,7 @@ test('handleUpdate - returns a validation error for an invalid regular expressio
     ...CreateDefaultState.createDefaultState(),
     flags: SearchFlags.UseRegularExpression,
     value: '[',
-    workspacePath: '/test',
+    workspaceUri: 'file:///test',
   }
 
   const result = await handleUpdate(state, {})
@@ -167,7 +167,7 @@ test.skip('handleUpdate - uses search flags from state', async () => {
     ...CreateDefaultState.createDefaultState(),
     flags: SearchFlags.MatchCase | SearchFlags.UseRegularExpression,
     value: 'test',
-    workspacePath: '/test',
+    workspaceUri: 'file:///test',
   }
   const update = { value: 'test' }
 

@@ -16,7 +16,7 @@ test('clearSearchResults - clears state and focuses search input', () => {
     maxLineY: 20,
     message: 'test message',
     minLineY: 10,
-    workspacePath: 'test',
+    workspaceUri: 'file:///test',
   }
 
   const result = ClearSearchResults.clearSearchResults(state)

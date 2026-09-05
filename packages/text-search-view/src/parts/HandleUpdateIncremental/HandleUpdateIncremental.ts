@@ -5,11 +5,11 @@ import * as SearchViewStates from '../SearchViewStates/SearchViewStates.ts'
 import * as TextSearchIncremental from '../TextSearchIncremental/TextSearchIncremental.ts'
 
 export const handleUpdateIncremental = async (state: SearchState, update: Partial<SearchState>): Promise<SearchState> => {
-  const { workspacePath } = state
+  const { workspaceUri } = state
   const partialNewState = { ...state, ...update }
   const { assetDir, contextLines, contextLinesEnabled, excludeValue, flags, includeValue, limit, platform, threads, uid, usePullBasedSearch, value } =
     partialNewState
-  const root = workspacePath
+  const root = workspaceUri
   const scheme = GetProtocol.getProtocol(root)
   const searchId = crypto.randomUUID() // TODO try to avoid side effect
   const latest1 = SearchViewStates.get(uid)

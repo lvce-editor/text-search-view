@@ -4,7 +4,7 @@ import * as GetReplacementEdits from '../src/parts/GetReplaceElements/GetReplace
 import * as TextSearchResultType from '../src/parts/TextSearchResultType/TextSearchResultType.ts'
 
 test('getReplacementEdits - single file with one match', () => {
-  const workspacePath = '/test'
+  const workspaceUri = 'file:///test'
   const results: readonly SearchResult[] = [
     {
       end: 0,
@@ -23,7 +23,7 @@ test('getReplacementEdits - single file with one match', () => {
   ]
   const replacement = 'new'
 
-  const edits = GetReplacementEdits.getReplaceElements(results, workspacePath, replacement)
+  const edits = GetReplacementEdits.getReplaceElements(results, workspaceUri, replacement)
   expect(edits).toEqual([
     {
       changes: [
@@ -35,7 +35,7 @@ test('getReplacementEdits - single file with one match', () => {
           text: 'new',
         },
       ],
-      uri: '/test/file.txt',
+      uri: 'file:///test/file.txt',
     },
   ])
 })
@@ -48,7 +48,7 @@ test('getReplacementEdits - ignores context lines', () => {
     { end: 0, lineNumber: 6, start: 0, text: 'context after', type: TextSearchResultType.Context },
   ]
 
-  expect(GetReplacementEdits.getReplaceElements(results, '/test', 'pin')).toEqual([
+  expect(GetReplacementEdits.getReplaceElements(results, 'file:///test', 'pin')).toEqual([
     {
       changes: [
         {
@@ -59,13 +59,13 @@ test('getReplacementEdits - ignores context lines', () => {
           text: 'pin',
         },
       ],
-      uri: '/test/file.txt',
+      uri: 'file:///test/file.txt',
     },
   ])
 })
 
 test('getReplacementEdits - multiple files with matches', () => {
-  const workspacePath = '/test'
+  const workspaceUri = 'file:///test'
   const results: readonly SearchResult[] = [
     {
       end: 0,
@@ -98,7 +98,7 @@ test('getReplacementEdits - multiple files with matches', () => {
   ]
   const replacement = 'new'
 
-  const edits = GetReplacementEdits.getReplaceElements(results, workspacePath, replacement)
+  const edits = GetReplacementEdits.getReplaceElements(results, workspaceUri, replacement)
   expect(edits).toEqual([
     {
       changes: [
@@ -110,7 +110,7 @@ test('getReplacementEdits - multiple files with matches', () => {
           text: 'new',
         },
       ],
-      uri: '/test/file1.txt',
+      uri: 'file:///test/file1.txt',
     },
     {
       changes: [
@@ -122,22 +122,22 @@ test('getReplacementEdits - multiple files with matches', () => {
           text: 'new',
         },
       ],
-      uri: '/test/file2.txt',
+      uri: 'file:///test/file2.txt',
     },
   ])
 })
 
 test('getReplacementEdits - empty results', () => {
-  const workspacePath = '/test'
+  const workspaceUri = 'file:///test'
   const results: readonly SearchResult[] = []
   const replacement = 'new'
 
-  const edits = GetReplacementEdits.getReplaceElements(results, workspacePath, replacement)
+  const edits = GetReplacementEdits.getReplaceElements(results, workspaceUri, replacement)
   expect(edits).toEqual([])
 })
 
 test('getReplacementEdits - file with multiple matches', () => {
-  const workspacePath = '/test'
+  const workspaceUri = 'file:///test'
   const results: readonly SearchResult[] = [
     {
       end: 0,
@@ -163,7 +163,7 @@ test('getReplacementEdits - file with multiple matches', () => {
   ]
   const replacement = 'new'
 
-  const edits = GetReplacementEdits.getReplaceElements(results, workspacePath, replacement)
+  const edits = GetReplacementEdits.getReplaceElements(results, workspaceUri, replacement)
   expect(edits).toEqual([
     {
       changes: [
@@ -182,13 +182,13 @@ test('getReplacementEdits - file with multiple matches', () => {
           text: 'new',
         },
       ],
-      uri: '/test/file.txt',
+      uri: 'file:///test/file.txt',
     },
   ])
 })
 
 test('getReplacementEdits - handles different file paths', () => {
-  const workspacePath = 'memfs:///test'
+  const workspaceUri = 'memfs:///test'
   const results: readonly SearchResult[] = [
     {
       end: 0,
@@ -207,7 +207,7 @@ test('getReplacementEdits - handles different file paths', () => {
   ]
   const replacement = 'new'
 
-  const edits = GetReplacementEdits.getReplaceElements(results, workspacePath, replacement)
+  const edits = GetReplacementEdits.getReplaceElements(results, workspaceUri, replacement)
   expect(edits).toEqual([
     {
       changes: [
@@ -245,7 +245,7 @@ test('getReplacementEdits - uses absolute columns when the preview is truncated'
     },
   ]
 
-  expect(GetReplacementEdits.getReplaceElements(results, '/workspace', 'pin')).toEqual([
+  expect(GetReplacementEdits.getReplaceElements(results, 'file:///workspace', 'pin')).toEqual([
     {
       changes: [
         {
@@ -256,7 +256,7 @@ test('getReplacementEdits - uses absolute columns when the preview is truncated'
           text: 'pin',
         },
       ],
-      uri: '/workspace/src/app.test.ts',
+      uri: 'file:///workspace/src/app.test.ts',
     },
   ])
 })
