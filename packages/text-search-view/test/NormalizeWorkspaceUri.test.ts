@@ -6,7 +6,7 @@ test.each([
   ['/workspace', 'file:///workspace'],
   ['/project files/100%#?', 'file:///project%20files/100%25%23%3F'],
   ['/project/日本語', 'file:///project/%E6%97%A5%E6%9C%AC%E8%AA%9E'],
-  ['/project/back\\slash', 'file:///project/back%5Cslash'],
+  ['/project/back\\Slash', 'file:///project/back%5CSlash'],
   ['C:\\Users\\project files', 'file:///C:/Users/project%20files'],
   ['D:/project', 'file:///D:/project'],
   ['\\\\server\\share\\project files', 'file://server/share/project%20files'],

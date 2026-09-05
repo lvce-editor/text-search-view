@@ -20,7 +20,8 @@ export const test: Test = async ({ Dialog, expect, FileSystem, Locator, Main, Se
   const message = Locator('.Search').locator('[role="status"]')
   await expect(message).toHaveText('1 result in 1 file')
   await Search.selectIndex(1)
-  await expect(Locator('.EditorRow')).toHaveText('needle')
+  const row = Locator('.EditorRow')
+  await expect(row).toHaveText('needle')
 
   // act
   await Search.toggleReplace()
@@ -31,5 +32,5 @@ export const test: Test = async ({ Dialog, expect, FileSystem, Locator, Main, Se
   // assert
   await expect(message).toHaveText("Replaced 1 occurrence across 1 file with 'pin'")
   await Main.openUri(filePath)
-  await expect(Locator('.EditorRow')).toHaveText('pin')
+  await expect(row).toHaveText('pin')
 }

@@ -6,7 +6,7 @@ test.each([
   ['file:///workspace/', 'file.ts', 'file:///workspace/file.ts'],
   ['file:///', 'file.ts', 'file:///file.ts'],
   ['file:///project%20files', '100%#?.ts', 'file:///project%20files/100%25%23%3F.ts'],
-  ['file:///workspace', 'back\\slash.ts', 'file:///workspace/back%5Cslash.ts'],
+  ['file:///workspace', 'back\\Slash.ts', 'file:///workspace/back%5CSlash.ts'],
   ['file:///C:/project', '.\\src\\file.ts', 'file:///C:/project/src/file.ts'],
   ['file://server/share', 'src\\file.ts', 'file://server/share/src/file.ts'],
   ['memfs://workspace', 'src/file.ts', 'memfs://workspace/src/file.ts'],
