@@ -102,7 +102,9 @@ test('getFileIndex - finds closest file above match', async () => {
   state.listItems = state.items
 
   await SelectIndex.selectIndex(state, 2) // Select second match
-  expect(mockRpc.invocations).toEqual([['Main.openUri', { focus: true, selections: new Uint32Array([9, 311, 9, 313]), uri: 'file:///test/file1.ts' }]])
+  expect(mockRpc.invocations).toEqual([
+    ['Main.openUri', { focus: true, selections: new Uint32Array([9, 311, 9, 313]), uri: 'file:///test/file1.ts' }],
+  ])
 })
 
 test('getFileIndex - returns -1 when no file found', async () => {
