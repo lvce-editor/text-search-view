@@ -37,7 +37,7 @@ export const getActions = (state: SearchState): readonly Action[] => {
     },
     {
       command: '',
-      enabled: hasSearchResults,
+      enabled: true,
       icon: MaskIcon.ListFlat,
       id: InputName.ViewAsTree,
       label: SearchStrings.viewAsTree(),

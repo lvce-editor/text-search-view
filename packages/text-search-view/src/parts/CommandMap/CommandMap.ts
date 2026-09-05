@@ -19,6 +19,8 @@ import * as FocusPreviousInput from '../FocusPreviousInput/FocusPreviousInput.ts
 import * as FocusReplaceValue from '../FocusReplaceValue/FocusReplaceValue.ts'
 import * as FocusSearchValue from '../FocusSearchValue/FocusSearchValue.ts'
 import * as FocusSearchValueNext from '../FocusSearchValueNext/FocusSearchValueNext.ts'
+import { getComponentDom } from '../GetComponentDom/GetComponentDom.ts'
+import * as GetComponentState from '../GetComponentState/GetComponentState.ts'
 import * as GetKeyBindings from '../GetKeyBindings/GetKeyBindings.ts'
 import { getMenuEntries } from '../GetMenuEntries/GetMenuEntries.ts'
 import { getMenuEntryIds } from '../GetMenuEntryIds/GetMenuEntryIds.ts'
@@ -49,7 +51,6 @@ import * as HandleReplaceInput from '../HandleReplaceInput/HandleReplaceInput.ts
 import * as HandleResize from '../HandleResize/HandleResize.ts'
 import * as HandleSharedInput from '../HandleSharedInput/HandleSharedInput.ts'
 import * as HandleWorkspaceChange from '../HandleWorkspaceChange/HandleWorkspaceChange.ts'
-import * as Initialize from '../Initialize/Initialize.ts'
 import * as ListFocusFirst from '../ListFocusFirst/ListFocusFirst.ts'
 import * as ListFocusIndex from '../ListFocusIndex/ListFocusIndex.ts'
 import * as ListFocusLast from '../ListFocusLast/ListFocusLast.ts'
@@ -79,11 +80,11 @@ import * as ReplaceAllAndPrompt from '../ReplaceAllAndPrompt/ReplaceAllAndPrompt
 import { replaceAllInFile } from '../ReplaceAllInFile/ReplaceAllInFile.ts'
 import * as Rerender from '../Rerender/Rerender.ts'
 import * as RestoreState from '../RestoreState/RestoreState.ts'
-import * as RevealInExplorer from '../RevealInExplorer/RevealInExplorer.ts'
 import * as SaveState from '../SaveState/SaveState.ts'
 import * as SearchFocus from '../SearchFocus/SearchFocus.ts'
 import * as WrapCommand from '../SearchViewStates/SearchViewStates.ts'
 import * as SelectIndex from '../SelectIndex/SelectIndex.ts'
+import * as SetComponentState from '../SetComponentState/SetComponentState.ts'
 import { setLimit } from '../SetLimit/SetLimit.ts'
 import * as Submit from '../Submit/Submit.ts'
 import * as TextSearch from '../TextSearch/TextSearch.ts'
@@ -140,22 +141,24 @@ export const commandMap = {
   'TextSearch.focusSearchValue': WrapCommand.wrapCommand(FocusSearchValue.focusSearchValue),
   'TextSearch.focusSearchValueNext': WrapCommand.wrapCommand(FocusSearchValueNext.focusSearchValueNext),
   'TextSearch.getCommandIds': WrapCommand.getCommandIds,
+  'TextSearch.getComponentDom': getComponentDom,
+  'TextSearch.getComponentState': GetComponentState.getComponentState,
   'TextSearch.getKeyBindings': GetKeyBindings.getKeyBindings,
   'TextSearch.getMenuEntries': WrapCommand.wrapGetter(getMenuEntries),
   'TextSearch.getMenuEntryIds': getMenuEntryIds,
   'TextSearch.handleActionClick': WrapCommand.wrapCommand(handleActionClick),
   'TextSearch.handleClickAt': WrapCommand.wrapCommand(ListHandleClickAt.handleClickAt),
   'TextSearch.handleContextMenu': WrapCommand.wrapCommand(ViewletSearchHandleContextMenu.handleContextMenu),
-  'TextSearch.handleExcludeInput': WrapCommand.wrapCommand(HandleExcludeInput.handleExcludeInput),
+  'TextSearch.handleExcludeInput': WrapCommand.wrapSerialCommand(HandleExcludeInput.handleExcludeInput),
   'TextSearch.handleFocusIn': WrapCommand.wrapCommand(SearchFocus.handleFocusIn),
   'TextSearch.handleHeaderClick': WrapCommand.wrapCommand(HandleHeaderClick.handleHeaderClick),
   'TextSearch.handleHeaderContextMenu': WrapCommand.wrapCommand(HandleHeaderContextMenu.handleHeaderContextMenu),
   'TextSearch.handleHeaderFocusIn': WrapCommand.wrapCommand(HandleHeaderFocusIn.handleHeaderFocusIn),
   'TextSearch.handleHeaderFocusOut': WrapCommand.wrapCommand(HandleHeaderFocusOut.handleHeaderFocusOut),
   'TextSearch.handleIconThemeChange': WrapCommand.wrapCommand(HandleIconThemeChange.handleIconThemeChange),
-  'TextSearch.handleIncludeInput': WrapCommand.wrapCommand(HandleIncludeInput.handleIncludeInput),
-  'TextSearch.handleInput': WrapCommand.wrapCommand(HandleInput.handleInput),
-  'TextSearch.handleInput2': WrapCommand.wrapCommand(HandleInput2.handleInput2),
+  'TextSearch.handleIncludeInput': WrapCommand.wrapSerialCommand(HandleIncludeInput.handleIncludeInput),
+  'TextSearch.handleInput': WrapCommand.wrapSerialCommand(HandleInput.handleInput),
+  'TextSearch.handleInput2': WrapCommand.wrapSerialCommand(HandleInput2.handleInput2),
   'TextSearch.handleInputBlur': WrapCommand.wrapCommand(handleInputBlur),
   'TextSearch.handleInputContextMenu': WrapCommand.wrapCommand(handleInputContextMenu),
   'TextSearch.handleInputCopy': WrapCommand.wrapCommand(handleInputCopy),
@@ -170,7 +173,7 @@ export const commandMap = {
   'TextSearch.handleMessagePort': handleDirectMessagePort,
   'TextSearch.handleOpenFolderClick': WrapCommand.wrapCommand(HandleOpenFolderClick.handleOpenFolderClick),
   'TextSearch.handlePullResultsFound': WrapCommand.wrapCommand(handlePullResultsFound),
-  'TextSearch.handleReplaceInput': WrapCommand.wrapCommand(HandleReplaceInput.handleReplaceInput),
+  'TextSearch.handleReplaceInput': WrapCommand.wrapSerialCommand(HandleReplaceInput.handleReplaceInput),
   'TextSearch.handleResize': WrapCommand.wrapCommand(HandleResize.handleResize),
   'TextSearch.handleScrollBarCaptureLost': WrapCommand.wrapCommand(ListHandleScrollBarCaptureLost.handleScrollBarCaptureLost),
   'TextSearch.handleScrollBarClick': WrapCommand.wrapCommand(ListHandleScrollBarClick.handleScrollBarClick),
@@ -178,12 +181,10 @@ export const commandMap = {
   'TextSearch.handleSharedInput': WrapCommand.wrapCommand(HandleSharedInput.handleSharedInput),
   'TextSearch.handleWheel': WrapCommand.wrapCommand(ListHandleWheel.handleWheel),
   'TextSearch.handleWorkspaceChange': WrapCommand.wrapCommand(HandleWorkspaceChange.handleWorkspaceChange),
-  // not wrapped
-  'TextSearch.initialize': Initialize.initialize,
   'TextSearch.loadContent': WrapCommand.wrapCommand(LoadContent.loadContent),
-  'TextSearch.nextHistoryResult': WrapCommand.wrapCommand(NextHistoryResult.nextHistoryResult),
+  'TextSearch.nextHistoryResult': WrapCommand.wrapSerialCommand(NextHistoryResult.nextHistoryResult),
   'TextSearch.openSearchEditor': WrapCommand.wrapCommand(openSearchEditor),
-  'TextSearch.previousHistoryResult': WrapCommand.wrapCommand(PreviousHistoryResult.previousHistoryResult),
+  'TextSearch.previousHistoryResult': WrapCommand.wrapSerialCommand(PreviousHistoryResult.previousHistoryResult),
   'TextSearch.refresh': WrapCommand.wrapCommand(Refresh.refresh),
   'TextSearch.removeCurrent': WrapCommand.wrapCommand(removeCurrent),
   'TextSearch.removeIndex': WrapCommand.wrapCommand(removeIndex),
@@ -197,22 +198,22 @@ export const commandMap = {
   'TextSearch.replaceAllInFile': WrapCommand.wrapCommand(replaceAllInFile),
   'TextSearch.rerender': Rerender.rerender,
   'TextSearch.restoreState': RestoreState.restoreState,
-  'TextSearch.revealInExplorer': WrapCommand.wrapCommand(RevealInExplorer.revealInExplorer),
   'TextSearch.saveState': WrapCommand.wrapGetter(SaveState.saveState),
-
   'TextSearch.selectIndex': WrapCommand.wrapCommand(SelectIndex.selectIndex),
-  'TextSearch.setLimit': WrapCommand.wrapCommand(setLimit),
-  'TextSearch.submit': WrapCommand.wrapCommand(Submit.submit),
+
+  'TextSearch.setComponentState': SetComponentState.setComponentState,
+  'TextSearch.setLimit': WrapCommand.wrapSerialCommand(setLimit),
+  'TextSearch.submit': WrapCommand.wrapSerialCommand(Submit.submit),
   'TextSearch.terminate': terminate,
   'TextSearch.textSearch': TextSearch.textSearch,
-  'TextSearch.toggleMatchCase': WrapCommand.wrapCommand(ToggleMatchCase.toggleMatchCase),
-  'TextSearch.toggleMatchWholeWord': WrapCommand.wrapCommand(ToggleMatchWholeWord.toggleMatchWholeWord),
-  'TextSearch.toggleOpenEditors': WrapCommand.wrapCommand(ToggleOpenEditors.toggleOpenEditors),
+  'TextSearch.toggleMatchCase': WrapCommand.wrapSerialCommand(ToggleMatchCase.toggleMatchCase),
+  'TextSearch.toggleMatchWholeWord': WrapCommand.wrapSerialCommand(ToggleMatchWholeWord.toggleMatchWholeWord),
+  'TextSearch.toggleOpenEditors': WrapCommand.wrapSerialCommand(ToggleOpenEditors.toggleOpenEditors),
   'TextSearch.togglePreserveCase': WrapCommand.wrapCommand(TogglePreserveCase.togglePreserveCase),
-  'TextSearch.toggleReplace': WrapCommand.wrapCommand(ToggleReplace.toggleReplace),
+  'TextSearch.toggleReplace': WrapCommand.wrapSerialCommand(ToggleReplace.toggleReplace),
   'TextSearch.toggleSearchDetails': WrapCommand.wrapCommand(ToggleDetailsExpanded.toggleDetailsExpanded),
-  'TextSearch.toggleUseIgnoreFiles': WrapCommand.wrapCommand(ToggleUseIgnoreFiles.toggleUseIgnoreFiles),
+  'TextSearch.toggleUseIgnoreFiles': WrapCommand.wrapSerialCommand(ToggleUseIgnoreFiles.toggleUseIgnoreFiles),
 
-  'TextSearch.toggleUseRegularExpression': WrapCommand.wrapCommand(ToggleUseRegularExpression.toggleUseRegularExpression),
+  'TextSearch.toggleUseRegularExpression': WrapCommand.wrapSerialCommand(ToggleUseRegularExpression.toggleUseRegularExpression),
   'TextSearch.viewAsTree': WrapCommand.wrapCommand(ViewAsTree.viewAsTree),
 }

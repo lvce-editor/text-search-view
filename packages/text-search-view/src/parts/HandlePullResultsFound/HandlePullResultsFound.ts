@@ -14,14 +14,16 @@ export const handlePullResultsFound = async (
   resultSearchId: string,
   newResults: readonly SearchResult[],
 ): Promise<SearchState> => {
-  const { fileIconCache, height, itemHeight, listItems, minimumSliderSize, searchId, uid } = state
-  if (searchId !== resultSearchId) {
+  const { uid } = state
+  const current = SearchViewStates.get(uid)
+  if (!current || current.newState.searchId !== resultSearchId) {
     return state
   }
+  const { fileIconCache, height, itemHeight, listItems, minimumSliderSize } = current.newState
   const allResults = [...listItems, ...newResults]
   const { fileCount, resultCount } = GetTextSearchResultCounts.getTextSearchResultCounts(allResults)
   const message = SearchStatusMessage.getStatusMessage(resultCount, fileCount)
-  const { headerHeight, messageHeight } = await GetSearchMessageLayout.getSearchMessageLayout(state, message)
+  const { headerHeight, messageHeight } = await GetSearchMessageLayout.getSearchMessageLayout(current.newState, message)
   const total = allResults.length
   const contentHeight = total * itemHeight
   const listHeight = height - headerHeight
@@ -33,6 +35,9 @@ export const handlePullResultsFound = async (
   const { icons, newFileIconCache } = await GetFileIcons.getFileIcons(visible, fileIconCache)
 
   const latest = SearchViewStates.get(uid)
+  if (!latest || latest.newState.searchId !== resultSearchId) {
+    return state
+  }
 
   const updatedState = {
     ...latest.newState,
@@ -51,8 +56,7 @@ export const handlePullResultsFound = async (
     minLineY: 0,
     scrollBarHeight,
   }
-  const oldState = latest ? latest.oldState : state
-  SearchViewStates.set(uid, oldState, updatedState)
-  await RendererWorker.invoke('Search.rerender')
+  SearchViewStates.set(uid, latest.oldState, updatedState)
+  await RendererWorker.invoke('Viewlet.requestRender', uid)
   return state
 }

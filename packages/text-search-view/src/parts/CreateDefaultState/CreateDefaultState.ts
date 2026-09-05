@@ -4,7 +4,6 @@ import * as DefaultExcludeValue from '../DefaultExcludeValue/DefaultExcludeValue
 import * as GetTopHeight from '../GetTopHeight/GetTopHeight.ts'
 import * as InputSource from '../InputSource/InputSource.ts'
 import * as MinimumSliderSize from '../MinimumSliderSize/MinimumSliderSize.ts'
-import * as ScrollBarFunctions from '../ScrollBarFunctions/ScrollBarFunctions.ts'
 import * as SearchFlags from '../SearchFlags/SearchFlags.ts'
 import * as SearchMessageHeight from '../SearchMessageHeight/SearchMessageHeight.ts'
 import * as ViewMode from '../ViewMode/ViewMode.ts'
@@ -20,8 +19,7 @@ export const createDefaultState = (): SearchState => {
   const height = 0
   const deltaY = 0
   const finalDeltaY = 0
-  const { scrollBarHeight } = virtualList
-  const scrollBarY = finalDeltaY === 0 ? 0 : ScrollBarFunctions.getScrollBarY(deltaY, finalDeltaY, height - headerHeight, scrollBarHeight)
+  const scrollBarY = 0
   const state: SearchState = {
     disposed: false,
     fileCount: 0,

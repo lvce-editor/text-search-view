@@ -63,7 +63,7 @@ test('returns grouped file menu entries including reveal in explorer', () => {
     menuEntrySeparator,
     {
       args: ['/workspace/src/file.ts'],
-      command: 'Search.revealInExplorer',
+      command: 'RevealInExplorer.reveal',
       flags: MenuItemFlags.None,
       id: 'revealInExplorerView',
       label: 'Reveal in Explorer View',
@@ -102,7 +102,7 @@ test('returns grouped match menu entries that reveal the containing file', () =>
     menuEntrySeparator,
     {
       args: ['memfs://workspace/src/file.ts'],
-      command: 'Search.revealInExplorer',
+      command: 'RevealInExplorer.reveal',
       flags: MenuItemFlags.None,
       id: 'revealInExplorerView',
       label: 'Reveal in Explorer View',

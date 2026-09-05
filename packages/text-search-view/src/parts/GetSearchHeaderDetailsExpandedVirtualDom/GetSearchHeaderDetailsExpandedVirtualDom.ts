@@ -11,28 +11,34 @@ import * as InputName from '../InputName/InputName.ts'
 import * as SearchStrings from '../SearchStrings/SearchStrings.ts'
 import { text } from '../VirtualDomHelpers/VirtualDomHelpers.ts'
 
+const detailsNode: VirtualDomNode = {
+  childCount: 5,
+  className: ClassNames.SearchHeaderDetailsExpanded,
+  type: VirtualDomElements.Div,
+}
+
+const topNode: VirtualDomNode = {
+  childCount: 2,
+  className: ClassNames.SearchHeaderDetailsExpandedTop,
+  type: VirtualDomElements.Div,
+}
+
+const headingNode: VirtualDomNode = {
+  childCount: 1,
+  className: ClassNames.SearchHeaderDetailsHeading,
+  type: VirtualDomElements.H4,
+}
+
 export const getSearchHeaderDetailsExpandedVirtualDom = (flags: number, message: string): readonly VirtualDomNode[] => {
   const includeButtons = GetInputActionsInclude.getInputActionsInclude(flags)
   const excludeButtons = GetInputActionsExclude.getInputActionsExclude(flags)
   const includePlaceholder = SearchStrings.include()
   const excludePlaceholder = SearchStrings.exclude()
   return [
-    {
-      childCount: 5,
-      className: ClassNames.SearchHeaderDetailsExpanded,
-      type: VirtualDomElements.Div,
-    },
-    {
-      childCount: 2,
-      className: ClassNames.SearchHeaderDetailsExpandedTop,
-      type: VirtualDomElements.Div,
-    },
+    detailsNode,
+    topNode,
     ...GetSearchDetailsToggleVirtualDom.getSearchDetailsToggleVirtualDom(),
-    {
-      childCount: 1,
-      className: ClassNames.SearchHeaderDetailsHeading,
-      type: VirtualDomElements.H4,
-    },
+    headingNode,
     text(SearchStrings.filesToInclude()),
     ...GetSearchFieldVirtualDom.getSearchFieldVirtualDom(
       InputName.FilesToInclude,
@@ -41,11 +47,7 @@ export const getSearchHeaderDetailsExpandedVirtualDom = (flags: number, message:
       includeButtons.inside,
       includeButtons.outside,
     ),
-    {
-      childCount: 1,
-      className: ClassNames.SearchHeaderDetailsHeading,
-      type: VirtualDomElements.H4,
-    },
+    headingNode,
     text(SearchStrings.filesToExclude()),
     ...GetSearchFieldVirtualDom.getSearchFieldVirtualDom(
       InputName.FilesToExclude,

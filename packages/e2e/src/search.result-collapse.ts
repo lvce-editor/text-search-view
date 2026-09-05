@@ -15,7 +15,7 @@ export const test: Test = async ({ expect, FileSystem, Locator, Search, SideBar,
   await expect(message).toHaveText('1 result in 1 file')
   const result = Locator('.TreeItem[aria-label="/test.css"]')
   await expect(result).toHaveAttribute('aria-expanded', 'true')
-  const badge = result.locator('.Badge')
+  const badge = result.locator('.SearchBadge')
   await expect(badge).toHaveText('1')
   const match = Locator('.TreeItem[aria-label="abc"]')
   await expect(match).toBeVisible()

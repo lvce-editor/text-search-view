@@ -1,11 +1,11 @@
 import { expect, test } from '@jest/globals'
-import { RendererWorker } from '@lvce-editor/rpc-registry'
+import { ClipBoardWorker } from '@lvce-editor/rpc-registry'
 import type { SearchState } from '../src/parts/SearchState/SearchState.ts'
 import * as Copy from '../src/parts/Copy/Copy.ts'
 import * as CreateDefaultState from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
 
 test('copy - no focused item returns same state', async () => {
-  using mockRpc = RendererWorker.registerMockRpc({})
+  using mockRpc = ClipBoardWorker.registerMockRpc({})
 
   const state: SearchState = {
     ...CreateDefaultState.createDefaultState(),
@@ -19,7 +19,7 @@ test('copy - no focused item returns same state', async () => {
 })
 
 test('copy - copies text from focused item', async () => {
-  using mockRpc = RendererWorker.registerMockRpc({
+  using mockRpc = ClipBoardWorker.registerMockRpc({
     'ClipBoard.writeText': () => undefined,
   })
 

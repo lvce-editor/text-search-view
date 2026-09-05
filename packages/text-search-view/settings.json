@@ -4,16 +4,25 @@
     "description": "Configures glob patterns for excluding files and folders from text search results.",
     "heading": "Exclude",
     "id": "search.exclude",
-    "type": 4,
-    "value": {}
+    "type": "array",
+    "value": []
   },
   {
     "category": "features",
     "description": "Controls the number of worker threads used for search",
     "heading": "Search Threads",
     "id": "search.threads",
+    "maximum": 16,
     "minimum": 1,
-    "type": 5,
+    "type": "number",
     "value": 1
+  },
+  {
+    "category": "features",
+    "description": "Uses pull-based search to retrieve text search results",
+    "heading": "Pull Based Search",
+    "id": "Search.usePullBasedSearch",
+    "type": "boolean",
+    "value": false
   }
 ]

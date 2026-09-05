@@ -1,5 +1,6 @@
 import type { SearchResult } from '../SearchResult/SearchResult.ts'
 import type { Tree } from '../Tree/Tree.ts'
+import * as Path from '../Path/Path.ts'
 import * as TextSearchResultType from '../TextSearchResultType/TextSearchResultType.ts'
 
 export const createMatchTree = (results: readonly SearchResult[]): Tree => {
@@ -13,7 +14,7 @@ export const createMatchTree = (results: readonly SearchResult[]): Tree => {
         const sliced = results.slice(start, i)
         tree[current] = sliced
       }
-      current = result.text
+      current = Path.normalizeRelativePath(result.text)
       start = i + 1
     }
   }

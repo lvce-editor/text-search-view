@@ -1,0 +1,11 @@
+{
+  "iconDefinitions": {
+    "_file": "/icons/default.svg",
+    "_css": "/icons/css.svg",
+    "_javascript": "/icons/javascript.svg"
+  },
+  "fileExtensions": {
+    "css": "_css",
+    "js": "_javascript"
+  }
+}

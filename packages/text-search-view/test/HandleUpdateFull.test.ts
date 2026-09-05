@@ -1,12 +1,12 @@
 import { expect, test } from '@jest/globals'
-import { IconThemeWorker, RendererWorker, TextSearchWorker } from '@lvce-editor/rpc-registry'
+import { IconThemeWorker, RendererWorker, TextMeasurementWorker, TextSearchWorker } from '@lvce-editor/rpc-registry'
 import type { SearchResult } from '../src/parts/SearchResult/SearchResult.ts'
 import type { SearchState } from '../src/parts/SearchState/SearchState.ts'
 import type { TextSearchOptions } from '../src/parts/TextSearchOptions/TextSearchOptions.ts'
 import * as CreateDefaultState from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
 import { handleUpdateFull } from '../src/parts/HandleUpdateFull/HandleUpdateFull.ts'
 import * as SearchFlags from '../src/parts/SearchFlags/SearchFlags.ts'
-import * as TextMeasurementWorker from '../src/parts/TextMeasurementWorker/TextMeasurementWorker.ts'
+import * as SearchViewStates from '../src/parts/SearchViewStates/SearchViewStates.ts'
 
 test('handleUpdateFull - sets limitHit to true when search hits limit', async () => {
   using _mockTextMeasurementWorker = TextMeasurementWorker.registerMockRpc({
@@ -55,7 +55,8 @@ test('handleUpdateFull - sets limitHit to true when search hits limit', async ()
     },
   })
 
-  const result = await handleUpdateFull(state, update)
+  await handleUpdateFull(state, update)
+  const result = SearchViewStates.get(state.uid).newState
 
   expect(result).toMatchObject({
     fileCount: 1,
@@ -116,7 +117,8 @@ test('handleUpdateFull - sets limitHit to false when search does not hit limit',
     },
   })
 
-  const result = await handleUpdateFull(state, update)
+  await handleUpdateFull(state, update)
+  const result = SearchViewStates.get(state.uid).newState
 
   expect(result).toMatchObject({
     fileCount: 1,
@@ -165,7 +167,8 @@ test('handleUpdateFull - passes enabled search options to the provider', async (
     workspacePath: '/test',
   }
 
-  const result = await handleUpdateFull(state, {})
+  await handleUpdateFull(state, {})
+  const result = SearchViewStates.get(state.uid).newState
 
   expect(receivedOptions).toMatchObject({
     contextLines: 2,
@@ -203,6 +206,32 @@ test('handleUpdateFull - disables context in provider options when the toggle is
   expect(receivedOptions?.contextLines).toBe(0)
 })
 
+test('handleUpdateFull - enables pull-based search for an explicit file protocol', async () => {
+  using _mockTextMeasurementWorker = TextMeasurementWorker.registerMockRpc({
+    'TextMeasurement.measureTextBlockHeight': () => 13,
+  })
+  let receivedOptions: TextSearchOptions | undefined
+  using _mockTextSearchWorker = TextSearchWorker.registerMockRpc({
+    async 'TextSearch.search'(_root: string, _query: string, options: TextSearchOptions) {
+      receivedOptions = options
+      return { limitHit: false, results: [] }
+    },
+  })
+  const state: SearchState = {
+    ...CreateDefaultState.createDefaultState(),
+    usePullBasedSearch: true,
+    value: 'test',
+    workspacePath: 'file:///test',
+  }
+
+  await handleUpdateFull(state, {})
+  const result = SearchViewStates.get(state.uid).newState
+
+  expect(receivedOptions?.scheme).toBe('file')
+  expect(receivedOptions?.usePullBasedSearch).toBe(true)
+  expect(result.searchId).not.toBe('')
+})
+
 test('handleUpdateFull - rejects a provider result that is not an array', async () => {
   using _mockTextSearchWorker = TextSearchWorker.registerMockRpc({
     async 'TextSearch.search'(): Promise<any> {
@@ -219,4 +248,34 @@ test('handleUpdateFull - rejects a provider result that is not an array', async 
   }
 
   await expect(handleUpdateFull(state, {})).rejects.toThrow('results must be of type array')
+})
+
+test('handleUpdateFull - does not overwrite state after the active search changes', async () => {
+  const state = {
+    ...CreateDefaultState.createDefaultState(),
+    uid: 106,
+    workspacePath: '/test',
+  }
+  SearchViewStates.set(state.uid, state, state)
+  let latestState: typeof state | undefined
+  using _mockTextSearchWorker = TextSearchWorker.registerMockRpc({
+    async 'TextSearch.search'() {
+      const latest = SearchViewStates.get(state.uid)
+      latestState = {
+        ...latest.newState,
+        message: "Replaced 1 occurrence across 1 file with 'new-text'",
+        searchId: '',
+      }
+      SearchViewStates.set(state.uid, latest.oldState, latestState)
+      return {
+        limitHit: false,
+        results: [],
+      }
+    },
+  })
+
+  const result = await handleUpdateFull(state, { value: 'test' })
+
+  expect(result).toBe(state)
+  expect(SearchViewStates.get(state.uid).newState).toBe(latestState)
 })

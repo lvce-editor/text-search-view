@@ -5,8 +5,10 @@ export const name = 'search.exclude-match'
 export const test: Test = async ({ expect, FileSystem, Locator, Search, SideBar, Workspace }) => {
   // arrange
   const tmpDir = await FileSystem.getTmpDir()
-  await FileSystem.writeFile(`${tmpDir}/a.css`, `needle`)
-  await FileSystem.writeFile(`${tmpDir}/b.js`, `needle`)
+  await FileSystem.setFiles([
+    { content: `needle`, uri: `${tmpDir}/a.css` },
+    { content: `needle`, uri: `${tmpDir}/b.js` },
+  ])
   await Workspace.setPath(tmpDir)
   await SideBar.open('Search')
   await Search.setValue('needle')

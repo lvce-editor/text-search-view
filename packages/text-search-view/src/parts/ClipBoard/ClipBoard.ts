@@ -1,9 +1,9 @@
-import { RendererWorker } from '@lvce-editor/rpc-registry'
+import { ClipBoardWorker } from '@lvce-editor/rpc-registry'
 
 export const writeText = async (text: string): Promise<void> => {
-  await RendererWorker.writeClipBoardText(text)
+  await ClipBoardWorker.writeText(text)
 }
 
 export const readText = async (): Promise<string> => {
-  return await RendererWorker.invoke('ClipBoard.readText')
+  return await ClipBoardWorker.readText()
 }

@@ -1,45 +1,14 @@
-import { readdir, readFile, writeFile } from 'node:fs/promises'
-import { createRequire } from 'node:module'
+import { readFile, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
-import { fileURLToPath, pathToFileURL } from 'node:url'
-import { patchRendererWorker } from './patchRendererWorker.js'
+import { fileURLToPath } from 'node:url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
 const root = join(__dirname, '..', '..', '..')
 
-const require = createRequire(import.meta.url)
-
-export const getRemoteUrl = (path) => {
-  const url = pathToFileURL(path).toString().slice(8)
-  return `/remote/${url}`
-}
-
 const nodeModulesPath = join(root, 'node_modules')
 
-const textSearchWorkerPath = join(root, '.tmp', 'dist', 'dist', 'textSearchViewMain.js')
-const textMeasurementWorkerPath = require.resolve('@lvce-editor/text-measurement-worker')
-
-const serverStaticPath = join(nodeModulesPath, '@lvce-editor', 'static-server', 'static')
 const serverMainPath = join(nodeModulesPath, '@lvce-editor', 'server', 'src', 'server.js')
-
-const RE_COMMIT_HASH = /^[a-z\d]+$/
-const isCommitHash = (dirent) => {
-  return dirent.length === 7 && dirent.match(RE_COMMIT_HASH)
-}
-
-const dirents = await readdir(serverStaticPath)
-const commitHash = dirents.find(isCommitHash) || ''
-const rendererWorkerMainPath = join(serverStaticPath, commitHash, 'packages', 'renderer-worker', 'dist', 'rendererWorkerMain.js')
-
-const content = await readFile(rendererWorkerMainPath, 'utf-8')
-const remoteUrl = getRemoteUrl(textSearchWorkerPath)
-const textMeasurementWorkerUrl = getRemoteUrl(textMeasurementWorkerPath)
-const newContent = patchRendererWorker(content, remoteUrl, true, textMeasurementWorkerUrl)
-
-if (newContent !== content) {
-  await writeFile(rendererWorkerMainPath, newContent)
-}
 
 const serverContent = await readFile(serverMainPath, 'utf-8')
 const staticPrefixSnippet = `  if (url.startsWith('/995dbd2')) {

@@ -1,5 +1,5 @@
-import { RendererWorker } from '@lvce-editor/rpc-registry'
 import type { SearchState } from '../SearchState/SearchState.ts'
+import { writeText } from '../ClipBoard/ClipBoard.ts'
 
 export const copyPath = async (state: SearchState): Promise<SearchState> => {
   const { focusedIndex, items, listFocusedIndex } = state
@@ -8,6 +8,6 @@ export const copyPath = async (state: SearchState): Promise<SearchState> => {
     return state
   }
   const item = items[actualIndex]
-  await RendererWorker.writeClipBoardText(item.text)
+  await writeText(item.text)
   return state
 }

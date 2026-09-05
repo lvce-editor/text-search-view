@@ -8,6 +8,12 @@ import * as MergeClassNames from '../MergeClassNames/MergeClassNames.ts'
 import * as SearchStrings from '../SearchStrings/SearchStrings.ts'
 import * as TabIndex from '../TabIndex/TabIndex.ts'
 
+const iconNode: VirtualDomNode = {
+  childCount: 0,
+  className: MergeClassNames.mergeClassNames(ClassNames.MaskIcon, ClassNames.MaskIconEllipsis),
+  type: VirtualDomElements.Div,
+}
+
 export const getSearchDetailsToggleVirtualDom = (): readonly VirtualDomNode[] => {
   return [
     {
@@ -21,10 +27,6 @@ export const getSearchDetailsToggleVirtualDom = (): readonly VirtualDomNode[] =>
       title: SearchStrings.toggleSearchDetails(),
       type: VirtualDomElements.Button,
     },
-    {
-      childCount: 0,
-      className: MergeClassNames.mergeClassNames(ClassNames.MaskIcon, ClassNames.MaskIconEllipsis),
-      type: VirtualDomElements.Div,
-    },
+    iconNode,
   ]
 }
