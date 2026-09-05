@@ -21,9 +21,15 @@ test('handleUpdate - routes to pull-based mode for file protocol and computes su
     ...CreateDefaultState.createDefaultState(),
     contextLines: 2,
     contextLinesEnabled: true,
+    searchWarningFontFamily: 'custom-font',
+    searchWarningFontSize: 14,
+    searchWarningHorizontalPadding: 23,
+    searchWarningLineHeight: 20,
+    searchWarningVerticalPadding: 11,
     uid: 101,
     usePullBasedSearch: true,
     value: 'before',
+    width: 120,
     workspacePath: '/test',
   }
 
@@ -85,9 +91,7 @@ test('handleUpdate - routes to pull-based mode for file protocol and computes su
     usePullBasedSearch: true,
   })
   expect(seenUid).toBe(101)
-  expect(mockRendererWorker.invocations).toEqual([
-    ['MeasureTextHeight.measureTextBlockHeight', expect.any(String), 'system-ui', 12, '18px', expect.any(Number)],
-  ])
+  expect(mockRendererWorker.invocations).toEqual([['MeasureTextHeight.measureTextBlockHeight', expect.any(String), 'custom-font', 14, '20px', 97]])
 })
 
 test('handleUpdatePullBased - disables pull-based mode for non-file protocol and ignores default excludes when flag is off', async () => {

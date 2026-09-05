@@ -59,6 +59,27 @@ test('loadContent without saved value returns state with loaded flag', async () 
   })
 })
 
+test('loadContent uses the search warning layout from state', async () => {
+  using mockRendererWorker = RendererWorker.registerMockRpc({
+    'MeasureTextHeight.measureTextBlockHeight': () => 20,
+    'Preferences.get': () => undefined,
+  })
+  const state = {
+    ...CreateDefaultState.createDefaultState(),
+    limitHitWarning: 'warning',
+    searchWarningFontFamily: 'custom-font',
+    searchWarningFontSize: 14,
+    searchWarningHorizontalPadding: 23,
+    searchWarningLineHeight: 20,
+    searchWarningVerticalPadding: 11,
+    width: 120,
+  }
+
+  await loadContent(state, undefined)
+
+  expect(mockRendererWorker.invocations).toContainEqual(['MeasureTextHeight.measureTextBlockHeight', 'warning', 'custom-font', 14, '20px', 97])
+})
+
 test('loadContent loads enabled search exclude settings', async () => {
   using mockRpc = RendererWorker.registerMockRpc({
     'Preferences.get': () => ({
