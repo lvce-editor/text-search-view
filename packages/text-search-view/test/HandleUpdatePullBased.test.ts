@@ -80,7 +80,7 @@ test('handleUpdate - routes to pull-based mode for file protocol and computes su
     defaultExcludes: state.defaultExcludes,
     query: 'test',
     root: 'file:///test',
-    scheme: '',
+    scheme: 'file',
     useIgnoreFiles: true,
     usePullBasedSearch: true,
   })
