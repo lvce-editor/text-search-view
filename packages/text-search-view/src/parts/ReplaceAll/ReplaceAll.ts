@@ -56,14 +56,14 @@ const replaceAllInFocusedFile = async (state: SearchState, fileIndex: number): P
     minimumSliderSize,
     minLineY,
     replacement,
-    workspacePath,
+    workspaceUri,
   } = state
   const fileItems = getFileItems(state, fileIndex)
   const matchCount = Math.max(fileItems.length - 1, 0)
   if (matchCount === 0) {
     return state
   }
-  const bulkEdits = GetReplaceElements.getReplaceElements(fileItems, workspacePath, replacement)
+  const bulkEdits = GetReplaceElements.getReplaceElements(fileItems, workspaceUri, replacement)
   await ApplyBulkReplacement.applyBulkReplacement(bulkEdits)
   await RendererWorker.handleWorkspaceRefresh()
 
@@ -97,22 +97,22 @@ const replaceAllInFocusedFile = async (state: SearchState, fileIndex: number): P
 }
 
 const confirmReplaceAll = async (state: SearchState, fileIndex: number): Promise<boolean> => {
-  const { items, matchCount: totalMatchCount, replacement, workspacePath } = state
+  const { items, matchCount: totalMatchCount, replacement, workspaceUri } = state
   const targetItems = fileIndex === -1 ? items : getFileItems(state, fileIndex)
   const fileCount = fileIndex === -1 ? targetItems.filter((item) => item.type === TextSearchResultType.File).length : 1
   const matchCount = fileIndex === -1 ? totalMatchCount : Math.max(targetItems.length - 1, 0)
   if (matchCount === 0) {
     return true
   }
-  return ReplaceAllAndPrompt.replaceAllAndPrompt(workspacePath, targetItems, replacement, matchCount, fileCount)
+  return ReplaceAllAndPrompt.replaceAllAndPrompt(workspaceUri, targetItems, replacement, matchCount, fileCount)
 }
 
 const replaceAllConfirmed = async (state: SearchState, fileIndex: number): Promise<SearchState> => {
   if (fileIndex !== -1) {
     return replaceAllInFocusedFile(state, fileIndex)
   }
-  const { items, matchCount, replacement, workspacePath } = state
-  const bulkEdits = GetReplaceElements.getReplaceElements(items, workspacePath, replacement)
+  const { items, matchCount, replacement, workspaceUri } = state
+  const bulkEdits = GetReplaceElements.getReplaceElements(items, workspaceUri, replacement)
   if (bulkEdits.length > 0) {
     // TODO this function should return an error message if an error occurred during bulk edit
     await ApplyBulkReplacement.applyBulkReplacement(bulkEdits)

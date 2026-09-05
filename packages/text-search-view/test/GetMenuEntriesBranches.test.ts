@@ -43,7 +43,7 @@ test('returns file entries for a file result', () => {
   const state = {
     ...createDefaultState(),
     items: [file],
-    workspacePath: '/workspace',
+    workspaceUri: 'file:///workspace',
   }
 
   expect(getMenuEntries(state, { index: 0, menuId: MenuEntryId.Search }).map(({ id }) => id)).toEqual([
@@ -62,7 +62,7 @@ test('returns match entries for a match result', () => {
   const state = {
     ...createDefaultState(),
     items: [file, match],
-    workspacePath: '/workspace',
+    workspaceUri: 'file:///workspace',
   }
 
   expect(getMenuEntries(state, { index: 1, menuId: MenuEntryId.Search }).map(({ id }) => id)).toEqual([

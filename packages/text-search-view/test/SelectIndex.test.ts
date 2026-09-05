@@ -96,13 +96,13 @@ test('getFileIndex - finds closest file above match', async () => {
       },
       { end: 0, lineNumber: 0, start: 0, text: 'file2.ts', type: TextSearchResultType.File },
     ],
-    workspacePath: '/test',
+    workspaceUri: 'file:///test',
   }
   // @ts-ignore
   state.listItems = state.items
 
   await SelectIndex.selectIndex(state, 2) // Select second match
-  expect(mockRpc.invocations).toEqual([['Main.openUri', { focus: true, selections: new Uint32Array([9, 311, 9, 313]), uri: '/test/file1.ts' }]])
+  expect(mockRpc.invocations).toEqual([['Main.openUri', { focus: true, selections: new Uint32Array([9, 311, 9, 313]), uri: 'file:///test/file1.ts' }]])
 })
 
 test('getFileIndex - returns -1 when no file found', async () => {
@@ -134,7 +134,7 @@ test('selectIndexPreview - uses extension search result coordinates as fallback'
       { end: 8, lineNumber: 10, start: 4, text: '', type: TextSearchResultType.Match },
       { end: 0, lineNumber: 0, start: 0, text: 'file2.ts', type: TextSearchResultType.File },
     ],
-    workspacePath: '/test',
+    workspaceUri: 'file:///test',
   }
   // @ts-ignore
   state.listItems = state.items
@@ -148,7 +148,7 @@ test('selectIndexPreview - uses extension search result coordinates as fallback'
     listFocused: false,
     listFocusedIndex: 2,
   })
-  expect(mockRpc.invocations).toEqual([['Main.openUri', { focus: true, selections: new Uint32Array([10, 4, 10, 8]), uri: '/test/file1.ts' }]])
+  expect(mockRpc.invocations).toEqual([['Main.openUri', { focus: true, selections: new Uint32Array([10, 4, 10, 8]), uri: 'file:///test/file1.ts' }]])
 })
 
 test('selectIndexPreview - opens the correct file after an earlier result is collapsed', async () => {
@@ -170,10 +170,10 @@ test('selectIndexPreview - opens the correct file after an earlier result is col
       { end: 0, lineNumber: 0, start: 0, text: 'file2.ts', type: TextSearchResultType.File },
       { end: 7, lineNumber: 3, start: 3, text: 'match 3', type: TextSearchResultType.Match },
     ],
-    workspacePath: '/test',
+    workspaceUri: 'file:///test',
   }
 
   await SelectIndex.selectIndex(state, 2)
 
-  expect(mockRpc.invocations).toEqual([['Main.openUri', { focus: true, selections: new Uint32Array([3, 3, 3, 7]), uri: '/test/file2.ts' }]])
+  expect(mockRpc.invocations).toEqual([['Main.openUri', { focus: true, selections: new Uint32Array([3, 3, 3, 7]), uri: 'file:///test/file2.ts' }]])
 })

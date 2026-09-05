@@ -15,7 +15,7 @@ const getSearchId = (): string => {
 }
 
 export const handleUpdatePullBased = async (state: SearchState, update: Partial<SearchState>): Promise<SearchState> => {
-  const { uid: previousUid, workspacePath } = state
+  const { uid: previousUid, workspaceUri } = state
   const searchId = getSearchId()
   const partialNewState: SearchState = { ...state, ...update, items: [], listItems: [], message: '', searchId, searchResults: [] }
   set(previousUid, state, partialNewState)
@@ -34,7 +34,7 @@ export const handleUpdatePullBased = async (state: SearchState, update: Partial<
     value,
     width,
   } = partialNewState
-  const root = workspacePath
+  const root = workspaceUri
   const scheme = GetProtocol.getProtocol(root)
   const isFileSearch = scheme === '' || scheme === 'file'
   const shouldUsePullBasedSearch = usePullBasedSearch && isFileSearch

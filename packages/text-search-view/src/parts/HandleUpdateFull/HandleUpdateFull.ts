@@ -14,7 +14,7 @@ import * as SearchViewStates from '../SearchViewStates/SearchViewStates.ts'
 import * as TextSearch from '../TextSearch/TextSearch.ts'
 
 export const handleUpdateFull = async (state: SearchState, update: Partial<SearchState>): Promise<SearchState> => {
-  const { workspacePath } = state
+  const { workspaceUri } = state
   const partialNewState = { ...state, ...update }
   const {
     assetDir,
@@ -35,7 +35,7 @@ export const handleUpdateFull = async (state: SearchState, update: Partial<Searc
     value,
     width,
   } = partialNewState
-  const root = workspacePath
+  const root = workspaceUri
   const scheme = GetProtocol.getProtocol(root)
   const isFileSearch = scheme === '' || scheme === 'file'
   const shouldUsePullBasedSearch = usePullBasedSearch && isFileSearch

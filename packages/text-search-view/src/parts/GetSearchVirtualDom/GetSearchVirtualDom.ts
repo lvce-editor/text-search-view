@@ -28,13 +28,13 @@ export const getSearchVirtualDom = (
   isSearchEditor: boolean = false,
   contextLines: number = 1,
   contextLinesEnabled: boolean = false,
-  workspacePath?: string,
+  workspaceUri?: string,
 ): readonly VirtualDomNode[] => {
   if (initial) {
     return []
   }
   const errorDom = GetSearchInputErrorVirtualDom.getSearchInputErrorVirtualDom(searchInputErrorMessage)
-  const noWorkspaceMessageDom = GetNoWorkspaceMessageVirtualDom.getNoWorkspaceMessageVirtualDom(workspacePath)
+  const noWorkspaceMessageDom = GetNoWorkspaceMessageVirtualDom.getNoWorkspaceMessageVirtualDom(workspaceUri)
   const childCount = 2 + (errorDom.length > 0 ? 1 : 0) + (noWorkspaceMessageDom.length > 0 ? 1 : 0)
 
   return [

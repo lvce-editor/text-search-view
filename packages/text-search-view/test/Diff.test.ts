@@ -61,7 +61,7 @@ test('diff - workspace path change', () => {
   const { oldState } = SearchViewStates.get(uid)
   const newState: SearchState = {
     ...oldState,
-    workspacePath: '/test',
+    workspaceUri: 'file:///test',
   }
   expect(Diff.diff(oldState, newState)).toEqual([DiffType.RenderIncremental])
 })

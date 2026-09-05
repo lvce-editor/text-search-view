@@ -32,7 +32,7 @@ test('handleUpdateFull - sets limitHit to true when search hits limit', async ()
     platform: 0,
     threads: 0,
     value: 'test',
-    workspacePath: '/test',
+    workspaceUri: 'file:///test',
   }
   const update = { value: 'test' }
   const searchResults: readonly SearchResult[] = [
@@ -94,7 +94,7 @@ test('handleUpdateFull - sets limitHit to false when search does not hit limit',
     platform: 0,
     threads: 0,
     value: 'test',
-    workspacePath: '/test',
+    workspaceUri: 'file:///test',
   }
   const update = { value: 'test' }
   const searchResults: readonly SearchResult[] = [
@@ -158,7 +158,7 @@ test('handleUpdateFull - passes enabled search options to the provider', async (
     flags,
     usePullBasedSearch: true,
     value: 'test',
-    workspacePath: '/test',
+    workspaceUri: 'file:///test',
   }
 
   await handleUpdateFull(state, {})
@@ -192,7 +192,7 @@ test('handleUpdateFull - disables context in provider options when the toggle is
     contextLines: 2,
     contextLinesEnabled: false,
     value: 'test',
-    workspacePath: '/test',
+    workspaceUri: 'file:///test',
   }
 
   await handleUpdateFull(state, {})
@@ -215,7 +215,7 @@ test('handleUpdateFull - enables pull-based search for an explicit file protocol
     ...CreateDefaultState.createDefaultState(),
     usePullBasedSearch: true,
     value: 'test',
-    workspacePath: 'file:///test',
+    workspaceUri: 'file:///test',
   }
 
   await handleUpdateFull(state, {})
@@ -238,7 +238,7 @@ test('handleUpdateFull - rejects a provider result that is not an array', async 
   const state: SearchState = {
     ...CreateDefaultState.createDefaultState(),
     value: 'test',
-    workspacePath: '/test',
+    workspaceUri: 'file:///test',
   }
 
   await expect(handleUpdateFull(state, {})).rejects.toThrow('results must be of type array')
@@ -248,7 +248,7 @@ test('handleUpdateFull - does not overwrite state after the active search change
   const state = {
     ...CreateDefaultState.createDefaultState(),
     uid: 106,
-    workspacePath: '/test',
+    workspaceUri: 'file:///test',
   }
   SearchViewStates.set(state.uid, state, state)
   let latestState: typeof state | undefined

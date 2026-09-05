@@ -24,7 +24,7 @@ test('returns grouped file menu entries including reveal in explorer', () => {
   const state = {
     ...createDefaultState(),
     items: [file],
-    workspacePath: '/workspace',
+    workspaceUri: 'file:///workspace',
   }
   const entries = getMenuEntries(state, { index: 0, menuId: MenuEntryId.Search })
 
@@ -62,7 +62,7 @@ test('returns grouped file menu entries including reveal in explorer', () => {
     },
     menuEntrySeparator,
     {
-      args: ['/workspace/src/file.ts'],
+      args: ['file:///workspace/src/file.ts'],
       command: 'RevealInExplorer.reveal',
       flags: MenuItemFlags.None,
       id: 'revealInExplorerView',
@@ -75,7 +75,7 @@ test('returns grouped match menu entries that reveal the containing file', () =>
   const state = {
     ...createDefaultState(),
     items: [file, match],
-    workspacePath: 'memfs://workspace',
+    workspaceUri: 'memfs://workspace',
   }
   const entries = getMenuEntries(state, { index: 1, menuId: MenuEntryId.Search })
 

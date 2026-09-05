@@ -26,7 +26,7 @@ test('viewAsTree displays search results as a folder tree', async () => {
     height: 130,
     items,
     listItems: items,
-    workspacePath: '/workspace',
+    workspaceUri: 'file:///workspace',
   }
 
   const result = await viewAsTree(state)

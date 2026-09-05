@@ -21,31 +21,31 @@ const match = {
 }
 
 test('returns the uri for a file result', () => {
-  const state = { ...createDefaultState(), items: [file('src/file.ts')], workspacePath: '/workspace' }
-  expect(getFileUri(state, 0)).toBe('/workspace/src/file.ts')
+  const state = { ...createDefaultState(), items: [file('src/file.ts')], workspaceUri: 'file:///workspace' }
+  expect(getFileUri(state, 0)).toBe('file:///workspace/src/file.ts')
 })
 
 test('normalizes a dot-relative file result', () => {
-  const state = { ...createDefaultState(), items: [file('./src/file.ts')], workspacePath: '/workspace' }
-  expect(getFileUri(state, 0)).toBe('/workspace/src/file.ts')
+  const state = { ...createDefaultState(), items: [file('./src/file.ts')], workspaceUri: 'file:///workspace' }
+  expect(getFileUri(state, 0)).toBe('file:///workspace/src/file.ts')
 })
 
 test('preserves a virtual workspace scheme', () => {
-  const state = { ...createDefaultState(), items: [file('src/file.ts')], workspacePath: 'memfs://workspace' }
+  const state = { ...createDefaultState(), items: [file('src/file.ts')], workspaceUri: 'memfs://workspace' }
   expect(getFileUri(state, 0)).toBe('memfs://workspace/src/file.ts')
 })
 
 test('returns the containing file uri for a match result', () => {
-  const state = { ...createDefaultState(), items: [file('first.ts'), match, file('second.ts'), match], workspacePath: '/workspace' }
-  expect(getFileUri(state, 3)).toBe('/workspace/second.ts')
+  const state = { ...createDefaultState(), items: [file('first.ts'), match, file('second.ts'), match], workspaceUri: 'file:///workspace' }
+  expect(getFileUri(state, 3)).toBe('file:///workspace/second.ts')
 })
 
 test('returns an empty string when no containing file exists', () => {
-  const state = { ...createDefaultState(), items: [match], workspacePath: '/workspace' }
+  const state = { ...createDefaultState(), items: [match], workspaceUri: 'file:///workspace' }
   expect(getFileUri(state, 0)).toBe('')
 })
 
 test('returns an empty string for an out-of-range index', () => {
-  const state = { ...createDefaultState(), items: [file('file.ts')], workspacePath: '/workspace' }
+  const state = { ...createDefaultState(), items: [file('file.ts')], workspaceUri: 'file:///workspace' }
   expect(getFileUri(state, 2)).toBe('')
 })

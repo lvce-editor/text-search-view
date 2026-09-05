@@ -95,7 +95,7 @@ export const createDefaultState = (): SearchState => {
     useFileIcons: true,
     usePullBasedSearch: false,
     viewMode: ViewMode.List,
-    workspacePath: '',
+    workspaceUri: '',
   }
   return state
 }

@@ -38,7 +38,7 @@ test('runs overlapping search input commands in invocation order', async () => {
   const state = {
     ...CreateDefaultState.createDefaultState(),
     uid: 107,
-    workspacePath: '/test',
+    workspaceUri: 'file:///test',
   }
   SearchViewStates.set(state.uid, state, state)
 

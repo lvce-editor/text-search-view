@@ -4,6 +4,7 @@ import * as DefaultExcludeValue from '../DefaultExcludeValue/DefaultExcludeValue
 import * as GetTopHeight from '../GetTopHeight/GetTopHeight.ts'
 import * as InputSource from '../InputSource/InputSource.ts'
 import * as MinimumSliderSize from '../MinimumSliderSize/MinimumSliderSize.ts'
+import * as NormalizeWorkspaceUri from '../NormalizeWorkspaceUri/NormalizeWorkspaceUri.ts'
 import * as SearchFlags from '../SearchFlags/SearchFlags.ts'
 import * as SearchMessageHeight from '../SearchMessageHeight/SearchMessageHeight.ts'
 import * as SearchViewStates from '../SearchViewStates/SearchViewStates.ts'
@@ -16,7 +17,7 @@ export const create = (
   y: number,
   width: number,
   height: number,
-  workspacePath: string,
+  workspaceUri: string,
   assetDir: string,
   itemHeight?: number,
   value: string = '',
@@ -102,7 +103,7 @@ export const create = (
     useFileIcons: true,
     usePullBasedSearch: false, // TODO enable
     viewMode: ViewMode.List,
-    workspacePath: workspacePath,
+    workspaceUri: NormalizeWorkspaceUri.normalizeWorkspaceUri(workspaceUri),
   }
   SearchViewStates.set(uid, state, state)
   return state
