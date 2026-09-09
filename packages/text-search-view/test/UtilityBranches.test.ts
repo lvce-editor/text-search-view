@@ -132,7 +132,7 @@ test('getChildCount supports a plain result without optional children', () => {
 })
 
 test('getDisplayResult rejects unknown result types', () => {
-  expect(() => getDisplayResult([{ ...file, type: 99 }], [], 0, 1, 0, '', -1, [], false, 0, [])).toThrow('unexpected search result type')
+  expect(() => getDisplayResult([{ ...file, type: 99 }], [], 0, 1, '', -1, [], false, 0, [])).toThrow('unexpected search result type')
 })
 
 test('getTextSearchResultCounts ignores unknown result types', () => {

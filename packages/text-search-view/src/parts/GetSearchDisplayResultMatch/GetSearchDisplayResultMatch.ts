@@ -4,7 +4,7 @@ import * as GetTreeItemIndent from '../GetTreeItemIndent/GetTreeItemIndent.ts'
 
 export const getDisplayResultMatch = (
   setSize: number,
-  searchTermLength: number,
+  matchLength: number,
   replacement: string,
   text: string,
   posInSet: number,
@@ -21,7 +21,7 @@ export const getDisplayResultMatch = (
     focused,
     icon: '',
     indent,
-    matchLength: searchTermLength,
+    matchLength,
     matchStart: start,
     posInSet,
     replacement,

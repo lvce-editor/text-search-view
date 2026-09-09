@@ -1,6 +1,16 @@
 import { expect, test } from '@jest/globals'
 import type { SearchResult } from '../src/parts/SearchResult/SearchResult.ts'
+import * as GetLabelVirtualDom from '../src/parts/GetLabelVirtualDom/GetLabelVirtualDom.ts'
 import * as GetSearchDisplayResult from '../src/parts/GetSearchDisplayResult/GetSearchDisplayResult.ts'
+
+test('getDisplayResult - highlights the result range independently of the current query length', () => {
+  const results: readonly SearchResult[] = [{ end: 13, lineNumber: 1, start: 2, text: '# File System Worker', type: 2 }]
+
+  const result = GetSearchDisplayResult.getDisplayResult(results, [], 0, 1, '', -1, [], false, 0, results)
+  const dom = GetLabelVirtualDom.getLabelVirtualDom(result.text, result.matchLength, result.matchStart, result.replacement)
+
+  expect(dom[3].text).toBe('File System')
+})
 
 test('getDisplayResult - file', () => {
   const results: readonly SearchResult[] = [
@@ -17,24 +27,11 @@ test('getDisplayResult - file', () => {
   const replacement = ''
   const focusedIndex = -1
   const setSize = 1
-  const searchTermLength = 1
   const fileIcons: readonly string[] = ['']
   const collapsedPaths: readonly string[] = []
   const minLineY = 0
   expect(
-    GetSearchDisplayResult.getDisplayResult(
-      results,
-      fileIcons,
-      i,
-      setSize,
-      searchTermLength,
-      replacement,
-      focusedIndex,
-      collapsedPaths,
-      false,
-      minLineY,
-      results,
-    ),
+    GetSearchDisplayResult.getDisplayResult(results, fileIcons, i, setSize, replacement, focusedIndex, collapsedPaths, false, minLineY, results),
   ).toEqual({
     badgeText: '0',
     depth: 0,
@@ -66,24 +63,11 @@ test('getDisplayResult - result', () => {
   const replacement = ''
   const focusedIndex = -1
   const setSize = 1
-  const searchTermLength = 1
   const fileIcons: readonly string[] = []
   const collapsedPaths: readonly string[] = []
   const minLineY = 0
   expect(
-    GetSearchDisplayResult.getDisplayResult(
-      results,
-      fileIcons,
-      i,
-      setSize,
-      searchTermLength,
-      replacement,
-      focusedIndex,
-      collapsedPaths,
-      false,
-      minLineY,
-      results,
-    ),
+    GetSearchDisplayResult.getDisplayResult(results, fileIcons, i, setSize, replacement, focusedIndex, collapsedPaths, false, minLineY, results),
   ).toEqual({
     badgeText: '',
     depth: 1,
@@ -112,7 +96,7 @@ test('getDisplayResult - context has no match or replacement highlight', () => {
     },
   ]
 
-  expect(GetSearchDisplayResult.getDisplayResult(results, [], 0, 1, 6, 'replacement', -1, [], false, 0, results)).toMatchObject({
+  expect(GetSearchDisplayResult.getDisplayResult(results, [], 0, 1, 'replacement', -1, [], false, 0, results)).toMatchObject({
     matchLength: 0,
     matchStart: 0,
     replacement: '',

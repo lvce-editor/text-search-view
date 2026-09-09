@@ -9,7 +9,6 @@ export const getDisplayResult = (
   fileIcons: readonly string[],
   i: number,
   setSize: number,
-  searchTermLength: number,
   replacement: string,
   focusedIndex: number,
   collapsedPaths: readonly string[],
@@ -18,7 +17,7 @@ export const getDisplayResult = (
   originalResults: readonly SearchResult[],
 ): DisplaySearchResult => {
   const result = results[i]
-  const { depth, isDirectory, start, text, type } = result
+  const { depth, end, isDirectory, start, text, type } = result
   const posInSet = i + 1
   const focused = i === focusedIndex
   const relativeIndex = i - minLineY
@@ -42,7 +41,7 @@ export const getDisplayResult = (
         isDirectory,
       )
     case TextSearchResultType.Match:
-      return GetSearchDisplayResultMatch.getDisplayResultMatch(setSize, searchTermLength, replacement, text, posInSet, start, focused, depth)
+      return GetSearchDisplayResultMatch.getDisplayResultMatch(setSize, end - start, replacement, text, posInSet, start, focused, depth)
     default:
       throw new Error('unexpected search result type')
   }
