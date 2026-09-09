@@ -29,13 +29,11 @@ export const createViewModel = (state: SearchState): ViewModel => {
     replacement,
     scrollBarHeight,
     searchInputErrorMessage,
-    value,
   } = state
   const displayResults = GetSearchDisplayResults.getDisplayResults(
     listItems,
     itemHeight,
     fileCount,
-    value,
     minLineY,
     maxLineY,
     replacement,
