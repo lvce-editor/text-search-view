@@ -174,7 +174,7 @@ export const commandMap = {
   'TextSearch.handleOpenFolderClick': WrapCommand.wrapCommand(HandleOpenFolderClick.handleOpenFolderClick),
   'TextSearch.handlePullResultsFound': WrapCommand.wrapCommand(handlePullResultsFound),
   'TextSearch.handleReplaceInput': WrapCommand.wrapSerialCommand(HandleReplaceInput.handleReplaceInput),
-  'TextSearch.handleResize': WrapCommand.wrapCommand(HandleResize.handleResize),
+  'TextSearch.handleResize': WrapCommand.wrapSerialCommand(HandleResize.handleResize),
   'TextSearch.handleScrollBarCaptureLost': WrapCommand.wrapCommand(ListHandleScrollBarCaptureLost.handleScrollBarCaptureLost),
   'TextSearch.handleScrollBarClick': WrapCommand.wrapCommand(ListHandleScrollBarClick.handleScrollBarClick),
   'TextSearch.handleScrollBarMove': WrapCommand.wrapCommand(ListHandleScrollBarMove.handleScrollBarMove),
