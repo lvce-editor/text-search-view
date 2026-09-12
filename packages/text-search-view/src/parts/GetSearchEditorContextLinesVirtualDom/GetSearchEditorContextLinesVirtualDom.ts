@@ -7,6 +7,8 @@ import * as InputName from '../InputName/InputName.ts'
 import * as MergeClassNames from '../MergeClassNames/MergeClassNames.ts'
 import * as SearchStrings from '../SearchStrings/SearchStrings.ts'
 
+const contextLinesClassName = MergeClassNames.mergeClassNames(ClassNames.InputBox, 'SearchEditorContextLinesInput')
+
 export const getSearchEditorContextLinesVirtualDom = (contextLines: number, contextLinesEnabled: boolean): readonly VirtualDomNode[] => {
   const button = {
     flag: contextLinesEnabled ? InputActionFlag.CheckBoxEnabled : InputActionFlag.CheckBoxDisabled,
@@ -18,7 +20,7 @@ export const getSearchEditorContextLinesVirtualDom = (contextLines: number, cont
     {
       ariaLabel: SearchStrings.contextLines(),
       childCount: 0,
-      className: MergeClassNames.mergeClassNames(ClassNames.InputBox, 'SearchEditorContextLinesInput'),
+      className: contextLinesClassName,
       inputType: 'number',
       min: 0,
       name: InputName.ContextLines,

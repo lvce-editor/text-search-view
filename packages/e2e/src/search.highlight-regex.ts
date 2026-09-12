@@ -12,9 +12,12 @@ export const test: Test = async ({ expect, FileSystem, Locator, Search, SideBar,
   await Search.setValue('file.*system')
 
   const search = Locator('.Search')
-  await expect(search.locator('[role="status"]')).toHaveText('2 results in 1 file')
+  const message = search.locator('[role="status"]')
+  await expect(message).toHaveText('2 results in 1 file')
   const heading = search.locator('[role="treeitem"][title="# File System Worker"]')
-  await expect(heading.locator('.Highlight')).toHaveText('File System')
+  const headingHighlight = heading.locator('.Highlight')
+  await expect(headingHighlight).toHaveText('File System')
   const description = search.locator('[role="treeitem"][title="Web Worker for the file system functionality in LVCE Editor."]')
-  await expect(description.locator('.Highlight')).toHaveText('file system')
+  const descriptionHighlight = description.locator('.Highlight')
+  await expect(descriptionHighlight).toHaveText('file system')
 }

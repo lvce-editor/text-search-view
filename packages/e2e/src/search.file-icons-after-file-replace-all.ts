@@ -26,7 +26,8 @@ export const test: Test = async ({ Dialog, expect, Extension, FileSystem, IconTh
   await Search.handleWheel(1, 10_000)
   const fileToReplace = viewletSearch.locator('.TreeItem[aria-expanded="true"]').first()
   await expect(fileToReplace).toBeVisible()
-  await expect(fileToReplace.locator('.FileIcon[src$="/javascript.svg"]')).toHaveCount(1)
+  const fileToReplaceJavaScriptIcon = fileToReplace.locator('.FileIcon[src$="/javascript.svg"]')
+  await expect(fileToReplaceJavaScriptIcon).toHaveCount(1)
   await Dialog.mockConfirm(() => true)
 
   // act
@@ -36,5 +37,6 @@ export const test: Test = async ({ Dialog, expect, Extension, FileSystem, IconTh
   await expect(message).toHaveText("Replaced 1 occurrence across 1 file with 'd'")
   const visibleFile = viewletSearch.locator('.TreeItem[aria-expanded="true"]').first()
   await expect(visibleFile).toBeVisible()
-  await expect(visibleFile.locator('.FileIcon[src$="/javascript.svg"]')).toHaveCount(1)
+  const visibleFileJavaScriptIcon = visibleFile.locator('.FileIcon[src$="/javascript.svg"]')
+  await expect(visibleFileJavaScriptIcon).toHaveCount(1)
 }

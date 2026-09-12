@@ -7,6 +7,36 @@ import * as CreateDefaultState from '../src/parts/CreateDefaultState/CreateDefau
 import * as SearchFlags from '../src/parts/SearchFlags/SearchFlags.ts'
 import * as SearchViewStates from '../src/parts/SearchViewStates/SearchViewStates.ts'
 
+test('preserves replace expansion when an input focus event overlaps the toggle', async () => {
+  const state = { ...CreateDefaultState.createDefaultState(), uid: 108 }
+  SearchViewStates.set(state.uid, state, state)
+
+  const toggle = commandMap['TextSearch.toggleReplace'](state.uid)
+  await Promise.resolve()
+  const focus = commandMap['TextSearch.handleInputFocus'](state.uid, 'SearchValue')
+  await Promise.all([toggle, focus])
+
+  expect(SearchViewStates.get(state.uid).newState).toMatchObject({
+    flags: state.flags | SearchFlags.ReplaceExpanded,
+    focused: true,
+  })
+})
+
+test('preserves replace expansion when an input selection event overlaps the toggle', async () => {
+  const state = { ...CreateDefaultState.createDefaultState(), uid: 109 }
+  SearchViewStates.set(state.uid, state, state)
+
+  const toggle = commandMap['TextSearch.toggleReplace'](state.uid)
+  await Promise.resolve()
+  const selection = commandMap['TextSearch.handleInputSelectionChange'](state.uid, 'SearchValue', 0, 1)
+  await Promise.all([toggle, selection])
+
+  expect(SearchViewStates.get(state.uid).newState).toMatchObject({
+    flags: state.flags | SearchFlags.ReplaceExpanded,
+    selections: { SearchValue: { end: 1, start: 0 } },
+  })
+})
+
 test('runs overlapping search input commands in invocation order', async () => {
   using _mockTextMeasurementWorker = TextMeasurementWorker.registerMockRpc({
     'TextMeasurement.measureTextBlockHeight': () => 13,

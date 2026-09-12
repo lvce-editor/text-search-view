@@ -8,9 +8,11 @@ import * as GetOutSideButtonsDom from '../GetOutSideButtonsDom/GetOutSideButtons
 import * as GetSearchFieldButtonVirtualDom from '../GetSearchFieldButtonVirtualDom/GetSearchFieldButtonVirtualDom.ts'
 import * as MergeClassNames from '../MergeClassNames/MergeClassNames.ts'
 
+const errorClassName = MergeClassNames.mergeClassNames(ClassNames.SearchField, ClassNames.SearchFieldError)
+
 const getSearchFieldClassName = (hasError: boolean): string => {
   if (hasError) {
-    return MergeClassNames.mergeClassNames(ClassNames.SearchField, ClassNames.SearchFieldError)
+    return errorClassName
   }
   return ClassNames.SearchField
 }
