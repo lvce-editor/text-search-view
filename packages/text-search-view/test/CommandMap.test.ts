@@ -7,6 +7,37 @@ import * as CreateDefaultState from '../src/parts/CreateDefaultState/CreateDefau
 import * as SearchFlags from '../src/parts/SearchFlags/SearchFlags.ts'
 import * as SearchViewStates from '../src/parts/SearchViewStates/SearchViewStates.ts'
 
+test('keeps the search input cleared when an earlier resize completes', async () => {
+  const { promise: measurement, resolve: resolveMeasurement } = Promise.withResolvers<number>()
+  const { promise: measurementStarted, resolve: resolveMeasurementStarted } = Promise.withResolvers<void>()
+  using _mockTextMeasurementWorker = TextMeasurementWorker.registerMockRpc({
+    'TextMeasurement.measureTextBlockHeight': () => {
+      resolveMeasurementStarted()
+      return measurement
+    },
+  })
+  const state = {
+    ...CreateDefaultState.createDefaultState(),
+    message: '1 result in 1 file',
+    uid: 110,
+    value: 'ab',
+  }
+  SearchViewStates.set(state.uid, state, state)
+
+  const resize = commandMap['TextSearch.handleResize'](state.uid, 0, 0, 200, 140)
+  await measurementStarted
+  const clearInput = commandMap['TextSearch.handleInput'](state.uid, '')
+  resolveMeasurement(13)
+  await Promise.all([resize, clearInput])
+
+  expect(SearchViewStates.get(state.uid).newState).toMatchObject({
+    message: '',
+    scrollBarHeight: 0,
+    value: '',
+    width: 200,
+  })
+})
+
 test('preserves replace expansion when an input focus event overlaps the toggle', async () => {
   const state = { ...CreateDefaultState.createDefaultState(), uid: 108 }
   SearchViewStates.set(state.uid, state, state)
