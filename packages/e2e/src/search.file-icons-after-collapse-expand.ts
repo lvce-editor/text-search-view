@@ -17,7 +17,8 @@ export const test: Test = async ({ expect, Extension, FileSystem, IconTheme, Loc
   await SideBar.open('Search')
   await Search.setValue('ab')
   const viewletSearch = Locator('.Search')
-  await expect(viewletSearch.locator('[role="status"]')).toHaveText('40 results in 40 files')
+  const message = viewletSearch.locator('[role="status"]')
+  await expect(message).toHaveText('40 results in 40 files')
 
   // act
   await Search.collapseAll()
@@ -26,7 +27,8 @@ export const test: Test = async ({ expect, Extension, FileSystem, IconTheme, Loc
   const file = viewletSearch.locator('.TreeItem[aria-label="/015.js"]')
   await expect(file).toBeVisible()
   await expect(file).toHaveAttribute('aria-expanded', 'false')
-  await expect(file.locator('.FileIcon[src$="/javascript.svg"]')).toHaveCount(1)
+  const fileJavaScriptIcon = file.locator('.FileIcon[src$="/javascript.svg"]')
+  await expect(fileJavaScriptIcon).toHaveCount(1)
 
   // act
   await Search.focusIndex(15)
@@ -34,13 +36,14 @@ export const test: Test = async ({ expect, Extension, FileSystem, IconTheme, Loc
 
   // assert
   await expect(file).toHaveAttribute('aria-expanded', 'true')
-  await expect(file.locator('.FileIcon[src$="/javascript.svg"]')).toHaveCount(1)
-  await expect(viewletSearch.locator('.TreeItem[aria-label="abc"]')).toBeVisible()
+  await expect(fileJavaScriptIcon).toHaveCount(1)
+  const result = viewletSearch.locator('.TreeItem[aria-label="abc"]')
+  await expect(result).toBeVisible()
 
   // act
   await Search.selectIndex(15)
 
   // assert
   await expect(file).toHaveAttribute('aria-expanded', 'false')
-  await expect(file.locator('.FileIcon[src$="/javascript.svg"]')).toHaveCount(1)
+  await expect(fileJavaScriptIcon).toHaveCount(1)
 }

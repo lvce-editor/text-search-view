@@ -8,6 +8,8 @@ import * as MergeClassNames from '../MergeClassNames/MergeClassNames.ts'
 import * as SearchStrings from '../SearchStrings/SearchStrings.ts'
 import * as TabIndex from '../TabIndex/TabIndex.ts'
 
+const toggleClassName = MergeClassNames.mergeClassNames(ClassNames.ToggleDetails, ClassNames.IconButton)
+
 const iconNode: VirtualDomNode = {
   childCount: 0,
   className: MergeClassNames.mergeClassNames(ClassNames.MaskIcon, ClassNames.MaskIconEllipsis),
@@ -19,7 +21,7 @@ export const getSearchDetailsToggleVirtualDom = (): readonly VirtualDomNode[] =>
     {
       ariaLabel: SearchStrings.toggleSearchDetails(),
       childCount: 1,
-      className: MergeClassNames.mergeClassNames(ClassNames.ToggleDetails, ClassNames.IconButton),
+      className: toggleClassName,
       name: InputName.ToggleSearchDetails,
       onClick: DomEventListenerFunctions.HandleButtonClick,
       role: AriaRoles.Button,
