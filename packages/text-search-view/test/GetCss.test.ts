@@ -23,6 +23,7 @@ test('getCss - returns base css variables when there are no indents', () => {
   expect(result).toContain('margin: 0;')
   expect(result).toContain('text-decoration: none;')
   expect(result).toContain('.SearchWorkspaceMessage {')
+  expect(result).toContain('line-height: 16px;')
   expect(result).toContain('margin-top: -16px;')
   expect(result).toContain('overflow-wrap: break-word;')
   expect(result).toContain('padding-right: 22px;')
