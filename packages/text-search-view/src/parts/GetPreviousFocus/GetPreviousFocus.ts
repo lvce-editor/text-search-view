@@ -1,5 +1,5 @@
 import { WhenExpression } from '@lvce-editor/virtual-dom-worker'
-import { ReplaceExpanded } from '../SearchFlags/SearchFlags.ts'
+import { DetailsExpanded, ReplaceExpanded } from '../SearchFlags/SearchFlags.ts'
 
 export const getPreviousFocus = (focus: number, flags: number): number => {
   switch (focus) {
@@ -26,6 +26,11 @@ export const getPreviousFocus = (focus: number, flags: number): number => {
       return WhenExpression.FocusSearchPreserveCase
     case WhenExpression.FocusSearchReplaceInput:
       return WhenExpression.FocusSearchInput
+    case WhenExpression.FocusSearchResults:
+      if (flags & DetailsExpanded) {
+        return WhenExpression.FocusIgnoreFiles
+      }
+      return WhenExpression.FocusToggleDetails
     case WhenExpression.FocusSearchWholeWord:
       return WhenExpression.FocusSearchMatchCase
     case WhenExpression.FocusToggleDetails:
