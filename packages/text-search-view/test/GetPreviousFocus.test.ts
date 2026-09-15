@@ -38,6 +38,16 @@ test('getPreviousFocus - from replace all to preserve case', () => {
   expect(result).toBe(WhenExpression.FocusSearchPreserveCase)
 })
 
+test('getPreviousFocus - from search results to details toggle without details expanded', () => {
+  const result = GetPreviousFocus.getPreviousFocus(WhenExpression.FocusSearchResults, 0)
+  expect(result).toBe(WhenExpression.FocusToggleDetails)
+})
+
+test('getPreviousFocus - from search results to last details control with details expanded', () => {
+  const result = GetPreviousFocus.getPreviousFocus(WhenExpression.FocusSearchResults, SearchFlags.DetailsExpanded)
+  expect(result).toBe(WhenExpression.FocusIgnoreFiles)
+})
+
 test('getPreviousFocus - from toggle details to replace all with replace expanded', () => {
   const result = GetPreviousFocus.getPreviousFocus(WhenExpression.FocusToggleDetails, SearchFlags.ReplaceExpanded)
   expect(result).toBe(WhenExpression.FocusSearchReplaceAll)
