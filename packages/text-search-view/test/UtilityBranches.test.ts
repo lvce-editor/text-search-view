@@ -4,6 +4,7 @@ import { convertSearchResults } from '../src/parts/ConvertSearchResults/ConvertS
 import { createDefaultState } from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
 import { createViewModel } from '../src/parts/CreateViewModel/CreateViewModel.ts'
 import { isEqual as isReplaceValueEqual } from '../src/parts/DiffReplaceValue/DiffReplaceValue.ts'
+import * as DirentType from '../src/parts/DirentType/DirentType.ts'
 import { getActionButtonVirtualDom } from '../src/parts/GetActionButtonVirtualDom/GetActionButtonVirtualDom.ts'
 import { getActionVirtualDom } from '../src/parts/GetActionVirtualDom/GetActionVirtualDom.ts'
 import { getFileName } from '../src/parts/GetFileName/GetFileName.ts'
@@ -112,6 +113,13 @@ test('input actions expose enabled flags', () => {
 
 test('getMissingIconRequests omits cached files', () => {
   expect(getMissingIconRequests([file], { 'src/file.ts': 'icon' })).toEqual([])
+})
+
+test('getMissingIconRequests requests directory icons', () => {
+  expect(getMissingIconRequests([{ ...file, isDirectory: true, text: 'src' }, file], {})).toEqual([
+    { name: 'src', path: 'src', type: DirentType.Directory },
+    { name: 'file.ts', path: 'src/file.ts', type: DirentType.File },
+  ])
 })
 
 test('getNextFocus preserves an unknown focus value', () => {

@@ -225,10 +225,22 @@ test('getDisplayResults - renders tree depths and directory rows', () => {
     { end: 6, lineNumber: 1, start: 0, text: 'needle', type: TextSearchResultType.Match },
   ]
 
-  const displayResults = GetSearchDisplayResults.getDisplayResults(results, 20, 1, 0, 3, '', ['', 'file-icon', ''], -1, [], true, originalResults)
+  const displayResults = GetSearchDisplayResults.getDisplayResults(
+    results,
+    20,
+    1,
+    0,
+    3,
+    '',
+    ['folder-icon', 'file-icon', ''],
+    -1,
+    [],
+    true,
+    originalResults,
+  )
 
   expect(displayResults).toMatchObject([
-    { badgeText: '', depth: 0, icon: '', indent: 16, text: 'src', title: '/src' },
+    { badgeText: '', depth: 0, icon: 'folder-icon', indent: 16, text: 'src', title: '/src' },
     { badgeText: '1', depth: 1, icon: 'file-icon', indent: 28, text: 'file.ts — src', title: '/src/file.ts' },
     { badgeText: '', depth: 2, icon: '', indent: 40, text: 'needle', title: 'needle' },
   ])

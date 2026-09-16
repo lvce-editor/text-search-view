@@ -14,7 +14,7 @@ test('viewAsTree leaves empty results unchanged', async () => {
 
 test('viewAsTree displays search results as a folder tree', async () => {
   using mockRpc = IconThemeWorker.registerMockRpc({
-    'IconTheme.getIcons': () => ['file-icon'],
+    'IconTheme.getIcons': () => ['folder-icon', 'folder-icon', 'file-icon'],
   })
   const items = [
     { end: 0, lineNumber: 0, start: 0, text: './src/nested/file.ts', type: TextSearchResultType.File },
@@ -45,11 +45,19 @@ test('viewAsTree displays search results as a folder tree', async () => {
     { depth: 2, isDirectory: undefined, text: 'src/nested/file.ts' },
     { depth: 3, isDirectory: undefined, text: 'needle' },
   ])
-  expect(result.icons).toEqual(['', '', 'file-icon', ''])
+  expect(result.icons).toEqual(['folder-icon', 'folder-icon', 'file-icon', ''])
   expect(mockRpc.invocations).toEqual([
     [
       'IconTheme.getIcons',
       [
+        {
+          name: 'src',
+          type: 2,
+        },
+        {
+          name: 'nested',
+          type: 2,
+        },
         {
           name: 'file.ts',
           type: 1,
