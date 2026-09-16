@@ -96,6 +96,7 @@ import * as TogglePreserveCase from '../TogglePreserveCase/TogglePreserveCase.ts
 import * as ToggleReplace from '../ToggleReplace/ToggleReplace.ts'
 import * as ToggleUseIgnoreFiles from '../ToggleUseIgnoreFiles/ToggleUseIgnoreFiles.ts'
 import * as ToggleUseRegularExpression from '../ToggleUseRegularExpression/ToggleUseRegularExpression.ts'
+import * as ViewAsList from '../ViewAsList/ViewAsList.ts'
 import * as ViewAsTree from '../ViewAsTree/ViewAsTree.ts'
 import * as ViewletSearchHandleContextMenu from '../ViewletSearchHandleContextMenu/ViewletSearchHandleContextMenu.ts'
 
@@ -215,5 +216,6 @@ export const commandMap = {
   'TextSearch.toggleUseIgnoreFiles': WrapCommand.wrapSerialCommand(ToggleUseIgnoreFiles.toggleUseIgnoreFiles),
 
   'TextSearch.toggleUseRegularExpression': WrapCommand.wrapSerialCommand(ToggleUseRegularExpression.toggleUseRegularExpression),
+  'TextSearch.viewAsList': WrapCommand.wrapCommand(ViewAsList.viewAsList),
   'TextSearch.viewAsTree': WrapCommand.wrapCommand(ViewAsTree.viewAsTree),
 }

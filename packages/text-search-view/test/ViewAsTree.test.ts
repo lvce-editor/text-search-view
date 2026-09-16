@@ -3,6 +3,7 @@ import { IconThemeWorker } from '@lvce-editor/rpc-registry'
 import { collapseAll } from '../src/parts/CollapseAll/CollapseAll.ts'
 import { createDefaultState } from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
 import * as TextSearchResultType from '../src/parts/TextSearchResultType/TextSearchResultType.ts'
+import { viewAsList } from '../src/parts/ViewAsList/ViewAsList.ts'
 import { viewAsTree } from '../src/parts/ViewAsTree/ViewAsTree.ts'
 import * as ViewMode from '../src/parts/ViewMode/ViewMode.ts'
 
@@ -68,4 +69,18 @@ test('viewAsTree displays search results as a folder tree', async () => {
 
   const collapsed = await collapseAll(result)
   expect(collapsed.listItems.map((item) => item.text)).toEqual(['src'])
+
+  const list = await viewAsList(collapsed)
+  expect(list).toMatchObject({
+    collapsedPaths: [],
+    deltaY: 0,
+    finalDeltaY: 0,
+    maxLineY: 2,
+    minLineY: 0,
+    viewMode: ViewMode.List,
+  })
+  expect(list.listItems.map(({ depth, text }) => ({ depth, text }))).toEqual([
+    { depth: undefined, text: './src/nested/file.ts' },
+    { depth: undefined, text: 'needle' },
+  ])
 })
