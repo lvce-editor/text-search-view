@@ -2,8 +2,11 @@ import type { Test } from '@lvce-editor/test-with-playwright'
 
 export const name = 'search.view-as-tree'
 
-export const test: Test = async ({ expect, FileSystem, Locator, Search, SideBar, Workspace }) => {
+export const test: Test = async ({ expect, Extension, FileSystem, IconTheme, Locator, Search, SideBar, Workspace }) => {
   // arrange
+  const iconThemeUri = import.meta.resolve('../fixtures/search-icon-theme')
+  await Extension.addWebExtension(iconThemeUri)
+  await IconTheme.setIconTheme('search-test-icon-theme')
   const tmpDir = await FileSystem.getTmpDir()
   await FileSystem.mkdir(`${tmpDir}/src`)
   await FileSystem.mkdir(`${tmpDir}/src/nested`)
@@ -28,4 +31,21 @@ export const test: Test = async ({ expect, FileSystem, Locator, Search, SideBar,
   await expect(nestedFolder).toHaveAttribute('aria-level', '1')
   await expect(file).toHaveAttribute('aria-level', '2')
   await expect(match).toHaveAttribute('aria-level', '3')
+  const sourceFolderIcon = sourceFolder.locator('.FileIcon[src$="/folder.svg"]')
+  const nestedFolderIcon = nestedFolder.locator('.FileIcon[src$="/folder.svg"]')
+  const fileIcon = file.locator('.FileIcon[src$="/default.svg"]')
+  await expect(sourceFolderIcon).toHaveCount(1)
+  await expect(nestedFolderIcon).toHaveCount(1)
+  await expect(fileIcon).toHaveCount(1)
+
+  // act
+  await IconTheme.setIconTheme('search-test-icon-theme-alternate')
+
+  // assert
+  const alternateSourceFolderIcon = sourceFolder.locator('.FileIcon[src$="/folder-alternate.svg"]')
+  const alternateNestedFolderIcon = nestedFolder.locator('.FileIcon[src$="/folder-alternate.svg"]')
+  const alternateFileIcon = file.locator('.FileIcon[src$="/default-alternate.svg"]')
+  await expect(alternateSourceFolderIcon).toHaveCount(1)
+  await expect(alternateNestedFolderIcon).toHaveCount(1)
+  await expect(alternateFileIcon).toHaveCount(1)
 }

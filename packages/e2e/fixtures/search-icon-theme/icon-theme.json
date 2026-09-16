@@ -1,6 +1,7 @@
 {
   "iconDefinitions": {
     "_file": "/icons/default.svg",
+    "_folder": "/icons/folder.svg",
     "_css": "/icons/css.svg",
     "_javascript": "/icons/javascript.svg"
   },
