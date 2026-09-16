@@ -3,6 +3,9 @@ import { RendererWorker } from '@lvce-editor/rpc-registry'
 import { createDefaultState } from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
 import { openSearchEditor } from '../src/parts/OpenSearchEditor/OpenSearchEditor.ts'
 
+const RE_SEARCH_EDITOR_URI_42 = /^search-editor:\/\/42-[\da-f-]+\/Search$/
+const RE_SEARCH_EDITOR_URI_7 = /^search-editor:\/\/7-[\da-f-]+\/Search$/
+
 test('openSearchEditor - opens a search editor in the main area', async () => {
   using mockRpc = RendererWorker.registerMockRpc({
     'Main.openUri': () => undefined,
@@ -17,7 +20,7 @@ test('openSearchEditor - opens a search editor in the main area', async () => {
   expect(result).toBe(state)
   expect(mockRpc.invocations).toHaveLength(1)
   expect(mockRpc.invocations[0][0]).toBe('Main.openUri')
-  expect(mockRpc.invocations[0][1]).toEqual({ focus: true, uri: expect.stringMatching(/^search-editor:\/\/42-[\da-f-]+\/Search$/) })
+  expect(mockRpc.invocations[0][1]).toEqual({ focus: true, uri: expect.stringMatching(RE_SEARCH_EDITOR_URI_42) })
 })
 
 test('openSearchEditor - opens a new editor on every invocation', async () => {
@@ -35,8 +38,8 @@ test('openSearchEditor - opens a new editor on every invocation', async () => {
   const firstUri = mockRpc.invocations[0][1].uri
   const secondUri = mockRpc.invocations[1][1].uri
   expect(firstUri).not.toBe(secondUri)
-  expect(firstUri).toMatch(/^search-editor:\/\/7-[\da-f-]+\/Search$/)
-  expect(secondUri).toMatch(/^search-editor:\/\/7-[\da-f-]+\/Search$/)
+  expect(firstUri).toMatch(RE_SEARCH_EDITOR_URI_7)
+  expect(secondUri).toMatch(RE_SEARCH_EDITOR_URI_7)
 })
 
 test('openSearchEditor - forwards renderer errors', async () => {

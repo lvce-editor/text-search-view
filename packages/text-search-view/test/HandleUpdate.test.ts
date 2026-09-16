@@ -7,6 +7,8 @@ import { handleUpdate } from '../src/parts/HandleUpdate/HandleUpdate.ts'
 import * as SearchFlags from '../src/parts/SearchFlags/SearchFlags.ts'
 import * as SearchViewStates from '../src/parts/SearchViewStates/SearchViewStates.ts'
 
+const RE_INVALID_REGULAR_EXPRESSION = /Invalid regular expression/
+
 test('handleUpdate - empty search value returns cleared state', async () => {
   const state: SearchState = {
     ...CreateDefaultState.createDefaultState(),
@@ -159,7 +161,7 @@ test('handleUpdate - returns a validation error for an invalid regular expressio
 
   const result = await handleUpdate(state, {})
 
-  expect(result.searchInputErrorMessage).toMatch(/Invalid regular expression/)
+  expect(result.searchInputErrorMessage).toMatch(RE_INVALID_REGULAR_EXPRESSION)
 })
 
 test.skip('handleUpdate - uses search flags from state', async () => {
