@@ -1,3 +1,5 @@
+const RE_WINDOWS_PATH = /^[a-z]:[\\/]/i
+
 // Older renderers pass a filesystem path when creating or changing the workspace.
 export const normalizeWorkspaceUri = (workspaceUri: string): string => {
   if (!workspaceUri) {
@@ -10,7 +12,7 @@ export const normalizeWorkspaceUri = (workspaceUri: string): string => {
     url.pathname = path.slice(slashIndex).replaceAll('%', '%25')
     return url.href
   }
-  if (workspaceUri.startsWith('/') || /^[a-z]:[\\/]/i.test(workspaceUri)) {
+  if (workspaceUri.startsWith('/') || RE_WINDOWS_PATH.test(workspaceUri)) {
     const url = new URL('file:///')
     const path = workspaceUri.startsWith('/') ? workspaceUri : workspaceUri.replaceAll('\\', '/')
     url.pathname = path.replaceAll('%', '%25').replaceAll('\\', '%5C')
