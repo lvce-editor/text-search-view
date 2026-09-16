@@ -51,6 +51,7 @@ export const ToggleReplace = 'Toggle Replace'
 export const ToggleSearchDetails = 'Toggle Search Details'
 export const UseExcludeSettings = 'Use Exclude Settings'
 export const UseRegularExpression = 'Use Regular Expression'
+export const ViewAsList = 'View as List'
 export const ViewAsTree = 'View as Tree'
 export const TheResultSetOnlyContainsASubSetOfMatches =
   'The result set only contains a subset of all matches. Be more specific in your search to narrow down the results.'

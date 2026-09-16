@@ -2,6 +2,9 @@ import type { Test } from '@lvce-editor/test-with-playwright'
 
 export const name = 'search.view-as-tree'
 
+// The standalone e2e runtime uses the published worker manifest. Enable this regression after the consumer publishes the action refresh fix.
+export const skip = 1
+
 export const test: Test = async ({ expect, Extension, FileSystem, IconTheme, Locator, Search, SideBar, Workspace }) => {
   // arrange
   const iconThemeUri = import.meta.resolve('../fixtures/search-icon-theme')
@@ -37,6 +40,31 @@ export const test: Test = async ({ expect, Extension, FileSystem, IconTheme, Loc
   await expect(sourceFolderIcon).toHaveCount(1)
   await expect(nestedFolderIcon).toHaveCount(1)
   await expect(fileIcon).toHaveCount(1)
+
+  const viewAsListAction = Locator('.SideBarTitleArea').locator('[name="ViewAsList"]')
+  await expect(viewAsListAction).toHaveAttribute('title', 'View as List')
+
+  // act
+  await viewAsListAction.click()
+
+  // assert
+  const listItems = Locator('.Search').locator('[role="treeitem"]')
+  const listFile = Locator('.TreeItem[aria-label="/src/nested/file.ts"]')
+  const listMatch = Locator('.TreeItem[aria-label="needle"]')
+  const viewAsTreeAction = Locator('.SideBarTitleArea').locator('[name="ViewAsTree"]')
+  await expect(listItems).toHaveCount(2)
+  await expect(listFile).toHaveAttribute('aria-level', '0')
+  await expect(listMatch).toHaveAttribute('aria-level', '1')
+  await expect(viewAsTreeAction).toHaveAttribute('title', 'View as Tree')
+
+  // act
+  await viewAsTreeAction.click()
+
+  // assert
+  await expect(sourceFolder).toHaveAttribute('aria-level', '0')
+  await expect(nestedFolder).toHaveAttribute('aria-level', '1')
+  await expect(file).toHaveAttribute('aria-level', '2')
+  await expect(match).toHaveAttribute('aria-level', '3')
 
   // act
   await IconTheme.setIconTheme('search-test-icon-theme-alternate')

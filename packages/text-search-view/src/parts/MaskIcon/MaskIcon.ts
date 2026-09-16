@@ -1,5 +1,6 @@
 export const ClearAll = 'ClearAll'
 export const CollapseAll = 'CollapseAll'
 export const ListFlat = 'ListFlat'
+export const ListTree = 'ListTree'
 export const NewFile = 'NewFile'
 export const Refresh = 'Refresh'

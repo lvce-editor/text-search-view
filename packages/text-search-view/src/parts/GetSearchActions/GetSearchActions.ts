@@ -4,12 +4,31 @@ import * as ActionType from '../ActionType/ActionType.ts'
 import * as InputName from '../InputName/InputName.ts'
 import * as MaskIcon from '../MaskIcon/MaskIcon.ts'
 import * as SearchStrings from '../SearchStrings/SearchStrings.ts'
+import * as ViewMode from '../ViewMode/ViewMode.ts'
 
 export const getActions = (state: SearchState): readonly Action[] => {
-  const { items, replacement, value } = state
+  const { items, replacement, value, viewMode } = state
   const hasSearchPattern = value !== ''
   const hasSearchResults = items.length > 0
   const canClear = hasSearchResults || hasSearchPattern || replacement !== ''
+  const viewAction =
+    viewMode === ViewMode.Tree
+      ? {
+          command: '',
+          enabled: true,
+          icon: MaskIcon.ListTree,
+          id: InputName.ViewAsList,
+          label: SearchStrings.viewAsList(),
+          type: ActionType.Button,
+        }
+      : {
+          command: '',
+          enabled: true,
+          icon: MaskIcon.ListFlat,
+          id: InputName.ViewAsTree,
+          label: SearchStrings.viewAsTree(),
+          type: ActionType.Button,
+        }
   return [
     {
       command: 'refresh',
@@ -35,14 +54,7 @@ export const getActions = (state: SearchState): readonly Action[] => {
       label: SearchStrings.openNewSearchEditor(),
       type: ActionType.Button,
     },
-    {
-      command: '',
-      enabled: true,
-      icon: MaskIcon.ListFlat,
-      id: InputName.ViewAsTree,
-      label: SearchStrings.viewAsTree(),
-      type: ActionType.Button,
-    },
+    viewAction,
     {
       command: '',
       enabled: hasSearchResults,

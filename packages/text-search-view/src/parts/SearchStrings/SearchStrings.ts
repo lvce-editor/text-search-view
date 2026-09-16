@@ -219,6 +219,10 @@ export const viewAsTree = (): string => {
   return I18nString.i18nString(UiStrings.ViewAsTree)
 }
 
+export const viewAsList = (): string => {
+  return I18nString.i18nString(UiStrings.ViewAsList)
+}
+
 export const collapseAll = (): string => {
   return I18nString.i18nString(UiStrings.CollapseAll)
 }
