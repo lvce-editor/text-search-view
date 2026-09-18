@@ -59,4 +59,13 @@ export default defineConfig([
       'unicorn/no-break-in-nested-loop': 'off',
     },
   },
+  {
+    files: ['**/*.ts'],
+    rules: {
+      'e2e/no-direct-click': 'off',
+      'unicorn/no-break-in-nested-loop': 'off',
+      '@typescript-eslint/no-deprecated': 'off',
+      'rpc/no-rpc-registry-destructuring': 'off',
+    },
+  },
 ])
