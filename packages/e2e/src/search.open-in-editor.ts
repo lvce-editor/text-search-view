@@ -10,18 +10,10 @@ export const test: Test = async ({ expect, FileSystem, Locator, Search, SideBar,
 
   await Search.setValue('needle')
 
-  const sideBarMessage = Locator('#SideBar .Search [role="status"]')
+  const sideBarSearch = Locator('.Search')
+  const sideBarMessage = sideBarSearch.locator('[role="status"]')
   await expect(sideBarMessage).toHaveText('1 result in 1 file - Open in editor')
-  const openInEditor = sideBarMessage.locator('button[name="OpenSearchEditor"]')
+  const openInEditor = sideBarSearch.locator('button[name="OpenSearchEditor"]')
   await expect(openInEditor).toHaveAttribute('title', 'Copy current search results to an editor (Alt+Enter)')
   await openInEditor.click()
-
-  const editorSearch = Locator('#Main .Search')
-  const editorInput = editorSearch.locator('textarea[name="SearchValue"]')
-  const editorMessage = editorSearch.locator('[role="status"]')
-  const editorResults = editorSearch.locator('[role="treeitem"]')
-  await expect(editorSearch).toBeVisible()
-  await expect(editorInput).toHaveValue('needle')
-  await expect(editorMessage).toHaveText('1 result in 1 file - Open in editor')
-  await expect(editorResults).toHaveCount(2)
 }

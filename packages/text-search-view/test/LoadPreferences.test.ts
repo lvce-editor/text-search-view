@@ -20,6 +20,7 @@ test('loads preferences in parallel', async () => {
 
   const result = await loadPreferences([])
 
+  expect(mockRpc.invocations).toHaveLength(3)
   expect(result).toEqual({
     defaultExcludes: ['**/excluded'],
     showOpenInEditorLink: true,
