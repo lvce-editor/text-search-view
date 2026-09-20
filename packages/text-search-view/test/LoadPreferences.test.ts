@@ -22,10 +22,12 @@ test('loads preferences in parallel', async () => {
 
   expect(result).toEqual({
     defaultExcludes: ['**/excluded'],
+    showOpenInEditorLink: true,
     usePullBasedSearch: true,
   })
   expect(mockRpc.invocations).toEqual([
     ['Preferences.get', 'search.exclude'],
+    ['Preferences.get', 'Search.showOpenInEditorLink'],
     ['Preferences.get', 'Search.usePullBasedSearch'],
   ])
 })

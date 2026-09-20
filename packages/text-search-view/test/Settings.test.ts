@@ -13,7 +13,12 @@ const loadSettings = async (): Promise<readonly Setting[]> => {
 test('contains all text search settings', async () => {
   const settings = await loadSettings()
 
-  expect(settings.map((setting) => setting.id)).toEqual(['search.exclude', 'search.threads', 'Search.usePullBasedSearch'])
+  expect(settings.map((setting) => setting.id)).toEqual([
+    'search.exclude',
+    'search.threads',
+    'Search.usePullBasedSearch',
+    'Search.showOpenInEditorLink',
+  ])
 })
 
 test('search.exclude has an array default', async () => {

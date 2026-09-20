@@ -90,6 +90,7 @@ export const createDefaultState = (): SearchState => {
         start: 0,
       },
     },
+    showOpenInEditorLink: true,
     threads: 0,
     useChevrons: true,
     useFileIcons: true,

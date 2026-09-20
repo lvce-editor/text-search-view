@@ -64,6 +64,12 @@ test('getSearchVirtualDom returns correct virtual DOM structure', () => {
     matchCount,
     '',
     focus,
+    false,
+    false,
+    1,
+    false,
+    undefined,
+    false,
   )
 
   expect(result).toEqual([

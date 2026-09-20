@@ -73,6 +73,7 @@ test('loadContent loads enabled search exclude settings', async () => {
   expect(result.defaultExcludes).toEqual(['**/excluded'])
   expect(mockRpc.invocations).toEqual([
     ['Preferences.get', 'search.exclude'],
+    ['Preferences.get', 'Search.showOpenInEditorLink'],
     ['Preferences.get', 'Search.usePullBasedSearch'],
   ])
 })
