@@ -98,6 +98,7 @@ export const create = (
         start: 0,
       },
     },
+    showOpenInEditorLink: true,
     threads: 0,
     useChevrons: true,
     useFileIcons: true,

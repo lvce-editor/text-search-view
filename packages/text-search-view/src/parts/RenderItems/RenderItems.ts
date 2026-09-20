@@ -23,6 +23,7 @@ export const getDom = (newState: SearchState): readonly any[] => {
     newState.contextLines,
     newState.contextLinesEnabled,
     newState.workspaceUri,
+    newState.showOpenInEditorLink,
   )
   return dom
 }

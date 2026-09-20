@@ -24,5 +24,13 @@
     "id": "Search.usePullBasedSearch",
     "type": "boolean",
     "value": false
+  },
+  {
+    "category": "search",
+    "description": "Shows a link to open the current search results in an editor",
+    "heading": "Open Search Results in Editor",
+    "id": "Search.showOpenInEditorLink",
+    "type": "boolean",
+    "value": true
   }
 ]

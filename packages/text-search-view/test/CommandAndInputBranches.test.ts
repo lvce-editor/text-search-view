@@ -27,7 +27,7 @@ test('handleActionClick dispatches every action and preserves unknown actions', 
   expect(await handleActionClick(state, InputName.ViewAsList)).toBe(state)
   expect(await handleActionClick(state, 'Unknown')).toBe(state)
   expect(mockRpc.invocations).toEqual([
-    ['Main.openUri', { focus: true, uri: expect.any(String) }],
+    ['Main.openUri', expect.objectContaining({ focus: true, uri: expect.any(String), value: '' })],
     ['Preferences.get', 'search.exclude'],
   ])
 })
