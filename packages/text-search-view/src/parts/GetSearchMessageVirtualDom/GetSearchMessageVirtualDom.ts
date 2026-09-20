@@ -11,11 +11,17 @@ import { text } from '../VirtualDomHelpers/VirtualDomHelpers.ts'
 
 const searchMessageActionClassName = MergeClassNames.mergeClassNames(LocalClassNames.MessageAction, LocalClassNames.SearchWorkspaceMessageAction)
 
+const statusNode: VirtualDomNode = {
+  childCount: 1,
+  role: AriaRoles.Status,
+  type: VirtualDomElements.Span,
+}
+
 const getMessageChildren = (message: string, showOpenInEditorLink: boolean, actionNode: VirtualDomNode): readonly VirtualDomNode[] => {
   if (showOpenInEditorLink) {
-    return [text(message), text(' - '), actionNode, text(SearchStrings.openInEditor())]
+    return [statusNode, text(message), text(' - '), actionNode, text(SearchStrings.openInEditor())]
   }
-  return [text(message)]
+  return [statusNode, text(message)]
 }
 
 export const getSearchMessageVirtualDom = (message: string, indented: boolean, showOpenInEditorLink = false): readonly VirtualDomNode[] => {
@@ -31,7 +37,6 @@ export const getSearchMessageVirtualDom = (message: string, indented: boolean, s
   const messageNode: VirtualDomNode = {
     childCount: showOpenInEditorLink ? 3 : 1,
     className: getSearchMessageClassName(indented),
-    role: AriaRoles.Status,
     type: VirtualDomElements.Div,
   }
   return [messageNode, ...getMessageChildren(message, showOpenInEditorLink, actionNode)]

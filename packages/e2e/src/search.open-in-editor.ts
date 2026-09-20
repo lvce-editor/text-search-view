@@ -12,7 +12,7 @@ export const test: Test = async ({ expect, FileSystem, Locator, Search, SideBar,
 
   const sideBarSearch = Locator('.Search')
   const sideBarMessage = sideBarSearch.locator('[role="status"]')
-  await expect(sideBarMessage).toHaveText('1 result in 1 file - Open in editor')
+  await expect(sideBarMessage).toHaveText('1 result in 1 file')
   const openInEditor = sideBarSearch.locator('button[name="OpenSearchEditor"]')
   await expect(openInEditor).toHaveAttribute('title', 'Copy current search results to an editor (Alt+Enter)')
   await openInEditor.click()
