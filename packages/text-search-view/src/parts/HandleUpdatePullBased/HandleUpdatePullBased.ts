@@ -28,6 +28,7 @@ export const handleUpdatePullBased = async (state: SearchState, update: Partial<
     includeValue,
     limit,
     platform,
+    showOpenInEditorLink,
     threads,
     uid,
     usePullBasedSearch,
@@ -76,7 +77,7 @@ export const handleUpdatePullBased = async (state: SearchState, update: Partial<
   const { fileCount, resultCount } = getTextSearchResultCounts(latest.newState.items)
   const message = getStatusMessage(resultCount, fileCount)
   const [messageHeight, warningHeight] = await Promise.all([
-    GetSearchMessageHeight.getSearchMessageHeight(message, width, flags),
+    GetSearchMessageHeight.getSearchMessageHeight(message, width, flags, showOpenInEditorLink && resultCount > 0),
     GetSearchWarningMessageHeight.getSearchWarningMessageHeight(limitHitWarning, width),
   ])
   const current = get(uid)

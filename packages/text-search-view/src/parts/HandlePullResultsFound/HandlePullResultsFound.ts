@@ -23,7 +23,11 @@ export const handlePullResultsFound = async (
   const allResults = [...listItems, ...newResults]
   const { fileCount, resultCount } = GetTextSearchResultCounts.getTextSearchResultCounts(allResults)
   const message = SearchStatusMessage.getStatusMessage(resultCount, fileCount)
-  const { headerHeight, messageHeight } = await GetSearchMessageLayout.getSearchMessageLayout(current.newState, message)
+  const { headerHeight, messageHeight } = await GetSearchMessageLayout.getSearchMessageLayout(
+    current.newState,
+    message,
+    current.newState.showOpenInEditorLink && resultCount > 0,
+  )
   const total = allResults.length
   const contentHeight = total * itemHeight
   const listHeight = height - headerHeight

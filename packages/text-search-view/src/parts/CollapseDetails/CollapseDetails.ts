@@ -6,9 +6,9 @@ import * as InputSource from '../InputSource/InputSource.ts'
 import * as SearchFlags from '../SearchFlags/SearchFlags.ts'
 
 export const collapseDetails = async (state: SearchState): Promise<SearchState> => {
-  const { flags, headerHeight, message, messageHeight: oldMessageHeight, width } = state
+  const { flags, headerHeight, matchCount, message, messageHeight: oldMessageHeight, showOpenInEditorLink, width } = state
   const newFlags = flags & ~SearchFlags.DetailsExpanded
-  const messageHeight = await GetSearchMessageHeight.getSearchMessageHeight(message, width, newFlags)
+  const messageHeight = await GetSearchMessageHeight.getSearchMessageHeight(message, width, newFlags, showOpenInEditorLink && matchCount > 0)
   return {
     ...state,
     flags: newFlags,

@@ -105,3 +105,29 @@ test('handleResize - remeasures the message and updates the header height', asyn
     ],
   ])
 })
+
+test('handleResize - includes the open in editor link in the measured message', async () => {
+  using mockRpc = TextMeasurementWorker.registerMockRpc({
+    'TextMeasurement.measureTextBlockHeight': (message: string) => {
+      expect(message).toBe('645 results in 56 files - Open in editor')
+      return 26
+    },
+  })
+  const state: SearchState = {
+    ...CreateDefaultState.createDefaultState(),
+    headerHeight: 70,
+    matchCount: 645,
+    message: '645 results in 56 files',
+    messageHeight: 30,
+    showOpenInEditorLink: true,
+    width: 400,
+  }
+
+  const result = await handleResize(state, 0, 0, 170, 500)
+
+  expect(result.messageHeight).toBe(39)
+  expect(result.headerHeight).toBe(79)
+  expect(mockRpc.invocations).toEqual([
+    ['TextMeasurement.measureTextBlockHeight', '645 results in 56 files - Open in editor', 'system-ui', 13, 13, 118],
+  ])
+})
