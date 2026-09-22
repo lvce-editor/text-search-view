@@ -7,13 +7,17 @@ import * as ViewletSearchStatusMessage from '../SearchStatusMessage/SearchStatus
 import * as UpdateVisibleFileIcons from '../UpdateVisibleFileIcons/UpdateVisibleFileIcons.ts'
 
 export const removeIndex = async (state: SearchState, index: number): Promise<SearchState> => {
-  const { deltaY, fileCount, height, itemHeight, items, matchCount, maxLineY, minimumSliderSize, minLineY } = state
+  const { deltaY, fileCount, height, itemHeight, items, matchCount, maxLineY, minimumSliderSize, minLineY, showOpenInEditorLink } = state
   if (index === -1) {
     return state
   }
   const { newFileCount, newFocusedIndex, newItems, newMatchCount } = removeItemFromItems(items, index, matchCount, fileCount)
   const message = ViewletSearchStatusMessage.getStatusMessage(newMatchCount, newFileCount)
-  const { headerHeight, messageHeight } = await GetSearchMessageLayout.getSearchMessageLayout(state, message)
+  const { headerHeight, messageHeight } = await GetSearchMessageLayout.getSearchMessageLayout(
+    state,
+    message,
+    showOpenInEditorLink && newMatchCount > 0,
+  )
   const { newDeltaY, newMaxLineY, newMinLineY } = getNewMinMax(newItems.length, minLineY, maxLineY, deltaY, itemHeight)
   const total = newItems.length
   const contentHeight = total * itemHeight
