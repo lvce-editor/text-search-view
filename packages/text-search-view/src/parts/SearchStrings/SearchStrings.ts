@@ -207,6 +207,14 @@ export const openNewSearchEditor = (): string => {
   return I18nString.i18nString(UiStrings.OpenNewSearchEditor)
 }
 
+export const openInEditor = (): string => {
+  return I18nString.i18nString(UiStrings.OpenInEditor)
+}
+
+export const copyCurrentSearchResultsToEditor = (): string => {
+  return I18nString.i18nString(UiStrings.CopyCurrentSearchResultsToEditor)
+}
+
 export const contextLines = (): string => {
   return I18nString.i18nString(UiStrings.ContextLines)
 }

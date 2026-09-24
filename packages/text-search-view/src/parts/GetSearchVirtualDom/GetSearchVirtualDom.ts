@@ -29,6 +29,7 @@ export const getSearchVirtualDom = (
   contextLines: number = 1,
   contextLinesEnabled: boolean = false,
   workspaceUri?: string,
+  showOpenInEditorLink: boolean = true,
 ): readonly VirtualDomNode[] => {
   if (initial) {
     return []
@@ -53,6 +54,7 @@ export const getSearchVirtualDom = (
       isSearchEditor,
       contextLines,
       contextLinesEnabled,
+      showOpenInEditorLink,
     ),
     ...errorDom,
     ...noWorkspaceMessageDom,

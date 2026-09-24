@@ -56,6 +56,7 @@ const replaceAllInFocusedFile = async (state: SearchState, fileIndex: number): P
     minimumSliderSize,
     minLineY,
     replacement,
+    showOpenInEditorLink,
     workspaceUri,
   } = state
   const fileItems = getFileItems(state, fileIndex)
@@ -69,7 +70,11 @@ const replaceAllInFocusedFile = async (state: SearchState, fileIndex: number): P
 
   const { newFileCount, newFocusedIndex, newItems, newMatchCount } = removeItemFromItems(items, fileIndex, totalMatchCount, fileCount)
   const message = GetReplacedMessage.getReplacedMessage(1, matchCount, replacement)
-  const { headerHeight, messageHeight } = await GetSearchMessageLayout.getSearchMessageLayout(state, message)
+  const { headerHeight, messageHeight } = await GetSearchMessageLayout.getSearchMessageLayout(
+    state,
+    message,
+    showOpenInEditorLink && newMatchCount > 0,
+  )
   const { newDeltaY, newMaxLineY, newMinLineY } = getNewMinMax(newItems.length, minLineY, maxLineY, deltaY, itemHeight)
   const total = newItems.length
   const contentHeight = total * itemHeight

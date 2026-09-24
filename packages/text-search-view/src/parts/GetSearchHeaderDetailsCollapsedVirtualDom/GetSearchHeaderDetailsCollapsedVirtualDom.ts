@@ -10,10 +10,14 @@ const detailsNode: VirtualDomNode = {
   type: VirtualDomElements.Div,
 }
 
-export const getSearchHeaderDetailsCollapsedVirtualDom = (message: string): readonly VirtualDomNode[] => {
+export const getSearchHeaderDetailsCollapsedVirtualDom = (
+  message: string,
+  matchCount = 0,
+  showOpenInEditorLink = true,
+): readonly VirtualDomNode[] => {
   return [
     detailsNode,
-    ...GetSearchMessageVirtualDom.getSearchMessageVirtualDom(message, true),
+    ...GetSearchMessageVirtualDom.getSearchMessageVirtualDom(message, true, showOpenInEditorLink && matchCount > 0),
     ...GetSearchDetailsToggleVirtualDom.getSearchDetailsToggleVirtualDom(),
   ]
 }

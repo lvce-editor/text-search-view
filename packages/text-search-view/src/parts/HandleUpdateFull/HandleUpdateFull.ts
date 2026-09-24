@@ -29,6 +29,7 @@ export const handleUpdateFull = async (state: SearchState, update: Partial<Searc
     limit,
     minimumSliderSize,
     platform,
+    showOpenInEditorLink,
     threads,
     uid,
     usePullBasedSearch,
@@ -80,7 +81,7 @@ export const handleUpdateFull = async (state: SearchState, update: Partial<Searc
   const message = SearchStatusMessage.getStatusMessage(resultCount, fileCount)
   const limitHitWarning = limitHit ? SearchStrings.theResultSetOnlyContainsASubSetOfMatches() : ''
   const [messageHeight, warningHeight] = await Promise.all([
-    GetSearchMessageHeight.getSearchMessageHeight(message, width, flags),
+    GetSearchMessageHeight.getSearchMessageHeight(message, width, flags, showOpenInEditorLink && resultCount > 0),
     GetSearchWarningMessageHeight.getSearchWarningMessageHeight(limitHitWarning, width),
   ])
   const headerHeight = GetSearchHeaderHeight.getSearchHeaderHeight(flags, messageHeight, warningHeight)

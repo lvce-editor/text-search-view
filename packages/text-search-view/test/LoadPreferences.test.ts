@@ -20,12 +20,15 @@ test('loads preferences in parallel', async () => {
 
   const result = await loadPreferences([])
 
+  expect(mockRpc.invocations).toHaveLength(3)
   expect(result).toEqual({
     defaultExcludes: ['**/excluded'],
+    showOpenInEditorLink: true,
     usePullBasedSearch: true,
   })
   expect(mockRpc.invocations).toEqual([
     ['Preferences.get', 'search.exclude'],
+    ['Preferences.get', 'Search.showOpenInEditorLink'],
     ['Preferences.get', 'Search.usePullBasedSearch'],
   ])
 })

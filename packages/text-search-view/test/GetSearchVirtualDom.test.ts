@@ -64,6 +64,12 @@ test('getSearchVirtualDom returns correct virtual DOM structure', () => {
     matchCount,
     '',
     focus,
+    false,
+    false,
+    1,
+    false,
+    undefined,
+    false,
   )
 
   expect(result).toEqual([
@@ -191,8 +197,12 @@ test('getSearchVirtualDom returns correct virtual DOM structure', () => {
     {
       childCount: 1,
       className: 'ViewletSearchMessage ViewletSearchMessageIndented',
-      role: AriaRoles.Status,
       type: 4,
+    },
+    {
+      childCount: 1,
+      role: AriaRoles.Status,
+      type: 8,
     },
     {
       childCount: 0,

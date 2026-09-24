@@ -29,7 +29,12 @@ const headingNode: VirtualDomNode = {
   type: VirtualDomElements.H4,
 }
 
-export const getSearchHeaderDetailsExpandedVirtualDom = (flags: number, message: string): readonly VirtualDomNode[] => {
+export const getSearchHeaderDetailsExpandedVirtualDom = (
+  flags: number,
+  message: string,
+  matchCount = 0,
+  showOpenInEditorLink = true,
+): readonly VirtualDomNode[] => {
   const includeButtons = GetInputActionsInclude.getInputActionsInclude(flags)
   const excludeButtons = GetInputActionsExclude.getInputActionsExclude(flags)
   const includePlaceholder = SearchStrings.include()
@@ -56,6 +61,6 @@ export const getSearchHeaderDetailsExpandedVirtualDom = (flags: number, message:
       excludeButtons.inside,
       excludeButtons.outside,
     ),
-    ...GetSearchMessageVirtualDom.getSearchMessageVirtualDom(message, false),
+    ...GetSearchMessageVirtualDom.getSearchMessageVirtualDom(message, false, showOpenInEditorLink && matchCount > 0),
   ]
 }
