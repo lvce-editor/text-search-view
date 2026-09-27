@@ -27,6 +27,15 @@
   },
   {
     "category": "search",
+    "description": "Configures the maximum number of text search results.",
+    "heading": "Maximum Search Results",
+    "id": "textSearch.maxResults",
+    "minimum": 1,
+    "type": "number",
+    "value": 20000
+  },
+  {
+    "category": "search",
     "description": "Shows a link to open the current search results in an editor",
     "heading": "Open Search Results in Editor",
     "id": "Search.showOpenInEditorLink",

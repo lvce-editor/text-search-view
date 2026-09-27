@@ -10,7 +10,7 @@ export const loadContent = async (state: SearchState, savedState: unknown, conte
   const { defaultExcludes: currentDefaultExcludes, limitHitWarning, messageHeight, width } = state
   const restoreSource = savedState ?? context
   const { excludeValue, flags, includeValue, replacement, savedCollapsedPaths, savedValue, threads } = RestoreState.restoreState(restoreSource)
-  const { defaultExcludes, showOpenInEditorLink, usePullBasedSearch } = await loadPreferences(currentDefaultExcludes)
+  const { defaultExcludes, maxResults, showOpenInEditorLink, usePullBasedSearch } = await loadPreferences(currentDefaultExcludes)
   const warningHeight = await GetSearchWarningMessageHeight.getSearchWarningMessageHeight(limitHitWarning, width)
   const headerHeight = GetSearchHeaderHeight.getSearchHeaderHeight(flags, messageHeight, warningHeight)
 
@@ -22,6 +22,7 @@ export const loadContent = async (state: SearchState, savedState: unknown, conte
     focus: 0, // TODO
     headerHeight,
     includeValue,
+    limit: maxResults,
     inputSource: InputSource.Script,
     replacement,
     showOpenInEditorLink,

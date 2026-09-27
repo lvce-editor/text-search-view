@@ -13,6 +13,9 @@ test('loads preferences in parallel', async () => {
           '**/excluded': true,
         }
       }
+      if (key === 'textSearch.maxResults') {
+        return 15_000
+      }
       notifyPullBasedSearchRequested()
       return true
     },
@@ -20,14 +23,16 @@ test('loads preferences in parallel', async () => {
 
   const result = await loadPreferences([])
 
-  expect(mockRpc.invocations).toHaveLength(3)
+  expect(mockRpc.invocations).toHaveLength(4)
   expect(result).toEqual({
     defaultExcludes: ['**/excluded'],
+    maxResults: 15_000,
     showOpenInEditorLink: true,
     usePullBasedSearch: true,
   })
   expect(mockRpc.invocations).toEqual([
     ['Preferences.get', 'search.exclude'],
+    ['Preferences.get', 'textSearch.maxResults'],
     ['Preferences.get', 'Search.showOpenInEditorLink'],
     ['Preferences.get', 'Search.usePullBasedSearch'],
   ])
