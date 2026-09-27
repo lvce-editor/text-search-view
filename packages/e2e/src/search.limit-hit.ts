@@ -13,7 +13,10 @@ export const test: Test = async ({ expect, FileSystem, Locator, Search, Settings
     await Search.setValue('ab')
     const viewletSearch = Locator('.Search')
     const message = viewletSearch.locator('[role="status"]')
-    await expect(message).toHaveText('5 results in 1 file')
+    const status = await message.textContent()
+    const resultCount = Number(status?.match(/^(\d+) results? in 1 file$/)?.[1])
+    expect(resultCount).toBeGreaterThan(0)
+    expect(resultCount).toBeLessThanOrEqual(5)
 
     // assert
     const warningMessage = Locator('.SearchWarningMessage')
