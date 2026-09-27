@@ -17,8 +17,22 @@ test('contains all text search settings', async () => {
     'search.exclude',
     'search.threads',
     'Search.usePullBasedSearch',
+    'textSearch.maxResults',
     'Search.showOpenInEditorLink',
   ])
+})
+
+test('textSearch.maxResults defaults to 20,000', async () => {
+  const settings = await loadSettings()
+  const maxResults = settings.find((setting) => setting.id === 'textSearch.maxResults')
+
+  expect(maxResults).toEqual(
+    expect.objectContaining({
+      minimum: 1,
+      type: 'number',
+      value: 20_000,
+    }),
+  )
 })
 
 test('search.exclude has an array default', async () => {
