@@ -22,8 +22,8 @@ export const loadContent = async (state: SearchState, savedState: unknown, conte
     focus: 0, // TODO
     headerHeight,
     includeValue,
-    limit: maxResults,
     inputSource: InputSource.Script,
+    limit: maxResults,
     replacement,
     showOpenInEditorLink,
     threads,

@@ -1,5 +1,5 @@
-import { getSearchExcludes } from '../GetSearchExcludes/GetSearchExcludes.ts'
 import { getMaxResults } from '../GetMaxResults/GetMaxResults.ts'
+import { getSearchExcludes } from '../GetSearchExcludes/GetSearchExcludes.ts'
 import { getShowOpenInEditorLink } from '../GetShowOpenInEditorLink/GetShowOpenInEditorLink.ts'
 import { getUsePullBasedSearch } from '../GetUsePullBasedSearch/GetUsePullBasedSearch.ts'
 
