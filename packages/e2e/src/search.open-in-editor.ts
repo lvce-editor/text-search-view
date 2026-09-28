@@ -4,9 +4,11 @@ export const name = 'search.open-in-editor'
 
 export const test: Test = async ({ expect, FileSystem, Locator, Search, SideBar, Workspace }) => {
   const tmpDir = await FileSystem.getTmpDir()
-  await FileSystem.writeFile(`${tmpDir}/test-a.txt`, 'needle')
-  await FileSystem.writeFile(`${tmpDir}/test-b.txt`, 'needle')
-  await FileSystem.writeFile(`${tmpDir}/test-c.txt`, 'needle')
+  await FileSystem.setFiles([
+    { content: 'needle', uri: `${tmpDir}/test-a.txt` },
+    { content: 'needle', uri: `${tmpDir}/test-b.txt` },
+    { content: 'needle', uri: `${tmpDir}/test-c.txt` },
+  ])
   await Workspace.setPath(tmpDir)
   await SideBar.open('Search')
 
@@ -16,6 +18,7 @@ export const test: Test = async ({ expect, FileSystem, Locator, Search, SideBar,
   const sideBarTreeItems = sideBarSearch.locator('[role="treeitem"]')
   const sideBarMessage = sideBarSearch.locator('[role="status"]')
   await expect(sideBarMessage).toHaveText('3 results in 3 files')
+  await expect(sideBarTreeItems).toHaveCount(6)
   const openInEditor = Locator('.SideBarTitleArea').locator('button[name="OpenSearchEditor"]')
   await expect(openInEditor).toBeVisible()
   await openInEditor.first().click()
