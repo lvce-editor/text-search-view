@@ -29,13 +29,13 @@ export default defineConfig([
     },
   },
   {
-    files: ['packages/text-search-view/test/CopyAll.test.ts', 'packages/e2e/**/*.ts'],
+    files: ['packages/text-search-view/test/CopyAll.test.ts', 'packages/{e2e,e2e-integration}/**/*.ts'],
     rules: {
       '@cspell/spellchecker': 'off',
     },
   },
   {
-    files: ['packages/text-search-view/test/GetProtocol.test.ts', 'packages/e2e/src/search.regex-optional-protocol.ts'],
+    files: ['packages/text-search-view/test/GetProtocol.test.ts', 'packages/{e2e,e2e-integration}/src/search.regex-optional-protocol.ts'],
     rules: {
       'unicorn/prefer-https': 'off',
     },
@@ -67,5 +67,34 @@ export default defineConfig([
       '@typescript-eslint/no-deprecated': 'off',
       'rpc/no-rpc-registry-destructuring': 'off',
     },
+  },
+  {
+    // The pinned application supplies its own Node runtime.
+    files: ['.github/workflows/integration.yml'],
+    rules: { 'github-actions/node-version-file': 'off', 'github-actions/on': 'off' },
+  },
+  {
+    // Preserve real DOM input events covered by the migrated application scenarios.
+    files: [
+      'packages/e2e-integration/src/viewlet.search-view-mode.ts',
+      'packages/e2e-integration/src/viewlet.search-result-cursor-visible.ts',
+      'packages/e2e-integration/src/viewlet.search-input-icon-color.ts',
+      'packages/e2e-integration/src/viewlet.search-editor-restore-previous-editor.ts',
+      'packages/e2e-integration/src/viewlet.search-editor-replace-all-accessibility.ts',
+      'packages/e2e-integration/src/viewlet.search-editor-preserve-tab-state.ts',
+      'packages/e2e-integration/src/viewlet.search-editor-open.ts',
+      'packages/e2e-integration/src/viewlet.search-editor-new-each-time.ts',
+      'packages/e2e-integration/src/viewlet.search-editor-keyboard-navigation.ts',
+      'packages/e2e-integration/src/viewlet.search-editor-independent-input.ts',
+      'packages/e2e-integration/src/viewlet.search-editor-context-lines.ts',
+      'packages/e2e-integration/src/viewlet.search-editor-close.ts',
+      'packages/e2e-integration/src/viewlet.search-editor-accessibility.ts',
+    ],
+    rules: { '@typescript-eslint/no-deprecated': 'off' },
+  },
+  {
+    // The application runner supplies mutable API objects to these scenarios.
+    files: ['packages/e2e-integration/src/**/*.ts'],
+    rules: { '@typescript-eslint/prefer-readonly-parameter-types': 'off' },
   },
 ])
