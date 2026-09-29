@@ -3,6 +3,7 @@ import { RendererWorker } from '@lvce-editor/rpc-registry'
 import type { SearchResult } from '../SearchResult/SearchResult.ts'
 import type { SearchState } from '../SearchState/SearchState.ts'
 import * as ApplyBulkReplacement from '../ApplyBulkReplacement/ApplyBulkReplacement.ts'
+import * as CreateListItems from '../CreateListItems/CreateListItems.ts'
 import { getNewMinMax } from '../GetNewMinMax/GetNewMinMax.ts'
 import * as GetReplacedMessage from '../GetReplacedMessage/GetReplacedMessage.ts'
 import * as GetReplaceElements from '../GetReplaceElements/GetReplaceElements.ts'
@@ -89,7 +90,7 @@ const replaceAllInFocusedFile = async (state: SearchState, fileIndex: number): P
     headerHeight,
     items: newItems,
     listFocusedIndex: newFocusedIndex,
-    listItems: newItems,
+    listItems: CreateListItems.createListItems(newItems),
     matchCount: newMatchCount,
     maxLineY: newMaxLineY,
     message,

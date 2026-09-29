@@ -21,6 +21,43 @@ test('getTreeListItems transforms flat results into tree structure', () => {
     { depth: 2, end: 0, lineNumber: 2, start: 0, text: 'src/folder/file2.ts', type: TextSearchResultType.File },
     { depth: 3, end: 6, lineNumber: 3, start: 0, text: 'match2', type: TextSearchResultType.Match },
   ])
+  expect(treeResults.map(Object.keys)).toEqual([
+    ['depth', 'end', 'endColumnIndex', 'isDirectory', 'lineNumber', 'rowIndex', 'start', 'startColumnIndex', 'text', 'type'],
+    ['depth', 'end', 'endColumnIndex', 'isDirectory', 'lineNumber', 'rowIndex', 'start', 'startColumnIndex', 'text', 'type'],
+    ['depth', 'end', 'endColumnIndex', 'isDirectory', 'lineNumber', 'rowIndex', 'start', 'startColumnIndex', 'text', 'type'],
+    ['depth', 'end', 'endColumnIndex', 'isDirectory', 'lineNumber', 'rowIndex', 'start', 'startColumnIndex', 'text', 'type'],
+    ['depth', 'end', 'endColumnIndex', 'isDirectory', 'lineNumber', 'rowIndex', 'start', 'startColumnIndex', 'text', 'type'],
+    ['depth', 'end', 'endColumnIndex', 'isDirectory', 'lineNumber', 'rowIndex', 'start', 'startColumnIndex', 'text', 'type'],
+  ])
+})
+
+test('getTreeListItems preserves provided zero coordinates and defaults absent coordinates consistently', () => {
+  const results = [
+    { end: 0, lineNumber: 0, start: 0, text: 'src/file.ts', type: TextSearchResultType.File },
+    {
+      end: 0,
+      endColumnIndex: 0,
+      lineNumber: 0,
+      rowIndex: 0,
+      start: 0,
+      startColumnIndex: 0,
+      text: 'match',
+      type: TextSearchResultType.Match,
+    },
+  ]
+
+  const treeResults = getTreeListItems(results)
+
+  expect(treeResults.map(Object.keys)).toEqual([
+    ['depth', 'end', 'endColumnIndex', 'isDirectory', 'lineNumber', 'rowIndex', 'start', 'startColumnIndex', 'text', 'type'],
+    ['depth', 'end', 'endColumnIndex', 'isDirectory', 'lineNumber', 'rowIndex', 'start', 'startColumnIndex', 'text', 'type'],
+    ['depth', 'end', 'endColumnIndex', 'isDirectory', 'lineNumber', 'rowIndex', 'start', 'startColumnIndex', 'text', 'type'],
+  ])
+  expect(treeResults[0]).toMatchObject({ end: 0, isDirectory: true, lineNumber: 0, start: 0 })
+  expect(treeResults[1]).toMatchObject({ end: 0, lineNumber: 0, start: 0 })
+  expect(treeResults[2]).toMatchObject({ endColumnIndex: 0, rowIndex: 0, startColumnIndex: 0 })
+  expect(treeResults[0].endColumnIndex).toBeUndefined()
+  expect(treeResults[2].depth).toBe(2)
 })
 
 test('getTreeListItems handles empty results', () => {

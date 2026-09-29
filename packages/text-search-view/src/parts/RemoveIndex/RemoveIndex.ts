@@ -1,4 +1,5 @@
 import type { SearchState } from '../SearchState/SearchState.ts'
+import * as CreateListItems from '../CreateListItems/CreateListItems.ts'
 import { getNewMinMax } from '../GetNewMinMax/GetNewMinMax.ts'
 import * as GetSearchMessageLayout from '../GetSearchMessageLayout/GetSearchMessageLayout.ts'
 import { removeItemFromItems } from '../RemoveItemFromItems/RemoveItemFromItems.ts'
@@ -32,7 +33,7 @@ export const removeIndex = async (state: SearchState, index: number): Promise<Se
     headerHeight,
     items: newItems,
     listFocusedIndex: newFocusedIndex,
-    listItems: newItems,
+    listItems: CreateListItems.createListItems(newItems),
     matchCount: newMatchCount,
     maxLineY: newMaxLineY,
     message,
