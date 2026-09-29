@@ -66,6 +66,12 @@ test('handleUpdateFull - sets limitHit to true when search hits limit', async ()
     searchInputErrorMessage: '',
     value: 'test',
   })
+  expect(result.listItems.map(Object.keys)).toEqual([
+    ['depth', 'end', 'endColumnIndex', 'isDirectory', 'lineNumber', 'rowIndex', 'start', 'startColumnIndex', 'text', 'type'],
+    ['depth', 'end', 'endColumnIndex', 'isDirectory', 'lineNumber', 'rowIndex', 'start', 'startColumnIndex', 'text', 'type'],
+  ])
+  expect(result.listItems[0].endColumnIndex).toBeUndefined()
+  expect(result.listItems[1].rowIndex).toBeUndefined()
   expect(mockRpc.invocations).toEqual([['IconTheme.getIcons', [{ name: 'file1.txt', type: 1 }]]])
   expect(mockRendererWorker.invocations).toEqual([['MeasureTextHeight.measureTextBlockHeight', expect.any(String), 'system-ui', 12, '18px', 1]])
 })

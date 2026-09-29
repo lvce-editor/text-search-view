@@ -1,4 +1,5 @@
 import type { SearchState } from '../SearchState/SearchState.ts'
+import * as CreateListItems from '../CreateListItems/CreateListItems.ts'
 import * as GetFileIcons from '../GetFileIcons/GetFileIcons.ts'
 import * as GetNumberOfVisibleItems from '../GetNumberOfVisibleItems/GetNumberOfVisibleItems.ts'
 import * as GetProtocol from '../GetProtocol/GetProtocol.ts'
@@ -93,6 +94,7 @@ export const handleUpdateFull = async (state: SearchState, update: Partial<Searc
   const maxLineY = Math.min(numberOfVisible, total)
   const finalDeltaY = Math.max(contentHeight - listHeight, 0)
   const visible = results.slice(0, maxLineY)
+  const listItems = CreateListItems.createListItems(results)
   const { icons, newFileIconCache } = await GetFileIcons.getFileIcons(visible, fileIconCache)
   const latest = SearchViewStates.get(uid)
   if (latest.newState.searchId !== searchId) {
@@ -110,7 +112,7 @@ export const handleUpdateFull = async (state: SearchState, update: Partial<Searc
     items: results,
     limitHit,
     limitHitWarning,
-    listItems: results,
+    listItems,
     loaded: true,
     matchCount: resultCount,
     maxLineY: maxLineY,

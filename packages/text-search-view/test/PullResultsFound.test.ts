@@ -136,5 +136,11 @@ test('handlePullResultsFound - merges results received from the text search work
     maxLineY: 2,
     message: '1 result in 1 file',
   })
+  expect(newState.listItems.map(Object.keys)).toEqual([
+    ['depth', 'end', 'endColumnIndex', 'isDirectory', 'lineNumber', 'rowIndex', 'start', 'startColumnIndex', 'text', 'type'],
+    ['depth', 'end', 'endColumnIndex', 'isDirectory', 'lineNumber', 'rowIndex', 'start', 'startColumnIndex', 'text', 'type'],
+  ])
+  expect(newState.listItems[0].rowIndex).toBeUndefined()
+  expect(newState.listItems[1].endColumnIndex).toBeUndefined()
   expect(mockRendererWorker.invocations).toEqual([['Viewlet.requestRender', state.uid]])
 })

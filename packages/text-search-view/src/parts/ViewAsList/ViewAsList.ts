@@ -1,4 +1,5 @@
 import type { SearchState } from '../SearchState/SearchState.ts'
+import * as CreateListItems from '../CreateListItems/CreateListItems.ts'
 import * as GetNumberOfVisibleItems from '../GetNumberOfVisibleItems/GetNumberOfVisibleItems.ts'
 import * as ScrollBarFunctions from '../ScrollBarFunctions/ScrollBarFunctions.ts'
 import * as UpdateVisibleFileIcons from '../UpdateVisibleFileIcons/UpdateVisibleFileIcons.ts'
@@ -21,7 +22,7 @@ export const viewAsList = async (state: SearchState): Promise<SearchState> => {
     collapsedPaths: [],
     deltaY: 0,
     finalDeltaY,
-    listItems: items,
+    listItems: CreateListItems.createListItems(items),
     maxLineY,
     minLineY: 0,
     scrollBarHeight,

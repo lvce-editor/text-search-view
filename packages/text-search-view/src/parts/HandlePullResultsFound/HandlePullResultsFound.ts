@@ -1,6 +1,7 @@
 import { RendererWorker } from '@lvce-editor/rpc-registry'
 import type { SearchResult } from '../SearchResult/SearchResult.ts'
 import type { SearchState } from '../SearchState/SearchState.ts'
+import * as CreateListItems from '../CreateListItems/CreateListItems.ts'
 import * as GetFileIcons from '../GetFileIcons/GetFileIcons.ts'
 import * as GetNumberOfVisibleItems from '../GetNumberOfVisibleItems/GetNumberOfVisibleItems.ts'
 import * as GetSearchMessageLayout from '../GetSearchMessageLayout/GetSearchMessageLayout.ts'
@@ -20,7 +21,7 @@ export const handlePullResultsFound = async (
     return state
   }
   const { fileIconCache, height, itemHeight, listItems, minimumSliderSize } = current.newState
-  const allResults = [...listItems, ...newResults]
+  const allResults = [...listItems, ...CreateListItems.createListItems(newResults)]
   const { fileCount, resultCount } = GetTextSearchResultCounts.getTextSearchResultCounts(allResults)
   const message = SearchStatusMessage.getStatusMessage(resultCount, fileCount)
   const { headerHeight, messageHeight } = await GetSearchMessageLayout.getSearchMessageLayout(
