@@ -14,12 +14,12 @@ const renderDirect = async (uid: number, commands: readonly any[]): Promise<read
   return [...rendererWorkerCommands, ['Viewlet.commitPending', uid, transactionId]]
 }
 
-export const render2 = (uid: number, _diffResult: readonly number[]): readonly any[] | Promise<readonly any[]> => {
+export const render2 = (uid: number, diffResult: readonly number[]): readonly any[] | Promise<readonly any[]> => {
   const { newState, oldState } = SearchViewStates.get(uid)
   // Commands can change state after diff2 returns and before this render request arrives.
-  const diffResult = Diff.diff(oldState, newState)
+  const currentDiff = [...new Set([...Diff.diff(oldState, newState), ...diffResult])]
   SearchViewStates.set(uid, newState, newState)
-  const commands = ApplyRender.applyRender(oldState, newState, diffResult)
+  const commands = ApplyRender.applyRender(oldState, newState, currentDiff)
   if (!RendererProcess.isConnected()) {
     return commands
   }

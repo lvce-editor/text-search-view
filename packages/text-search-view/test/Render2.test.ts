@@ -13,7 +13,7 @@ import * as SearchViewStates from '../src/parts/SearchViewStates/SearchViewState
 // Setup a state in SearchViewStates
 const uid = 123
 const oldState = { ...CreateDefaultState.createDefaultState(), height: 100, uid, width: 100 }
-const newState = { ...oldState, inputSource: InputSource.Script, value: 'new value' }
+const newState = { ...oldState, value: 'new value' }
 SearchViewStates.set(uid, oldState, newState)
 
 test('render2 returns correct commands for RenderValue diff', () => {
@@ -27,7 +27,7 @@ test('render2 queues renderer commands and returns a lightweight commit marker',
   RendererProcess.set(createMockRpc({ commandMap: { 'Viewlet.queueCommands': queueCommands } }))
   const directUid = 456
   const oldState = { ...CreateDefaultState.createDefaultState(), uid: directUid }
-  const newState = { ...oldState, inputSource: InputSource.Script, value: 'direct value' }
+  const newState = { ...oldState, value: 'direct value' }
   SearchViewStates.set(directUid, oldState, newState)
 
   const result = await Render2.render2(directUid, [DiffType.RenderValue])
