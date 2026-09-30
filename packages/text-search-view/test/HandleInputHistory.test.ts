@@ -1,7 +1,7 @@
 import { expect, test } from '@jest/globals'
 import * as CreateDefaultState from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
-import * as InputSource from '../src/parts/InputSource/InputSource.ts'
 import { handleInput } from '../src/parts/HandleInput/HandleInput.ts'
+import * as InputSource from '../src/parts/InputSource/InputSource.ts'
 
 test('handleInput resets history navigation when the user edits the query', async () => {
   const state = {
