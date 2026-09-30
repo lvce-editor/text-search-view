@@ -35,7 +35,7 @@ export const test: Test = async ({ expect, FileSystem, KeyBoard, Locator, Main, 
   const betaFile = Locator('.Main .Search .TreeItem[aria-label$="beta.txt"]')
   await waitFor(() => expect(alphaFile).toBeVisible())
   await KeyBoard.press('Enter')
-  await input.press('Control+A')
+  await KeyBoard.press('Control+A')
   await input.type('beta')
   await waitFor(() => expect(results).toHaveCount(2))
   await waitFor(() => expect(betaFile).toBeVisible())
@@ -62,7 +62,7 @@ export const test: Test = async ({ expect, FileSystem, KeyBoard, Locator, Main, 
 
   await KeyBoard.press('ArrowUp')
   await waitFor(() => expect(input).toHaveValue('beta'))
-  await input.press('Control+A')
+  await KeyBoard.press('Control+A')
   await input.type('edited')
   await waitFor(() => expect(results).toHaveCount(0))
   await KeyBoard.press('Enter')
