@@ -4,146 +4,42 @@ import * as CreateDefaultState from '../src/parts/CreateDefaultState/CreateDefau
 import * as InputSource from '../src/parts/InputSource/InputSource.ts'
 import { nextHistoryResult } from '../src/parts/NextHistoryResult/NextHistoryResult.ts'
 
-test('nextHistoryResult - returns state unchanged when newValue equals current value', async () => {
-  const state: SearchState = {
-    ...CreateDefaultState.createDefaultState(),
-    history: ['test1', 'test2', 'test3'],
-    historyIndex: 0,
-    value: 'test1',
-  }
-
-  const result = await nextHistoryResult(state)
-
-  expect(result).toBe(state)
+const createState = (history: readonly string[], historyIndex: number, value: string): SearchState => ({
+  ...CreateDefaultState.createDefaultState(),
+  history,
+  historyIndex,
+  value,
 })
 
-test('nextHistoryResult - with empty history and empty value returns state unchanged', async () => {
-  const state: SearchState = {
-    ...CreateDefaultState.createDefaultState(),
-    history: [],
-    historyIndex: 0,
-    value: '',
-  }
-
-  const result = await nextHistoryResult(state)
-
-  expect(result).toBe(state)
+test('nextHistoryResult does nothing while the current input is not browsing history', async () => {
+  const state = createState(['first', 'second'], -1, 'draft')
+  expect(await nextHistoryResult(state)).toBe(state)
 })
 
-test('nextHistoryResult - with historyIndex -1 and empty value returns state unchanged', async () => {
-  const state: SearchState = {
-    ...CreateDefaultState.createDefaultState(),
-    history: ['test1', 'test2', 'test3'],
-    historyIndex: -1,
-    value: '',
-  }
-
-  const result = await nextHistoryResult(state)
-
-  expect(result).toBe(state)
+test('nextHistoryResult does nothing with empty history', async () => {
+  const state = createState([], -1, 'draft')
+  expect(await nextHistoryResult(state)).toBe(state)
 })
 
-test('nextHistoryResult - calls handleUpdate when newValue differs from current value', async () => {
-  const state: SearchState = {
-    ...CreateDefaultState.createDefaultState(),
-    history: ['test1', 'test2', 'test3'],
-    historyIndex: 0,
-    value: 'current',
-  }
-
-  const result = await nextHistoryResult(state)
-
-  expect(result).toMatchObject({
+test('nextHistoryResult moves toward newer history entries', async () => {
+  const state = createState(['first', 'second'], 0, 'first')
+  expect(await nextHistoryResult(state)).toMatchObject({
     historyIndex: 1,
     inputSource: InputSource.Script,
-    value: 'test1',
+    value: 'second',
   })
 })
 
-test('nextHistoryResult - with empty history calls handleUpdate with empty value', async () => {
-  const state: SearchState = {
-    ...CreateDefaultState.createDefaultState(),
-    history: [],
-    historyIndex: 0,
-    value: 'current',
-  }
-
-  const result = await nextHistoryResult(state)
-
-  expect(result).toMatchObject({
+test('nextHistoryResult returns to an empty input after the newest entry', async () => {
+  const state = createState(['first', 'second'], 1, 'second')
+  expect(await nextHistoryResult(state)).toMatchObject({
     historyIndex: -1,
     inputSource: InputSource.Script,
-    loaded: true,
     value: '',
   })
 })
 
-test('nextHistoryResult - with historyIndex -1 calls handleUpdate with empty value', async () => {
-  const state: SearchState = {
-    ...CreateDefaultState.createDefaultState(),
-    history: ['test1', 'test2', 'test3'],
-    historyIndex: -1,
-    value: 'current',
-  }
-
-  const result = await nextHistoryResult(state)
-
-  expect(result).toMatchObject({
-    historyIndex: -1,
-    inputSource: InputSource.Script,
-    loaded: true,
-    value: '',
-  })
-})
-
-test('nextHistoryResult - with historyIndex at end of history', async () => {
-  const state: SearchState = {
-    ...CreateDefaultState.createDefaultState(),
-    history: ['test1', 'test2'],
-    historyIndex: 1,
-    value: 'current',
-  }
-
-  const result = await nextHistoryResult(state)
-
-  expect(result).toMatchObject({
-    historyIndex: 2,
-    inputSource: InputSource.Script,
-    value: 'test2',
-  })
-})
-
-test('nextHistoryResult - with historyIndex beyond history length calls handleUpdate with empty value', async () => {
-  const state: SearchState = {
-    ...CreateDefaultState.createDefaultState(),
-    history: ['test1', 'test2'],
-    historyIndex: 5,
-    value: 'current',
-  }
-
-  const result = await nextHistoryResult(state)
-
-  expect(result).toMatchObject({
-    historyIndex: 6,
-    inputSource: InputSource.Script,
-    loaded: true,
-    value: '',
-  })
-})
-
-test('nextHistoryResult - updates historyIndex correctly', async () => {
-  const state: SearchState = {
-    ...CreateDefaultState.createDefaultState(),
-    history: ['test1', 'test2', 'test3'],
-    historyIndex: 1,
-    value: 'different',
-  }
-
-  const result = await nextHistoryResult(state)
-
-  expect(result).toMatchObject({
-    historyIndex: 2,
-    inputSource: InputSource.Script,
-    value: 'test2',
-  })
+test('nextHistoryResult stays at the blank input when already at the newest boundary', async () => {
+  const state = createState(['first', 'second'], -1, '')
+  expect(await nextHistoryResult(state)).toBe(state)
 })

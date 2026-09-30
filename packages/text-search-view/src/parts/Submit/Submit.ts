@@ -8,6 +8,7 @@ export const submit = (state: SearchState): Promise<SearchState> => {
   const newHistory = GetNewHistory.getNewHistory(history, value)
   return ViewletSearchHandleUpdate.handleUpdate(state, {
     history: newHistory,
+    historyIndex: -1,
     inputSource: InputSource.User,
     value,
   })

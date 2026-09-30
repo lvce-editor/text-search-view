@@ -3,5 +3,6 @@ import * as HandleUpdate from '../HandleUpdate/HandleUpdate.ts'
 import * as InputSource from '../InputSource/InputSource.ts'
 
 export const handleInput = (state: SearchState, value: string, inputSource = InputSource.Script): Promise<SearchState> => {
-  return HandleUpdate.handleUpdate(state, { inputSource, value })
+  const historyIndex = inputSource === InputSource.User ? -1 : state.historyIndex
+  return HandleUpdate.handleUpdate(state, { historyIndex, inputSource, value })
 }
