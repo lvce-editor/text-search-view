@@ -26,6 +26,12 @@ export const test: Test = async ({ expect, FileSystem, KeyBoard, Locator, Main, 
 
   const input = Locator('.Main textarea[name="SearchValue"]')
   const results = Locator('.Main .Search .TreeItem')
+  const clearInput = async (count: number): Promise<void> => {
+    await input.click()
+    for (let index = 0; index < count; index++) {
+      await KeyBoard.press('Backspace')
+    }
+  }
   await waitFor(() => expect(input).toBeVisible())
   await input.click()
 
@@ -35,7 +41,7 @@ export const test: Test = async ({ expect, FileSystem, KeyBoard, Locator, Main, 
   const betaFile = Locator('.Main .Search .TreeItem[aria-label$="beta.txt"]')
   await waitFor(() => expect(alphaFile).toBeVisible())
   await KeyBoard.press('Enter')
-  await KeyBoard.press('Control+A')
+  await clearInput(5)
   await input.type('beta')
   await waitFor(() => expect(results).toHaveCount(2))
   await waitFor(() => expect(betaFile).toBeVisible())
@@ -62,7 +68,7 @@ export const test: Test = async ({ expect, FileSystem, KeyBoard, Locator, Main, 
 
   await KeyBoard.press('ArrowUp')
   await waitFor(() => expect(input).toHaveValue('beta'))
-  await KeyBoard.press('Control+A')
+  await clearInput(4)
   await input.type('edited')
   await waitFor(() => expect(results).toHaveCount(0))
   await KeyBoard.press('Enter')
