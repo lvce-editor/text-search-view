@@ -1,9 +1,20 @@
-import { test } from '@jest/globals'
+import { expect, test } from '@jest/globals'
+import * as CreateDefaultState from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
+import { submit } from '../src/parts/Submit/Submit.ts'
 
-test.skip('submit calls handleUpdate with updated history', async () => {
-  // Skipped due to readonly property issues
-})
+test('submit appends the query to history and resets history navigation', async () => {
+  const state = {
+    ...CreateDefaultState.createDefaultState(),
+    history: ['first'],
+    historyIndex: 0,
+    value: 'second',
+  }
 
-test.skip('submit with different value', async () => {
-  // Skipped due to readonly property issues
+  const result = await submit(state)
+
+  expect(result).toMatchObject({
+    history: ['first', 'second'],
+    historyIndex: -1,
+    value: 'second',
+  })
 })
