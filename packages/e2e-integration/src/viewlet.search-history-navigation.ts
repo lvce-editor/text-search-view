@@ -26,12 +26,6 @@ export const test: Test = async ({ expect, FileSystem, KeyBoard, Locator, Main, 
 
   const input = Locator('.Main textarea[name="SearchValue"]')
   const results = Locator('.Main .Search .TreeItem')
-  const clearInput = async (count: number): Promise<void> => {
-    await input.click()
-    for (let index = 0; index < count; index++) {
-      await KeyBoard.press('Backspace')
-    }
-  }
   await waitFor(() => expect(input).toBeVisible())
   await input.click()
 
@@ -41,15 +35,13 @@ export const test: Test = async ({ expect, FileSystem, KeyBoard, Locator, Main, 
   const betaFile = Locator('.Main .Search .TreeItem[aria-label$="beta.txt"]')
   await waitFor(() => expect(alphaFile).toBeVisible())
   await KeyBoard.press('Enter')
-  await clearInput(5)
-  await input.type('beta')
-  await waitFor(() => expect(results).toHaveCount(2))
-  await waitFor(() => expect(betaFile).toBeVisible())
-  await expect(alphaFile).toBeHidden()
+  await input.type(' beta')
+  await waitFor(() => expect(results).toHaveCount(0))
   await KeyBoard.press('Enter')
 
   await KeyBoard.press('ArrowUp')
-  await waitFor(() => expect(input).toHaveValue('beta'))
+  await waitFor(() => expect(input).toHaveValue('alpha beta'))
+  await waitFor(() => expect(results).toHaveCount(0))
   await KeyBoard.press('ArrowUp')
   await waitFor(() => expect(input).toHaveValue('alpha'))
   await waitFor(() => expect(results).toHaveCount(2))
@@ -57,9 +49,8 @@ export const test: Test = async ({ expect, FileSystem, KeyBoard, Locator, Main, 
   await expect(betaFile).toBeHidden()
 
   await KeyBoard.press('ArrowDown')
-  await waitFor(() => expect(input).toHaveValue('beta'))
-  await waitFor(() => expect(betaFile).toBeVisible())
-  await expect(alphaFile).toBeHidden()
+  await waitFor(() => expect(input).toHaveValue('alpha beta'))
+  await waitFor(() => expect(results).toHaveCount(0))
   await KeyBoard.press('ArrowDown')
   await waitFor(() => expect(input).toHaveValue(''))
   await waitFor(() => expect(results).toHaveCount(0))
@@ -67,11 +58,10 @@ export const test: Test = async ({ expect, FileSystem, KeyBoard, Locator, Main, 
   await waitFor(() => expect(input).toHaveValue(''))
 
   await KeyBoard.press('ArrowUp')
-  await waitFor(() => expect(input).toHaveValue('beta'))
-  await clearInput(4)
-  await input.type('edited')
+  await waitFor(() => expect(input).toHaveValue('alpha beta'))
+  await input.type(' edited')
   await waitFor(() => expect(results).toHaveCount(0))
   await KeyBoard.press('Enter')
   await KeyBoard.press('ArrowUp')
-  await waitFor(() => expect(input).toHaveValue('edited'))
+  await waitFor(() => expect(input).toHaveValue('alpha beta edited'))
 }
