@@ -9,12 +9,20 @@ export const previousHistoryResult = async (state: SearchState): Promise<SearchS
     return state
   }
   const { newHistoryIndex, newValue } = getPreviousHistoryData(history, historyIndex)
-  if (newValue === value && newHistoryIndex === historyIndex) {
-    return state
+  if (newValue === value) {
+    if (newHistoryIndex === historyIndex) {
+      return state
+    }
+    return {
+      ...state,
+      historyIndex: newHistoryIndex,
+      inputSource: InputSource.Script,
+    }
   }
-  return HandleUpdate.handleUpdate(state, {
+  const update = {
     historyIndex: newHistoryIndex,
     inputSource: InputSource.Script,
     value: newValue,
-  })
+  }
+  return HandleUpdate.handleUpdate(state, update)
 }

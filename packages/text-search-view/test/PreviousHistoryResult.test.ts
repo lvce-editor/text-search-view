@@ -25,6 +25,15 @@ test('previousHistoryResult recalls the newest entry from a draft input', async 
   })
 })
 
+test('previousHistoryResult enters history without rerunning the current query', async () => {
+  const state = createState(['first', 'second'], -1, 'second')
+  expect(await previousHistoryResult(state)).toMatchObject({
+    historyIndex: 1,
+    inputSource: InputSource.Script,
+    value: 'second',
+  })
+})
+
 test('previousHistoryResult moves toward older entries', async () => {
   const state = createState(['first', 'second'], 1, 'second')
   expect(await previousHistoryResult(state)).toMatchObject({
