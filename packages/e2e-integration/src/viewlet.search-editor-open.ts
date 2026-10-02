@@ -8,6 +8,7 @@ export const test: Test = async ({ expect, FileSystem, KeyBoard, Locator, Main, 
   await Workspace.setUri(tmpDir)
   await Main.closeAllEditors()
   await Locator('.ActivityBarItem[title="Search"]').click()
+  await new Promise((resolve) => setTimeout(resolve, 500))
 
   const searchEditorButton = Locator('#SideBar button[title="Open New Search Editor"]')
   await expect(searchEditorButton).toBeVisible()
