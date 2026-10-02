@@ -16,7 +16,7 @@ const waitFor = async (assertion: () => Promise<void>): Promise<void> => {
   }
 }
 
-export const test: Test = async ({ expect, FileSystem, KeyBoard, Locator, Main, Workspace }) => {
+export const test: Test = async ({ expect, FileSystem, Locator, Main, Workspace }) => {
   const tmpDir = await FileSystem.getTmpDir()
   await FileSystem.writeFile(`${tmpDir}/search-editor.txt`, 'search editor')
   await Workspace.setUri(tmpDir)
@@ -34,8 +34,6 @@ export const test: Test = async ({ expect, FileSystem, KeyBoard, Locator, Main, 
   const searchInput = Locator('.Main textarea[name="SearchValue"]')
   await waitFor(() => expect(searchInput).toBeVisible())
   await waitFor(() => expect(searchInput).toBeFocused())
-  for (const key of 'immediately focused') {
-    await KeyBoard.press(key === ' ' ? 'Space' : key)
-  }
+  await searchInput.type('immediately focused')
   await expect(searchInput).toHaveValue('immediately focused')
 }

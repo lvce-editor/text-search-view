@@ -16,7 +16,7 @@ const waitFor = async (assertion: () => Promise<void>): Promise<void> => {
   }
 }
 
-export const test: Test = async ({ expect, FileSystem, KeyBoard, Locator, Main, Workspace }) => {
+export const test: Test = async ({ expect, FileSystem, Locator, Main, Workspace }) => {
   const tmpDir = await FileSystem.getTmpDir()
   await FileSystem.writeFile(`${tmpDir}/search-editor.txt`, 'search editor')
   await Workspace.setUri(tmpDir)
@@ -30,9 +30,7 @@ export const test: Test = async ({ expect, FileSystem, KeyBoard, Locator, Main, 
   const searchInput = Locator('.Main textarea[name="SearchValue"]')
   await waitFor(() => expect(searchInput).toBeVisible())
   await waitFor(() => expect(searchInput).toBeFocused())
-  for (const key of 'first editor') {
-    await KeyBoard.press(key === ' ' ? 'Space' : key)
-  }
+  await searchInput.type('first editor')
   await expect(searchInput).toHaveValue('first editor')
   const searchEditorButtonAfterFirstOpen = Locator('button[title="Open New Search Editor"]')
   await expect(searchEditorButtonAfterFirstOpen).toHaveCount(1)
@@ -46,9 +44,7 @@ export const test: Test = async ({ expect, FileSystem, KeyBoard, Locator, Main, 
   await expect(tabs.nth(0)).toHaveAttribute('aria-selected', 'false')
   await expect(tabs.nth(1)).toHaveAttribute('aria-selected', 'true')
   await expect(searchInput).toBeFocused()
-  for (const key of 'newest editor') {
-    await KeyBoard.press(key === ' ' ? 'Space' : key)
-  }
+  await searchInput.type('newest editor')
   await expect(searchInput).toHaveValue('newest editor')
   await tabs.nth(0).click()
   await expect(searchInput).toHaveValue('first editor')
