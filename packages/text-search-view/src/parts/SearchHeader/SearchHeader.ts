@@ -19,6 +19,11 @@ export interface SearchHeader {
   readonly replacement: string
   readonly searchId: string
   readonly searchInputErrorMessage: string
+  readonly searchWarningFontFamily: string
+  readonly searchWarningFontSize: number
+  readonly searchWarningHorizontalPadding: number
+  readonly searchWarningLineHeight: number
+  readonly searchWarningVerticalPadding: number
   readonly showOpenInEditorLink: boolean
   readonly useChevrons: boolean
   readonly useFileIcons: boolean

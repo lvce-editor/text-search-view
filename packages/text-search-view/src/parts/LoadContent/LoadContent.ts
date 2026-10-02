@@ -7,11 +7,29 @@ import { loadPreferences } from '../LoadPreferences/LoadPreferences.ts'
 import * as RestoreState from '../RestoreState/RestoreState.ts'
 
 export const loadContent = async (state: SearchState, savedState: unknown, context?: unknown): Promise<SearchState> => {
-  const { defaultExcludes: currentDefaultExcludes, limitHitWarning, messageHeight, width } = state
+  const {
+    defaultExcludes: currentDefaultExcludes,
+    limitHitWarning,
+    messageHeight,
+    searchWarningFontFamily,
+    searchWarningFontSize,
+    searchWarningHorizontalPadding,
+    searchWarningLineHeight,
+    searchWarningVerticalPadding,
+    width,
+  } = state
   const restoreSource = savedState ?? context
   const { excludeValue, flags, includeValue, replacement, savedCollapsedPaths, savedValue, threads } = RestoreState.restoreState(restoreSource)
   const { defaultExcludes, maxResults, showOpenInEditorLink, usePullBasedSearch } = await loadPreferences(currentDefaultExcludes)
-  const warningHeight = await GetSearchWarningMessageHeight.getSearchWarningMessageHeight(limitHitWarning, width)
+  const warningHeight = await GetSearchWarningMessageHeight.getSearchWarningMessageHeight(
+    limitHitWarning,
+    width,
+    searchWarningFontFamily,
+    searchWarningFontSize,
+    searchWarningLineHeight,
+    searchWarningHorizontalPadding,
+    searchWarningVerticalPadding,
+  )
   const headerHeight = GetSearchHeaderHeight.getSearchHeaderHeight(flags, messageHeight, warningHeight)
 
   const update: Partial<SearchState> = {
