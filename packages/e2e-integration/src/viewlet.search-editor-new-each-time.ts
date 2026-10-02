@@ -17,6 +17,7 @@ const waitFor = async (assertion: () => Promise<void>): Promise<void> => {
 }
 
 export const test: Test = async ({ expect, FileSystem, KeyBoard, Locator, Main, Workspace }) => {
+  console.log('[DEBUG-focus] test started')
   const tmpDir = await FileSystem.getTmpDir()
   await FileSystem.writeFile(`${tmpDir}/search-editor.txt`, 'search editor')
   await Workspace.setUri(tmpDir)
@@ -26,10 +27,16 @@ export const test: Test = async ({ expect, FileSystem, KeyBoard, Locator, Main, 
 
   const searchEditorButton = Locator('button[title="Open New Search Editor"]')
   await expect(searchEditorButton).toBeVisible()
+  console.log('[DEBUG-focus] clicking new editor')
   await searchEditorButton.click()
+  console.log('[DEBUG-focus] clicked new editor')
   const searchInput = Locator('#Main textarea[name="SearchValue"]')
+  console.log('[DEBUG-focus] waiting visible')
   await waitFor(() => expect(searchInput).toBeVisible())
+  console.log('[DEBUG-focus] visible')
+  console.log('[DEBUG-focus] waiting focus')
   await waitFor(() => expect(searchInput).toBeFocused())
+  console.log('[DEBUG-focus] focused')
   for (const key of 'first editor') {
     await KeyBoard.press(key === ' ' ? 'Space' : key)
   }
@@ -37,7 +44,9 @@ export const test: Test = async ({ expect, FileSystem, KeyBoard, Locator, Main, 
   const searchEditorButtonAfterFirstOpen = Locator('button[title="Open New Search Editor"]')
   await expect(searchEditorButtonAfterFirstOpen).toHaveCount(1)
   await searchEditorButtonAfterFirstOpen.click()
+  console.log('[DEBUG-focus] waiting focus')
   await waitFor(() => expect(searchInput).toBeFocused())
+  console.log('[DEBUG-focus] focused')
 
   const tabs = Locator('.MainTab')
   await expect(tabs).toHaveCount(2)
