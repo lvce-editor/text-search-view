@@ -2,7 +2,9 @@ import type { Test } from '@lvce-editor/test-with-playwright'
 
 export const name = 'viewlet.search-editor-new-each-time'
 
-export const test: Test = async ({ expect, KeyBoard, Locator, Main }) => {
+export const test: Test = async ({ expect, FileSystem, KeyBoard, Locator, Main, Workspace }) => {
+  const tmpDir = await FileSystem.getTmpDir()
+  await Workspace.setUri(tmpDir)
   await Main.closeAllEditors()
   await Locator('.ActivityBarItem[title="Search"]').click()
   await new Promise((resolve) => setTimeout(resolve, 500))
