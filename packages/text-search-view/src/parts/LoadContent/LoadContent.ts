@@ -11,12 +11,12 @@ export const loadContent = async (state: SearchState, savedState: unknown, conte
     defaultExcludes: currentDefaultExcludes,
     limitHitWarning,
     messageHeight,
-    width,
     searchWarningFontFamily,
     searchWarningFontSize,
     searchWarningHorizontalPadding,
     searchWarningLineHeight,
     searchWarningVerticalPadding,
+    width,
   } = state
   const restoreSource = savedState ?? context
   const { excludeValue, flags, includeValue, replacement, savedCollapsedPaths, savedValue, threads } = RestoreState.restoreState(restoreSource)
