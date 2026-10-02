@@ -16,6 +16,13 @@ export const verifyNativeFocus = async (page, testName, expect) => {
     await expect(sidebarInput).toHaveValue(sidebarQuery)
   }
   await tabs.nth(initialCount).click()
+  console.error(
+    '[DEBUG-tab-state]',
+    await tabs.evaluateAll((elements) =>
+      elements.map((element) => ({ selected: element.getAttribute('aria-selected'), index: element.getAttribute('data-index') })),
+    ),
+  )
+  await expect(tabs.nth(initialCount)).toHaveAttribute('aria-selected', 'true')
   await expect(input).toHaveValue('native first query')
   await tabs.nth(initialCount + 1).click()
   await expect(input).toHaveValue('native second query')

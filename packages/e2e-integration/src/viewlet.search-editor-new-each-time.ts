@@ -47,7 +47,9 @@ export const test: Test = async ({ expect, FileSystem, Locator, Main, Workspace 
   await searchInput.type('newest editor')
   await expect(searchInput).toHaveValue('newest editor')
   await tabs.nth(0).click()
+  await waitFor(() => expect(tabs.nth(0)).toHaveAttribute('aria-selected', 'true'))
   await expect(searchInput).toHaveValue('first editor')
   await tabs.nth(1).click()
+  await waitFor(() => expect(tabs.nth(1)).toHaveAttribute('aria-selected', 'true'))
   await expect(searchInput).toHaveValue('newest editor')
 }
