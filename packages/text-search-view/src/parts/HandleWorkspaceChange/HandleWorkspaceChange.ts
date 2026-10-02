@@ -1,7 +1,8 @@
 import type { SearchState } from '../SearchState/SearchState.ts'
+import * as NormalizeWorkspaceUri from '../NormalizeWorkspaceUri/NormalizeWorkspaceUri.ts'
 import * as SearchMessageHeight from '../SearchMessageHeight/SearchMessageHeight.ts'
 
-export const handleWorkspaceChange = (state: SearchState, workspacePath: string): SearchState => {
+export const handleWorkspaceChange = (state: SearchState, workspaceUri: string): SearchState => {
   const { headerHeight: oldHeaderHeight, messageHeight: oldMessageHeight } = state
   const headerHeight = oldHeaderHeight + SearchMessageHeight.Minimum - oldMessageHeight
   return {
@@ -17,6 +18,6 @@ export const handleWorkspaceChange = (state: SearchState, workspacePath: string)
     minLineY: 0,
     replacement: '',
     value: '',
-    workspacePath,
+    workspaceUri: NormalizeWorkspaceUri.normalizeWorkspaceUri(workspaceUri),
   }
 }

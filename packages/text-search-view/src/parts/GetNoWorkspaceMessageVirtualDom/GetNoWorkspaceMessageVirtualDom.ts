@@ -23,8 +23,8 @@ const actionNode: VirtualDomNode = {
   type: VirtualDomElements.Button,
 }
 
-export const getNoWorkspaceMessageVirtualDom = (workspacePath: string | undefined): readonly VirtualDomNode[] => {
-  if (workspacePath !== '') {
+export const getNoWorkspaceMessageVirtualDom = (workspaceUri: string | undefined): readonly VirtualDomNode[] => {
+  if (workspaceUri !== '') {
     return []
   }
   return [parentNode, text(`${SearchStrings.noWorkspaceFolder()} - `), actionNode, text(SearchStrings.openFolder())]

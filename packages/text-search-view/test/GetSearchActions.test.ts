@@ -1,6 +1,7 @@
 import { test, expect } from '@jest/globals'
 import { createDefaultState } from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
 import { getActions } from '../src/parts/GetSearchActions/GetSearchActions.ts'
+import * as ViewMode from '../src/parts/ViewMode/ViewMode.ts'
 
 test('getSearchActions - should return array of search actions', () => {
   const state = {
@@ -57,4 +58,19 @@ test('getSearchActions - enables actions for a search pattern and results', () =
     value: 'test',
   }
   expect(getActions(state).map(({ enabled }) => enabled)).toEqual([true, true, true, true, true])
+})
+
+test('getSearchActions - returns the action to switch back to a list in tree mode', () => {
+  const state = {
+    ...createDefaultState(),
+    viewMode: ViewMode.Tree,
+  }
+  expect(getActions(state)[3]).toEqual({
+    command: '',
+    enabled: true,
+    icon: 'ListTree',
+    id: 'ViewAsList',
+    label: 'View as List',
+    type: 1,
+  })
 })

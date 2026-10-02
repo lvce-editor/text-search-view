@@ -16,10 +16,10 @@ test('handleWorkspaceChange - clears search, replace, and search results', () =>
     minLineY: 5,
     replacement: 'replace-me',
     value: 'search-me',
-    workspacePath: 'test',
+    workspaceUri: 'file:///test',
   }
 
-  const result = HandleWorkspaceChange.handleWorkspaceChange(state, '/new-workspace')
+  const result = HandleWorkspaceChange.handleWorkspaceChange(state, 'file:///new-workspace')
 
   expect(result).toEqual({
     ...state,
@@ -32,6 +32,13 @@ test('handleWorkspaceChange - clears search, replace, and search results', () =>
     minLineY: 0,
     replacement: '',
     value: '',
-    workspacePath: '/new-workspace',
+    workspaceUri: 'file:///new-workspace',
   })
+})
+
+test('handleWorkspaceChange - normalizes legacy paths and preserves an empty workspace', () => {
+  const state = CreateDefaultState.createDefaultState()
+  const result = HandleWorkspaceChange.handleWorkspaceChange(state, 'C:\\project files')
+  expect(result.workspaceUri).toBe('file:///C:/project%20files')
+  expect(HandleWorkspaceChange.handleWorkspaceChange(result, '').workspaceUri).toBe('')
 })

@@ -7,7 +7,6 @@ export const getDisplayResults = (
   results: readonly SearchResult[],
   itemHeight: number,
   resultCount: number,
-  searchTerm: string,
   minLineY: number,
   maxLineY: number,
   replacement: string,
@@ -21,7 +20,6 @@ export const getDisplayResults = (
 
   const displayResults: DisplaySearchResult[] = []
   const setSize = resultCount
-  const searchTermLength = searchTerm.length
   const max = Math.min(filteredResults.length, maxLineY)
   for (let i = minLineY; i < max; i++) {
     const displayResult = GetSearchDisplayResult.getDisplayResult(
@@ -29,7 +27,6 @@ export const getDisplayResults = (
       fileIcons,
       i,
       setSize,
-      searchTermLength,
       replacement,
       focusedIndex,
       collapsedPaths,

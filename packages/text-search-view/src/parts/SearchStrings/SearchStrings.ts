@@ -207,6 +207,14 @@ export const openNewSearchEditor = (): string => {
   return I18nString.i18nString(UiStrings.OpenNewSearchEditor)
 }
 
+export const openInEditor = (): string => {
+  return I18nString.i18nString(UiStrings.OpenInEditor)
+}
+
+export const copyCurrentSearchResultsToEditor = (): string => {
+  return I18nString.i18nString(UiStrings.CopyCurrentSearchResultsToEditor)
+}
+
 export const contextLines = (): string => {
   return I18nString.i18nString(UiStrings.ContextLines)
 }
@@ -217,6 +225,10 @@ export const toggleContextLines = (): string => {
 
 export const viewAsTree = (): string => {
   return I18nString.i18nString(UiStrings.ViewAsTree)
+}
+
+export const viewAsList = (): string => {
+  return I18nString.i18nString(UiStrings.ViewAsList)
 }
 
 export const collapseAll = (): string => {

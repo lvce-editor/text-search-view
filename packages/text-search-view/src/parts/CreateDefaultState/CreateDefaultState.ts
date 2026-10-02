@@ -95,12 +95,13 @@ export const createDefaultState = (): SearchState => {
         start: 0,
       },
     },
+    showOpenInEditorLink: true,
     threads: 0,
     useChevrons: true,
     useFileIcons: true,
     usePullBasedSearch: false,
     viewMode: ViewMode.List,
-    workspacePath: '',
+    workspaceUri: '',
   }
   return state
 }

@@ -30,7 +30,7 @@ test('handleUpdate - routes to pull-based mode for file protocol and computes su
     usePullBasedSearch: true,
     value: 'before',
     width: 120,
-    workspacePath: '/test',
+    workspaceUri: 'file:///test',
   }
 
   const pulledResults: readonly SearchResult[] = [
@@ -85,8 +85,8 @@ test('handleUpdate - routes to pull-based mode for file protocol and computes su
     contextLines: 2,
     defaultExcludes: state.defaultExcludes,
     query: 'test',
-    root: '/test',
-    scheme: '',
+    root: 'file:///test',
+    scheme: 'file',
     useIgnoreFiles: true,
     usePullBasedSearch: true,
   })
@@ -104,7 +104,7 @@ test('handleUpdatePullBased - disables pull-based mode for non-file protocol and
     uid: 102,
     usePullBasedSearch: true,
     value: 'before',
-    workspacePath: 'memfs://test',
+    workspaceUri: 'memfs://test',
   }
 
   let seenOptions: any
@@ -143,7 +143,7 @@ test('handleUpdatePullBased - returns previous state when latest state cannot be
     ...CreateDefaultState.createDefaultState(),
     uid: 103,
     value: 'before',
-    workspacePath: '/test',
+    workspaceUri: 'file:///test',
   }
 
   let seenUid = -1
@@ -171,7 +171,7 @@ test('handleUpdatePullBased - does not overwrite state after the active search c
     ...CreateDefaultState.createDefaultState(),
     uid: 105,
     value: 'before',
-    workspacePath: '/test',
+    workspaceUri: 'file:///test',
   }
   let latestState: SearchState | undefined
   using _mockTextSearchWorker = TextSearchWorker.registerMockRpc({

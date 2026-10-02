@@ -11,9 +11,14 @@ export const test: Test = async ({ expect, Locator, SideBar, Workspace }) => {
 
   // assert
   const actions = Locator('.SideBarTitleArea')
-  await expect(actions.locator('[name="Refresh"]')).toHaveAttribute('disabled', '')
-  await expect(actions.locator('[name="ClearAll"]')).toHaveAttribute('disabled', '')
-  await expect(actions.locator('[name="ViewAsTree"]')).toHaveAttribute('disabled', null)
-  await expect(actions.locator('[name="CollapseAll"]')).toHaveAttribute('disabled', '')
-  await expect(actions.locator('[name="OpenSearchEditor"]')).toHaveAttribute('disabled', null)
+  const refreshAction = actions.locator('[name="Refresh"]')
+  await expect(refreshAction).toHaveAttribute('disabled', '')
+  const clearAllAction = actions.locator('[name="ClearAll"]')
+  await expect(clearAllAction).toHaveAttribute('disabled', '')
+  const viewAsTreeAction = actions.locator('[name="ViewAsTree"]')
+  await expect(viewAsTreeAction).toHaveAttribute('disabled', null)
+  const collapseAllAction = actions.locator('[name="CollapseAll"]')
+  await expect(collapseAllAction).toHaveAttribute('disabled', '')
+  const openSearchEditorAction = actions.locator('[name="OpenSearchEditor"]')
+  await expect(openSearchEditorAction).toHaveAttribute('disabled', null)
 }

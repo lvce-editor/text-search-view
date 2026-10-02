@@ -4,6 +4,7 @@ import { collapseAll } from '../CollapseAll/CollapseAll.ts'
 import * as InputName from '../InputName/InputName.ts'
 import { openSearchEditor } from '../OpenSearchEditor/OpenSearchEditor.ts'
 import { refresh } from '../Refresh/Refresh.ts'
+import { viewAsList } from '../ViewAsList/ViewAsList.ts'
 import { viewAsTree } from '../ViewAsTree/ViewAsTree.ts'
 
 export const handleActionClick = async (state: SearchState, name: string): Promise<SearchState> => {
@@ -16,6 +17,8 @@ export const handleActionClick = async (state: SearchState, name: string): Promi
       return openSearchEditor(state)
     case InputName.Refresh:
       return refresh(state)
+    case InputName.ViewAsList:
+      return viewAsList(state)
     case InputName.ViewAsTree:
       return viewAsTree(state)
     default:

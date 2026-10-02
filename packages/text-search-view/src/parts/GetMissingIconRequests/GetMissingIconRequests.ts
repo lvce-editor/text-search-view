@@ -5,10 +5,13 @@ import type { SearchResult } from '../SearchResult/SearchResult.ts'
 import { getFileName } from '../GetFileName/GetFileName.ts'
 import { getFilePath } from '../GetFilePath/GetFilePath.ts'
 import { isFile } from '../IsFile/IsFile.ts'
+import * as TextSearchResultType from '../TextSearchResultType/TextSearchResultType.ts'
 
 const getMissingDirents = (searchResults: readonly SearchResult[], fileIconCache: FileIconCache): readonly SearchResult[] => {
   const missingDirents: SearchResult[] = []
-  const files = searchResults.filter(isFile)
+  const files = searchResults.filter(
+    (searchResult) => isFile(searchResult) || (searchResult.type === TextSearchResultType.File && searchResult.isDirectory === true),
+  )
   for (const file of files) {
     const uri = getFilePath(file.text)
 
@@ -25,7 +28,7 @@ const toIconRequest = (item: SearchResult): IconRequest => {
   return {
     name: fileName,
     path: filePath,
-    type: DirentType.File,
+    type: item.isDirectory ? DirentType.Directory : DirentType.File,
   }
 }
 

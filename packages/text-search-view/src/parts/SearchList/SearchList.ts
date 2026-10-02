@@ -34,7 +34,7 @@ export interface SearchList extends List<SearchResult> {
   readonly touchOffsetY: number
   readonly touchTimeStamp: number
   readonly width: number
-  readonly workspacePath: string
+  readonly workspaceUri: string
   readonly x: number
   readonly y: number
 }

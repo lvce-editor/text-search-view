@@ -1,4 +1,4 @@
-# Text Search Worker
+# Text Search View
 
 Web Worker for the text search functionality in LVCE Editor.
 

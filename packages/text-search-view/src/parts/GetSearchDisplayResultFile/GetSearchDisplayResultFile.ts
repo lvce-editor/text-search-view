@@ -38,7 +38,7 @@ export const getSearchDisplayResultFile = (
     depth,
     expanded,
     focused,
-    icon: isDirectory ? '' : fileIcons[relativeIndex],
+    icon: fileIcons[relativeIndex],
     indent,
     matchLength: 0,
     matchStart: 0,

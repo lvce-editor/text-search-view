@@ -17,6 +17,7 @@ export const getSearchHeaderVirtualDom = (
   isSearchEditor: boolean = false,
   contextLines: number = 1,
   contextLinesEnabled: boolean = false,
+  showOpenInEditorLink: boolean = true,
 ): readonly VirtualDomNode[] => {
   const warningDom = getSearchHeaderLimitHitVirtualDom(limitHitWarning)
   const parentNode: VirtualDomNode = {
@@ -37,7 +38,7 @@ export const getSearchHeaderVirtualDom = (
       contextLines,
       contextLinesEnabled,
     ),
-    ...GetSearchHeaderDetailsVirtualDom.getSearchHeaderDetailsVirtualDom(flags, message),
+    ...GetSearchHeaderDetailsVirtualDom.getSearchHeaderDetailsVirtualDom(flags, message, matchCount, showOpenInEditorLink),
     ...warningDom,
   ]
   return dom

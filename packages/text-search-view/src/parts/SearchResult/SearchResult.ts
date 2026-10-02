@@ -1,12 +1,12 @@
 export interface SearchResult {
-  readonly depth?: number
+  readonly depth?: number | undefined
   readonly end: number
-  readonly endColumnIndex?: number
-  readonly isDirectory?: boolean
+  readonly endColumnIndex?: number | undefined
+  readonly isDirectory?: boolean | undefined
   readonly lineNumber: number
-  readonly rowIndex?: number
+  readonly rowIndex?: number | undefined
   readonly start: number
-  readonly startColumnIndex?: number
+  readonly startColumnIndex?: number | undefined
   readonly text: string
   readonly type: number
 }

@@ -4,15 +4,16 @@ export interface NextHistoryData {
 }
 
 export const getNextHistoryData = (history: readonly string[], historyIndex: number): NextHistoryData => {
-  if (historyIndex === -1 || history.length === 0) {
+  if (historyIndex < 0 || history.length === 0 || historyIndex >= history.length - 1) {
     return {
       newHistoryIndex: -1,
       newValue: '',
     }
   }
-  const item = history.at(historyIndex) || ''
+  const newHistoryIndex = historyIndex + 1
+  const item = history[newHistoryIndex]
   return {
-    newHistoryIndex: historyIndex + 1,
+    newHistoryIndex,
     newValue: item,
   }
 }

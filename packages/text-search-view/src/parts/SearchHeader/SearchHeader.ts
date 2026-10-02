@@ -24,6 +24,7 @@ export interface SearchHeader {
   readonly searchWarningHorizontalPadding: number
   readonly searchWarningLineHeight: number
   readonly searchWarningVerticalPadding: number
+  readonly showOpenInEditorLink: boolean
   readonly useChevrons: boolean
   readonly useFileIcons: boolean
   readonly usePullBasedSearch: boolean

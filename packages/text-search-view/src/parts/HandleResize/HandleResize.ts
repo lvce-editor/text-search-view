@@ -13,11 +13,13 @@ export const handleResize = async (state: SearchState, x: number, y: number, wid
     headerHeight: oldHeaderHeight,
     itemHeight,
     listItems,
+    matchCount,
     message,
     messageHeight: oldMessageHeight,
     minimumSliderSize,
+    showOpenInEditorLink,
   } = state
-  const messageHeight = await GetSearchMessageHeight.getSearchMessageHeight(message, width, flags)
+  const messageHeight = await GetSearchMessageHeight.getSearchMessageHeight(message, width, flags, showOpenInEditorLink && matchCount > 0)
   const headerHeight = oldHeaderHeight + messageHeight - oldMessageHeight
   const total = listItems.length
   const contentHeight = total * itemHeight

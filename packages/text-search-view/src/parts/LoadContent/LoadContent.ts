@@ -6,20 +6,21 @@ import * as InputSource from '../InputSource/InputSource.ts'
 import { loadPreferences } from '../LoadPreferences/LoadPreferences.ts'
 import * as RestoreState from '../RestoreState/RestoreState.ts'
 
-export const loadContent = async (state: SearchState, savedState: unknown): Promise<SearchState> => {
+export const loadContent = async (state: SearchState, savedState: unknown, context?: unknown): Promise<SearchState> => {
   const {
     defaultExcludes: currentDefaultExcludes,
     limitHitWarning,
     messageHeight,
+    width,
     searchWarningFontFamily,
     searchWarningFontSize,
     searchWarningHorizontalPadding,
     searchWarningLineHeight,
     searchWarningVerticalPadding,
-    width,
   } = state
-  const { excludeValue, flags, includeValue, replacement, savedCollapsedPaths, savedValue, threads } = RestoreState.restoreState(savedState)
-  const { defaultExcludes, usePullBasedSearch } = await loadPreferences(currentDefaultExcludes)
+  const restoreSource = savedState ?? context
+  const { excludeValue, flags, includeValue, replacement, savedCollapsedPaths, savedValue, threads } = RestoreState.restoreState(restoreSource)
+  const { defaultExcludes, maxResults, showOpenInEditorLink, usePullBasedSearch } = await loadPreferences(currentDefaultExcludes)
   const warningHeight = await GetSearchWarningMessageHeight.getSearchWarningMessageHeight(
     limitHitWarning,
     width,
@@ -40,7 +41,9 @@ export const loadContent = async (state: SearchState, savedState: unknown): Prom
     headerHeight,
     includeValue,
     inputSource: InputSource.Script,
+    limit: maxResults,
     replacement,
+    showOpenInEditorLink,
     threads,
     usePullBasedSearch,
     value: savedValue,
@@ -65,6 +68,7 @@ export const loadContent = async (state: SearchState, savedState: unknown): Prom
     flags,
     initial: false,
     loaded: true,
+    showOpenInEditorLink,
     threads,
     usePullBasedSearch,
   }

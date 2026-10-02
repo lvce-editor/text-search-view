@@ -6,7 +6,7 @@
     },
     "packages/build": {
       "project": ["src/**/*.ts"],
-      "ignoreDependencies": ["@lvce-editor/verror", "esbuild", "playwright"]
+      "ignoreDependencies": ["@lvce-editor/shared-process", "@lvce-editor/static-server", "@lvce-editor/verror", "esbuild", "playwright"]
     },
     "packages/e2e": {
       "entry": ["src/**/*.ts"],

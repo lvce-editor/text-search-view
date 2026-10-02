@@ -13,7 +13,26 @@ const loadSettings = async (): Promise<readonly Setting[]> => {
 test('contains all text search settings', async () => {
   const settings = await loadSettings()
 
-  expect(settings.map((setting) => setting.id)).toEqual(['search.exclude', 'search.threads', 'Search.usePullBasedSearch'])
+  expect(settings.map((setting) => setting.id)).toEqual([
+    'search.exclude',
+    'search.threads',
+    'Search.usePullBasedSearch',
+    'textSearch.maxResults',
+    'Search.showOpenInEditorLink',
+  ])
+})
+
+test('textSearch.maxResults defaults to 20,000', async () => {
+  const settings = await loadSettings()
+  const maxResults = settings.find((setting) => setting.id === 'textSearch.maxResults')
+
+  expect(maxResults).toEqual(
+    expect.objectContaining({
+      minimum: 1,
+      type: 'number',
+      value: 20_000,
+    }),
+  )
 })
 
 test('search.exclude has an array default', async () => {

@@ -4,13 +4,13 @@ import * as GetReplaceAllConfirmText from '../GetReplaceAllConfirmText/GetReplac
 import * as ViewletSearchStrings from '../SearchStrings/SearchStrings.ts'
 
 export const replaceAllAndPrompt = async (
-  workspacePath: string,
+  workspaceUri: string,
   items: readonly any[],
   replacement: string,
   matchCount: number,
   fileCount: number,
 ): Promise<boolean> => {
-  Assert.string(workspacePath)
+  Assert.string(workspaceUri)
   Assert.array(items)
   Assert.string(replacement)
   Assert.number(matchCount)

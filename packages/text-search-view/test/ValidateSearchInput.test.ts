@@ -2,6 +2,8 @@ import { expect, jest, test } from '@jest/globals'
 import { UseRegularExpression } from '../src/parts/SearchFlags/SearchFlags.ts'
 import * as ValidateSearchInput from '../src/parts/ValidateSearchInput/ValidateSearchInput.ts'
 
+const RE_INVALID_REGULAR_EXPRESSION = /Invalid regular expression/
+
 test('validateSearchInput - empty string returns empty error message', () => {
   expect(ValidateSearchInput.validateSearchInput('', UseRegularExpression)).toBe('')
 })
@@ -40,7 +42,7 @@ test('validateSearchInput - complex valid regex returns empty error message', ()
 })
 
 test('validateSearchInput - unescaped special characters returns error message', () => {
-  expect(ValidateSearchInput.validateSearchInput('\\', UseRegularExpression)).toMatch(/Invalid regular expression/)
+  expect(ValidateSearchInput.validateSearchInput('\\', UseRegularExpression)).toMatch(RE_INVALID_REGULAR_EXPRESSION)
 })
 
 test('validateSearchInput - unicode flag is supported', () => {

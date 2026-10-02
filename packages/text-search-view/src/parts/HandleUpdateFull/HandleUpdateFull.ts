@@ -1,4 +1,5 @@
 import type { SearchState } from '../SearchState/SearchState.ts'
+import * as CreateListItems from '../CreateListItems/CreateListItems.ts'
 import * as GetFileIcons from '../GetFileIcons/GetFileIcons.ts'
 import * as GetNumberOfVisibleItems from '../GetNumberOfVisibleItems/GetNumberOfVisibleItems.ts'
 import * as GetProtocol from '../GetProtocol/GetProtocol.ts'
@@ -14,7 +15,7 @@ import * as SearchViewStates from '../SearchViewStates/SearchViewStates.ts'
 import * as TextSearch from '../TextSearch/TextSearch.ts'
 
 export const handleUpdateFull = async (state: SearchState, update: Partial<SearchState>): Promise<SearchState> => {
-  const { workspacePath } = state
+  const { workspaceUri } = state
   const partialNewState = { ...state, ...update }
   const {
     assetDir,
@@ -34,13 +35,14 @@ export const handleUpdateFull = async (state: SearchState, update: Partial<Searc
     searchWarningHorizontalPadding,
     searchWarningLineHeight,
     searchWarningVerticalPadding,
+    showOpenInEditorLink,
     threads,
     uid,
     usePullBasedSearch,
     value,
     width,
   } = partialNewState
-  const root = workspacePath
+  const root = workspaceUri
   const scheme = GetProtocol.getProtocol(root)
   const isFileSearch = scheme === '' || scheme === 'file'
   const shouldUsePullBasedSearch = usePullBasedSearch && isFileSearch
@@ -85,7 +87,7 @@ export const handleUpdateFull = async (state: SearchState, update: Partial<Searc
   const message = SearchStatusMessage.getStatusMessage(resultCount, fileCount)
   const limitHitWarning = limitHit ? SearchStrings.theResultSetOnlyContainsASubSetOfMatches() : ''
   const [messageHeight, warningHeight] = await Promise.all([
-    GetSearchMessageHeight.getSearchMessageHeight(message, width, flags),
+    GetSearchMessageHeight.getSearchMessageHeight(message, width, flags, showOpenInEditorLink && resultCount > 0),
     GetSearchWarningMessageHeight.getSearchWarningMessageHeight(
       limitHitWarning,
       width,
@@ -105,6 +107,7 @@ export const handleUpdateFull = async (state: SearchState, update: Partial<Searc
   const maxLineY = Math.min(numberOfVisible, total)
   const finalDeltaY = Math.max(contentHeight - listHeight, 0)
   const visible = results.slice(0, maxLineY)
+  const listItems = CreateListItems.createListItems(results)
   const { icons, newFileIconCache } = await GetFileIcons.getFileIcons(visible, fileIconCache)
   const latest = SearchViewStates.get(uid)
   if (latest.newState.searchId !== searchId) {
@@ -122,7 +125,7 @@ export const handleUpdateFull = async (state: SearchState, update: Partial<Searc
     items: results,
     limitHit,
     limitHitWarning,
-    listItems: results,
+    listItems,
     loaded: true,
     matchCount: resultCount,
     maxLineY: maxLineY,

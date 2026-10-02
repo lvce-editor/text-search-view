@@ -15,5 +15,7 @@ export const test: Test = async ({ expect, FileSystem, Locator, Search, SideBar,
   // assert
   const viewletSearch = Locator('.Search')
   const message = viewletSearch.locator('[role="status"]')
+  const openInEditor = message.locator('button[name="OpenSearchEditor"]')
   await expect(message).toHaveText('No results found')
+  await expect(openInEditor).toHaveCount(0)
 }

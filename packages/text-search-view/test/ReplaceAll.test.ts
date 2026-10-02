@@ -29,7 +29,7 @@ test('replaceAll - replaces all matches and updates state', async () => {
     ],
     matchCount: 2,
     replacement: 'new-text',
-    workspacePath: '/test',
+    workspaceUri: 'file:///test',
   }
 
   const result = await replaceAll(state)
@@ -66,7 +66,7 @@ test('replaceAll - replaces all matches and updates state', async () => {
               text: 'new-text',
             },
           ],
-          uri: '/test/file1.txt',
+          uri: 'file:///test/file1.txt',
         },
         {
           changes: [
@@ -78,7 +78,7 @@ test('replaceAll - replaces all matches and updates state', async () => {
               text: 'new-text',
             },
           ],
-          uri: '/test/file2.txt',
+          uri: 'file:///test/file2.txt',
         },
       ],
     ],
@@ -104,7 +104,7 @@ test('replaceAll - user cancels replacement', async () => {
     ],
     matchCount: 2,
     replacement: 'new-text',
-    workspacePath: '/test',
+    workspaceUri: 'file:///test',
   }
 
   const result = await replaceAll(state)
@@ -158,7 +158,7 @@ test('replaceAllWithProgress - invalidates the active search before applying rep
     replacement: 'new-text',
     searchId: 'active-search',
     uid: 500,
-    workspacePath: '/test',
+    workspaceUri: 'file:///test',
   }
   let updateCount = 0
   const context: AsyncCommandContext<SearchState> = {
@@ -205,7 +205,7 @@ test('replaceAllWithProgress - invalidates the active search before applying rep
             text: 'new-text',
           },
         ],
-        uri: '/test/file1.txt',
+        uri: 'file:///test/file1.txt',
       },
       {
         changes: [
@@ -217,7 +217,7 @@ test('replaceAllWithProgress - invalidates the active search before applying rep
             text: 'new-text',
           },
         ],
-        uri: '/test/file2.txt',
+        uri: 'file:///test/file2.txt',
       },
     ],
   ])
@@ -253,7 +253,7 @@ test('replaceAllWithProgress - reports progress for the focused file', async () 
     matchCount: 2,
     replacement: 'new-text',
     searchId: 'active-search',
-    workspacePath: '/test',
+    workspaceUri: 'file:///test',
   }
   using mockRpc = RendererWorker.registerMockRpc({
     'BulkReplacement.applyBulkReplacement'() {},
@@ -299,7 +299,7 @@ test('replaceAllWithProgress - stops when the active search changes while confir
     replacement: 'new-text',
     searchId: 'active-search',
     uid: 601,
-    workspacePath: '/test',
+    workspaceUri: 'file:///test',
   }
   const newerState = { ...currentState, searchId: 'new-search' }
   using mockDialogRpc = DialogWorker.registerMockRpc({
@@ -341,7 +341,7 @@ test('replaceAllWithProgress - user cancels before progress is rendered', async 
     matchCount: 1,
     message: '1 result in 1 file',
     replacement: 'new-text',
-    workspacePath: '/test',
+    workspaceUri: 'file:///test',
   }
   const context: AsyncCommandContext<SearchState> = {
     getState() {
@@ -431,7 +431,7 @@ test('replaceAll - replaces all matches in focused file only and updates state',
     ],
     matchCount: 2,
     replacement: 'new-text',
-    workspacePath: '/test',
+    workspaceUri: 'file:///test',
   }
 
   const result = await replaceAll(state)
@@ -478,7 +478,7 @@ test('replaceAll - replaces all matches in focused file only and updates state',
               text: 'new-text',
             },
           ],
-          uri: '/test/file1.txt',
+          uri: 'file:///test/file1.txt',
         },
       ],
     ],

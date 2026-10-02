@@ -37,7 +37,6 @@ test('getDisplayResults', () => {
   const fileIcons: readonly string[] = ['']
   const itemHeight = 20
   const resultCount = 3
-  const searchTerm = 'a'
   const minLineY = 0
   const maxLineY = 4
   const replacement = ''
@@ -48,7 +47,6 @@ test('getDisplayResults', () => {
       results,
       itemHeight,
       resultCount,
-      searchTerm,
       minLineY,
       maxLineY,
       replacement,
@@ -163,7 +161,6 @@ test('getDisplayResults - should not show child items when parent file is collap
   const fileIcons: readonly string[] = ['', '']
   const itemHeight = 20
   const resultCount = 3 // Only file1.txt and file2.txt should be counted, plus file2.txt's match
-  const searchTerm = 'a'
   const minLineY = 0
   const maxLineY = 3 // Only show file1.txt, file2.txt, and file2.txt's match
   const replacement = ''
@@ -175,7 +172,6 @@ test('getDisplayResults - should not show child items when parent file is collap
     results, // This should be the filtered results, but currently it's not
     itemHeight,
     resultCount,
-    searchTerm,
     minLineY,
     maxLineY,
     replacement,
@@ -213,7 +209,7 @@ test('getDisplayResults - should render relative folder path next to file name w
       type: TextSearchResultType.Match,
     },
   ]
-  const displayResults = GetSearchDisplayResults.getDisplayResults(results, 20, 1, 'a', 0, 2, '', [''], -1, [], true, results)
+  const displayResults = GetSearchDisplayResults.getDisplayResults(results, 20, 1, 0, 2, '', [''], -1, [], true, results)
 
   expect(displayResults[0].text).toBe('index.kt — languages')
 })
@@ -233,11 +229,10 @@ test('getDisplayResults - renders tree depths and directory rows', () => {
     results,
     20,
     1,
-    'needle',
     0,
     3,
     '',
-    ['', 'file-icon', ''],
+    ['folder-icon', 'file-icon', ''],
     -1,
     [],
     true,
@@ -245,7 +240,7 @@ test('getDisplayResults - renders tree depths and directory rows', () => {
   )
 
   expect(displayResults).toMatchObject([
-    { badgeText: '', depth: 0, icon: '', indent: 16, text: 'src', title: '/src' },
+    { badgeText: '', depth: 0, icon: 'folder-icon', indent: 16, text: 'src', title: '/src' },
     { badgeText: '1', depth: 1, icon: 'file-icon', indent: 28, text: 'file.ts — src', title: '/src/file.ts' },
     { badgeText: '', depth: 2, icon: '', indent: 40, text: 'needle', title: 'needle' },
   ])

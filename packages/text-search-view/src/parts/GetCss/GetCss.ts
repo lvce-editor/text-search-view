@@ -67,6 +67,7 @@ export const getCss = (
 }
 
 .SearchWorkspaceMessage {
+  line-height: 16px;
   margin-top: -16px;
   overflow-wrap: break-word;
   padding-right: 22px;

@@ -18,14 +18,22 @@ const watchArgs = [
 ]
 
 const main = async (): Promise<void> => {
+  await execa('npm', ['run', 'build'], {
+    cwd: root,
+    stdio: 'inherit',
+  })
   execa('npm', watchArgs, {
     cwd: root,
     stdio: 'inherit',
   })
-  execa('node', ['node_modules/@lvce-editor/server/bin/server.js', '--only-extension=packages/e2e/extension', '--test-path=packages/e2e'], {
-    cwd: root,
-    stdio: 'inherit',
-  })
+  execa(
+    'node',
+    ['node_modules/@lvce-editor/server/bin/server.js', '--only-extension=packages/e2e/extension', '--test-path=packages/e2e', '--link=.tmp/dist'],
+    {
+      cwd: root,
+      stdio: 'inherit',
+    },
+  )
 }
 
 main()

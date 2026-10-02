@@ -4,6 +4,8 @@ import type { VirtualDomNode } from '../VirtualDomNode/VirtualDomNode.ts'
 import * as MergeClassNames from '../MergeClassNames/MergeClassNames.ts'
 import { text } from '../VirtualDomHelpers/VirtualDomHelpers.ts'
 
+const RE_NEWLINE = /\r\n|\r|\n/
+
 const deleted: VirtualDomNode = {
   childCount: 1,
   className: ClassNames.HighlightDeleted,
@@ -44,7 +46,7 @@ export const getLabelVirtualDom = (displayText: string, matchLength: number, mat
     const highlight = displayText.slice(matchStart, matchStart + matchLength)
     const after = displayText.slice(matchStart + matchLength)
     if (replacement) {
-      const replacementPreview = replacement.split(/\r\n|\r|\n/, 1)[0]
+      const replacementPreview = replacement.split(RE_NEWLINE, 1)[0]
       return [label4, text(before), deleted, text(highlight), inserted, text(replacementPreview), text(after)]
     }
     return [label3, text(before), highlighted, text(highlight), text(after)]

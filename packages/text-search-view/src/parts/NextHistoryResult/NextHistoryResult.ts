@@ -5,6 +5,9 @@ import * as InputSource from '../InputSource/InputSource.ts'
 
 export const nextHistoryResult = async (state: SearchState): Promise<SearchState> => {
   const { history, historyIndex, value } = state
+  if (history.length === 0 || historyIndex < 0) {
+    return state
+  }
   const { newHistoryIndex, newValue } = getNextHistoryData(history, historyIndex)
   if (newValue === value) {
     return state

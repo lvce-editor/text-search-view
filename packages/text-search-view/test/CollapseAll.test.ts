@@ -15,7 +15,7 @@ test('collapseAll returns the same state', async () => {
     uid: 42,
     value: 'test',
     width: 100,
-    workspacePath: '/workspace',
+    workspaceUri: 'file:///workspace',
   }
 
   const result = await collapseAll(state)
@@ -34,7 +34,7 @@ test('collapseAll with different state', async () => {
     uid: 123,
     value: 'another test',
     width: 200,
-    workspacePath: '/workspace',
+    workspaceUri: 'file:///workspace',
   }
 
   const result = await collapseAll(state)

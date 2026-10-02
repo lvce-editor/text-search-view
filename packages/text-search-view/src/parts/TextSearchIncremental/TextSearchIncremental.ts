@@ -1,6 +1,7 @@
 import { RendererWorker, TextSearchWorker } from '@lvce-editor/rpc-registry'
 import type { SearchState } from '../SearchState/SearchState.ts'
 import type { TextSearchOptions } from '../TextSearchOptions/TextSearchOptions.ts'
+import * as CreateListItems from '../CreateListItems/CreateListItems.ts'
 import * as GetNumberOfVisibleItems from '../GetNumberOfVisibleItems/GetNumberOfVisibleItems.ts'
 import * as SearchViewStates from '../SearchViewStates/SearchViewStates.ts'
 import { waitForNextFrame } from '../WaitForNextFrame/WaitForNextFrame.ts'
@@ -29,7 +30,7 @@ export const textSearchIncremental = async (
     const updatedState2: SearchState = {
       ...latest2.newState,
       items: visible,
-      listItems: visible,
+      listItems: CreateListItems.createListItems(visible),
       maxLineY: visible.length,
       minLineY: 0,
     }

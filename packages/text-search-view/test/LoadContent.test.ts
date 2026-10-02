@@ -37,6 +37,30 @@ test('loadContent with saved value calls handleUpdate', async () => {
   })
 })
 
+test('loadContent applies the configured result limit before restoring a search', async () => {
+  using _mockRendererWorker = RendererWorker.registerMockRpc({
+    async 'Preferences.get'(key: string) {
+      if (key === 'textSearch.maxResults') {
+        return 15_000
+      }
+      return undefined
+    },
+  })
+  using _mockTextSearchWorker = TextSearchWorker.registerMockRpc({
+    async 'TextSearch.search'() {
+      return {
+        limitHit: false,
+        results: [],
+      }
+    },
+  })
+  const state = CreateDefaultState.createDefaultState()
+
+  const result = await loadContent(state, { value: 'restored query' })
+
+  expect(result.limit).toBe(15_000)
+})
+
 test('loadContent without saved value returns state with loaded flag', async () => {
   const state = CreateDefaultState.createDefaultState()
   const savedState = {
@@ -94,6 +118,8 @@ test('loadContent loads enabled search exclude settings', async () => {
   expect(result.defaultExcludes).toEqual(['**/excluded'])
   expect(mockRpc.invocations).toEqual([
     ['Preferences.get', 'search.exclude'],
+    ['Preferences.get', 'textSearch.maxResults'],
+    ['Preferences.get', 'Search.showOpenInEditorLink'],
     ['Preferences.get', 'Search.usePullBasedSearch'],
   ])
 })

@@ -1,4 +1,5 @@
 import type { SearchResult } from '../SearchResult/SearchResult.ts'
+import * as CreateListItem from '../CreateListItem/CreateListItem.ts'
 import * as TextSearchResultType from '../TextSearchResultType/TextSearchResultType.ts'
 
 export const getTreeListItems = (results: readonly SearchResult[]): readonly SearchResult[] => {
@@ -7,7 +8,7 @@ export const getTreeListItems = (results: readonly SearchResult[]): readonly Sea
   let matchDepth = 0
   for (const result of results) {
     if (result.type !== TextSearchResultType.File) {
-      listItems.push({ ...result, depth: matchDepth })
+      listItems.push(CreateListItem.createListItem(result, { depth: matchDepth }))
       continue
     }
     const path = result.text.startsWith('./') ? result.text.slice(2) : result.text
@@ -17,11 +18,16 @@ export const getTreeListItems = (results: readonly SearchResult[]): readonly Sea
       directory = directory ? `${directory}/${parts[i]}` : parts[i]
       if (!directories.has(directory)) {
         directories.add(directory)
-        listItems.push({ depth: i, end: 0, isDirectory: true, lineNumber: 0, start: 0, text: directory, type: TextSearchResultType.File })
+        listItems.push(
+          CreateListItem.createListItem(
+            { end: 0, lineNumber: 0, start: 0, text: directory, type: TextSearchResultType.File },
+            { depth: i, isDirectory: true },
+          ),
+        )
       }
     }
     matchDepth = parts.length
-    listItems.push({ ...result, depth: matchDepth - 1, text: path })
+    listItems.push(CreateListItem.createListItem(result, { depth: matchDepth - 1, text: path }))
   }
   return listItems
 }

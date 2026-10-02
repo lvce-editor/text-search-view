@@ -14,8 +14,8 @@ export const handleUpdate = async (state: SearchState, update: Partial<SearchSta
   const { incrementalSearch, usePullBasedSearch } = state
   const partialNewState = { ...state, ...update }
   try {
-    const { flags, value, workspacePath } = partialNewState
-    if (IsEmptyString.isEmptyString(value) || IsEmptyString.isEmptyString(workspacePath)) {
+    const { flags, value, workspaceUri } = partialNewState
+    if (IsEmptyString.isEmptyString(value) || IsEmptyString.isEmptyString(workspaceUri)) {
       const newState = handleUpdateEmpty(state, update)
       const current = SearchViewStates.get(newState.uid)
       if (current) {

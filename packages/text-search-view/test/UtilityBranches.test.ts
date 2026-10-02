@@ -4,6 +4,7 @@ import { convertSearchResults } from '../src/parts/ConvertSearchResults/ConvertS
 import { createDefaultState } from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
 import { createViewModel } from '../src/parts/CreateViewModel/CreateViewModel.ts'
 import { isEqual as isReplaceValueEqual } from '../src/parts/DiffReplaceValue/DiffReplaceValue.ts'
+import * as DirentType from '../src/parts/DirentType/DirentType.ts'
 import { getActionButtonVirtualDom } from '../src/parts/GetActionButtonVirtualDom/GetActionButtonVirtualDom.ts'
 import { getActionVirtualDom } from '../src/parts/GetActionVirtualDom/GetActionVirtualDom.ts'
 import { getFileName } from '../src/parts/GetFileName/GetFileName.ts'
@@ -114,6 +115,13 @@ test('getMissingIconRequests omits cached files', () => {
   expect(getMissingIconRequests([file], { 'src/file.ts': 'icon' })).toEqual([])
 })
 
+test('getMissingIconRequests requests directory icons', () => {
+  expect(getMissingIconRequests([{ ...file, isDirectory: true, text: 'src' }, file], {})).toEqual([
+    { name: 'src', path: 'src', type: DirentType.Directory },
+    { name: 'file.ts', path: 'src/file.ts', type: DirentType.File },
+  ])
+})
+
 test('getNextFocus preserves an unknown focus value', () => {
   expect(getNextFocus(999, 0)).toBe(999)
 })
@@ -132,7 +140,7 @@ test('getChildCount supports a plain result without optional children', () => {
 })
 
 test('getDisplayResult rejects unknown result types', () => {
-  expect(() => getDisplayResult([{ ...file, type: 99 }], [], 0, 1, 0, '', -1, [], false, 0, [])).toThrow('unexpected search result type')
+  expect(() => getDisplayResult([{ ...file, type: 99 }], [], 0, 1, '', -1, [], false, 0, [])).toThrow('unexpected search result type')
 })
 
 test('getTextSearchResultCounts ignores unknown result types', () => {
