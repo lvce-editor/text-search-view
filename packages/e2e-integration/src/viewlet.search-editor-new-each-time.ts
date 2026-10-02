@@ -2,6 +2,20 @@ import type { Test } from '@lvce-editor/test-with-playwright'
 
 export const name = 'viewlet.search-editor-new-each-time'
 
+const waitFor = async (assertion: () => Promise<void>): Promise<void> => {
+  for (let attempt = 0; attempt < 100; attempt++) {
+    try {
+      await assertion()
+      return
+    } catch (error) {
+      if (attempt === 99) {
+        throw error
+      }
+      await new Promise((resolve) => setTimeout(resolve, 50))
+    }
+  }
+}
+
 export const test: Test = async ({ expect, FileSystem, KeyBoard, Locator, Main, Workspace }) => {
   const tmpDir = await FileSystem.getTmpDir()
   await FileSystem.writeFile(`${tmpDir}/search-editor.txt`, 'search editor')
@@ -13,9 +27,9 @@ export const test: Test = async ({ expect, FileSystem, KeyBoard, Locator, Main, 
   const searchEditorButton = Locator('button[title="Open New Search Editor"]')
   await expect(searchEditorButton).toBeVisible()
   await searchEditorButton.click()
-  await new Promise((resolve) => setTimeout(resolve, 50))
   const searchInput = Locator('#Main textarea[name="SearchValue"]')
-  await expect(searchInput).toBeFocused()
+  await waitFor(() => expect(searchInput).toBeVisible())
+  await waitFor(() => expect(searchInput).toBeFocused())
   for (const key of 'first editor') {
     await KeyBoard.press(key === ' ' ? 'Space' : key)
   }
@@ -23,7 +37,7 @@ export const test: Test = async ({ expect, FileSystem, KeyBoard, Locator, Main, 
   const searchEditorButtonAfterFirstOpen = Locator('button[title="Open New Search Editor"]')
   await expect(searchEditorButtonAfterFirstOpen).toHaveCount(1)
   await searchEditorButtonAfterFirstOpen.click()
-  await new Promise((resolve) => setTimeout(resolve, 50))
+  await waitFor(() => expect(searchInput).toBeFocused())
 
   const tabs = Locator('.MainTab')
   await expect(tabs).toHaveCount(2)
