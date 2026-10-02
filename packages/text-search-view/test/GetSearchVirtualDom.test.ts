@@ -70,12 +70,13 @@ test('getSearchVirtualDom returns correct virtual DOM structure', () => {
     false,
     undefined,
     false,
+    42,
   )
 
   expect(result).toEqual([
     {
       childCount: 2,
-      className: 'Viewlet Search',
+      className: 'Viewlet Search Search-42',
       type: 4,
     },
     {

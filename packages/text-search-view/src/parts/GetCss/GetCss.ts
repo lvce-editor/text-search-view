@@ -33,21 +33,22 @@ export const getCss = (
   treeItemsTop: number,
   headerHeight: number = 0,
   messageHeight: number = 30,
+  uid: number = 0,
 ): string => {
   const rules = [
-    `.Search {
+    `.Search-${uid} {
   --ScrollBarHeight: ${scrollBarHeight}px;
   --ScrollBarTop: ${scrollBarY}px;
   --TreeItemsTop: ${top}px;
   --SearchMessageHeight: ${messageHeight}px;
 }
 
-.SearchHeader {
+.Search-${uid} .SearchHeader {
   contain: strict;
   height: ${headerHeight}px;
 }
 
-.Search .SearchHeaderDetails {
+.Search-${uid} .SearchHeaderDetails {
   height: var(--SearchMessageHeight);
 }
 

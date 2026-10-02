@@ -24,6 +24,7 @@ export const getDom = (newState: SearchState): readonly any[] => {
     newState.contextLinesEnabled,
     newState.workspaceUri,
     newState.showOpenInEditorLink,
+    newState.uid,
   )
   return dom
 }

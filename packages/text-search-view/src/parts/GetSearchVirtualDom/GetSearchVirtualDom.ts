@@ -30,6 +30,7 @@ export const getSearchVirtualDom = (
   contextLinesEnabled: boolean = false,
   workspaceUri?: string,
   showOpenInEditorLink: boolean = true,
+  uid: number = 0,
 ): readonly VirtualDomNode[] => {
   if (initial) {
     return []
@@ -41,7 +42,7 @@ export const getSearchVirtualDom = (
   return [
     {
       childCount,
-      className,
+      className: MergeClassNames.mergeClassNames(className, `Search-${uid}`),
       type: VirtualDomElements.Div,
     },
     ...GetSearchHeaderVirtualDom.getSearchHeaderVirtualDom(
