@@ -1,4 +1,4 @@
-import { cp, mkdir, readdir, readFile, realpath, rm, writeFile } from 'node:fs/promises'
+import { cp, mkdir, readdir, readFile, realpath, rm } from 'node:fs/promises'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -34,22 +34,7 @@ for (const [from, to] of config.artifacts) {
   await cp(join(owner, from), target, { recursive: true })
 }
 
-// Temporary diagnostic probe: retain the runner's original failure and timing.
-const runnerPath = join(tests, 'src/_all.js')
-let runner = await readFile(runnerPath, 'utf8')
-runner = runner.replace(
-  'const page = await context.newPage()',
-  `const page = await context.newPage()
-  page.on('pageerror', error => console.error('[DEBUG-focus] pageerror', error.stack))
-  page.on('requestfailed', request => console.error('[DEBUG-focus] requestfailed', request.url(), request.failure()))`,
-)
-runner = runner.replace(
-  'await expect(testOverlay).toBeVisible({ timeout })',
-  `try {
-    await expect(testOverlay).toBeVisible({ timeout })
-  } catch (error) {
-    console.error('[DEBUG-focus] state', await page.evaluate(() => ({url: location.href, active: document.activeElement?.outerHTML, dom: document.body.innerHTML})))
-    throw error
-  }`,
-)
-await writeFile(runnerPath, runner)
+if (process.env.MAIN_AREA_REF) {
+  const target = await realpath(join(application, 'packages/renderer-worker/node_modules/@lvce-editor/main-area-worker'))
+  await cp(join(owner, '.tmp/main-area-candidate/.tmp/dist'), target, { recursive: true })
+}
