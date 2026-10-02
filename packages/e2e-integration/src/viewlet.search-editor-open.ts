@@ -2,7 +2,7 @@ import type { Test } from '@lvce-editor/test-with-playwright'
 
 export const name = 'viewlet.search-editor-open'
 
-export const test: Test = async ({ expect, Locator, Main }) => {
+export const test: Test = async ({ expect, KeyBoard, Locator, Main }) => {
   await Main.closeAllEditors()
   await Locator('.ActivityBarItem[title="Search"]').click()
 
@@ -14,5 +14,11 @@ export const test: Test = async ({ expect, Locator, Main }) => {
   await expect(tabs).toHaveCount(1)
   await expect(tabs.locator('.TabTitle')).toHaveText('Search')
   await expect(Locator('#Main .Search')).toBeVisible()
-  await expect(Locator('#Main textarea[name="SearchValue"]')).toBeVisible()
+  const searchInput = Locator('#Main textarea[name="SearchValue"]')
+  await expect(searchInput).toBeVisible()
+  await expect(searchInput).toBeFocused()
+  for (const key of 'immediately focused') {
+    await KeyBoard.press(key === ' ' ? 'Space' : key)
+  }
+  await expect(searchInput).toHaveValue('immediately focused')
 }

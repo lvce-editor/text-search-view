@@ -2,7 +2,7 @@ import type { Test } from '@lvce-editor/test-with-playwright'
 
 export const name = 'viewlet.search-editor-new-each-time'
 
-export const test: Test = async ({ expect, Locator, Main }) => {
+export const test: Test = async ({ expect, KeyBoard, Locator, Main }) => {
   await Main.closeAllEditors()
   await Locator('.ActivityBarItem[title="Search"]').click()
   await new Promise((resolve) => setTimeout(resolve, 500))
@@ -11,6 +11,12 @@ export const test: Test = async ({ expect, Locator, Main }) => {
   await expect(searchEditorButton).toBeVisible()
   await searchEditorButton.click()
   await new Promise((resolve) => setTimeout(resolve, 50))
+  const searchInput = Locator('#Main textarea[name="SearchValue"]')
+  await expect(searchInput).toBeFocused()
+  for (const key of 'first editor') {
+    await KeyBoard.press(key === ' ' ? 'Space' : key)
+  }
+  await expect(searchInput).toHaveValue('first editor')
   const searchEditorButtonAfterFirstOpen = Locator('button[title="Open New Search Editor"]')
   await expect(searchEditorButtonAfterFirstOpen).toHaveCount(1)
   await searchEditorButtonAfterFirstOpen.click()
@@ -22,4 +28,13 @@ export const test: Test = async ({ expect, Locator, Main }) => {
   await expect(tabs.nth(1).locator('.TabTitle')).toHaveText('Search')
   await expect(tabs.nth(0)).toHaveAttribute('aria-selected', 'false')
   await expect(tabs.nth(1)).toHaveAttribute('aria-selected', 'true')
+  await expect(searchInput).toBeFocused()
+  for (const key of 'newest editor') {
+    await KeyBoard.press(key === ' ' ? 'Space' : key)
+  }
+  await expect(searchInput).toHaveValue('newest editor')
+  await tabs.nth(0).click()
+  await expect(searchInput).toHaveValue('first editor')
+  await tabs.nth(1).click()
+  await expect(searchInput).toHaveValue('newest editor')
 }
