@@ -4,6 +4,7 @@ export const name = 'viewlet.search-editor-open'
 
 export const test: Test = async ({ expect, FileSystem, KeyBoard, Locator, Main, Workspace }) => {
   const tmpDir = await FileSystem.getTmpDir()
+  await FileSystem.writeFile(`${tmpDir}/search-editor.txt`, 'search editor')
   await Workspace.setUri(tmpDir)
   await Main.closeAllEditors()
   await Locator('.ActivityBarItem[title="Search"]').click()
