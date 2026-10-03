@@ -1,4 +1,4 @@
-import { cp, mkdir, readdir, readFile, realpath, rm } from 'node:fs/promises'
+import { cp, mkdir, readdir, readFile, realpath, rm, writeFile } from 'node:fs/promises'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -33,3 +33,19 @@ for (const [from, to] of config.artifacts) {
   })
   await cp(join(owner, from), target, { recursive: true })
 }
+
+if (process.env.MAIN_AREA_REF) {
+  const target = await realpath(join(application, 'packages/renderer-worker/node_modules/@lvce-editor/main-area-worker'))
+  await cp(join(owner, '.tmp/main-area-candidate/.tmp/dist'), target, { recursive: true })
+}
+
+// Native keyboard checks supplement the in-app harness, whose key events are synthetic.
+await cp(join(here, 'browser-focus.mjs'), join(tests, 'browser-focus.mjs'))
+const runnerPath = join(tests, 'src/_all.js')
+const runner = await readFile(runnerPath, 'utf8')
+const testCall = 'await testFile(page, testName, timeout)'
+if (!runner.includes(testCall)) throw new Error('Application runner no longer exposes the expected test loop')
+await writeFile(
+  runnerPath,
+  runner.replace(testCall, `${testCall}\n      await (await import('../browser-focus.mjs')).verifyNativeFocus(page, testName, expect)`),
+)

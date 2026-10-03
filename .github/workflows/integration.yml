@@ -2,6 +2,15 @@ name: Integration
 'on':
   workflow_dispatch:
     inputs:
+      main_area_ref:
+        description: Optional main-area-worker candidate commit
+        required: false
+        type: string
+      application_ref:
+        description: Application commit for integration compatibility checks
+        required: false
+        default: 59fc07859cec2b6d1bfb4db3e49ef590bc4eb9d1
+        type: string
       test_name_prefix:
         description: Optional test file name prefix for a focused integration run
         required: false
@@ -29,7 +38,7 @@ jobs:
       - uses: actions/checkout@v7
         with:
           repository: lvce-editor/lvce-editor
-          ref: 236de223cab8f9eeb72dc68a260b63f0db3b4ef9
+          ref: ${{ inputs.application_ref }}
           path: .tmp/lvce-integration
       - uses: actions/setup-node@v6
         with:
@@ -37,10 +46,22 @@ jobs:
       - name: Install application dependencies
         working-directory: .tmp/lvce-integration
         run: npm ci
+      - uses: actions/checkout@v7
+        if: inputs.main_area_ref != ''
+        with:
+          repository: lvce-editor/main-area-worker
+          ref: ${{ inputs.main_area_ref }}
+          path: .tmp/main-area-candidate
+      - name: Build main-area candidate
+        if: inputs.main_area_ref != ''
+        working-directory: .tmp/main-area-candidate
+        run: npm ci && npm run build
       - name: Install Chromium
         working-directory: .tmp/lvce-integration/packages/extension-host-worker-tests
         run: npx playwright install --with-deps chromium
       - name: Prepare owned integration tests
+        env:
+          MAIN_AREA_REF: ${{ inputs.main_area_ref }}
         run: node packages/e2e-integration/prepare.mjs .tmp/lvce-integration
       - name: Run owned integration tests
         working-directory: .tmp/lvce-integration/packages/extension-host-worker-tests

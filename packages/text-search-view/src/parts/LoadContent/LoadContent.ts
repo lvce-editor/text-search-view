@@ -1,3 +1,4 @@
+import { WhenExpression } from '@lvce-editor/virtual-dom-worker'
 import type { SearchState } from '../SearchState/SearchState.ts'
 import * as GetSearchHeaderHeight from '../GetSearchHeaderHeight/GetSearchHeaderHeight.ts'
 import * as GetSearchWarningMessageHeight from '../GetSearchWarningMessageHeight/GetSearchWarningMessageHeight.ts'
@@ -37,7 +38,8 @@ export const loadContent = async (state: SearchState, savedState: unknown, conte
     defaultExcludes,
     excludeValue,
     flags,
-    focus: 0, // TODO
+    focus: WhenExpression.FocusSearchInput,
+    focusSource: InputSource.Script,
     headerHeight,
     includeValue,
     inputSource: InputSource.Script,
