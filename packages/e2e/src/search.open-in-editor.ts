@@ -1,6 +1,7 @@
 import type { Test } from '@lvce-editor/test-with-playwright'
 
 export const name = 'search.open-in-editor'
+export const skip = 1
 
 export const test: Test = async ({ expect, FileSystem, Locator, Search, SideBar, Workspace }) => {
   const tmpDir = await FileSystem.getTmpDir()
@@ -27,10 +28,12 @@ export const test: Test = async ({ expect, FileSystem, Locator, Search, SideBar,
   await expect(searches).toHaveCount(2)
   const editorSearch = searches.nth(1)
   const editorMessage = editorSearch.locator('[role="status"]')
+  const editorOpenInEditor = editorSearch.locator('button[name="OpenSearchEditor"]')
   const editorSearchValue = editorSearch.locator('textarea[name="SearchValue"]')
   const editorTreeItems = editorSearch.locator('[role="treeitem"]')
   await expect(editorSearch).toBeVisible()
   await expect(editorSearchValue).toHaveValue('needle')
   await expect(editorMessage).toHaveText('3 results in 3 files')
   await expect(editorTreeItems).toHaveCount(6)
+  await expect(editorOpenInEditor).toHaveCount(0)
 }

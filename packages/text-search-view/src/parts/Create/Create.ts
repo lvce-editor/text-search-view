@@ -103,7 +103,7 @@ export const create = (
         start: 0,
       },
     },
-    showOpenInEditorLink: true,
+    showOpenInEditorLink: !isSearchEditor,
     threads: 0,
     useChevrons: true,
     useFileIcons: true,
