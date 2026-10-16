@@ -66,7 +66,7 @@ export const loadContent = async (state: SearchState, savedState: unknown, conte
     }
     const result = await ViewletSearchHandleUpdate.handleUpdate(searchState, update)
     // Search handlers publish results directly and return their input state.
-    const restoredState = result === searchState ? (SearchViewStates.get(uid)?.newState ?? result) : result
+    const restoredState = result === searchState ? SearchViewStates.get(uid).newState : result
     return {
       ...restoredState,
       initial: false,
