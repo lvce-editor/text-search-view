@@ -17,7 +17,7 @@ export const viewAsTree = async (state: SearchState): Promise<SearchState> => {
   const finalDeltaY = Math.max(contentHeight - listHeight, 0)
   const numberOfVisible = GetNumberOfVisibleItems.getNumberOfVisibleItems(listHeight, itemHeight)
   const maxLineY = Math.min(numberOfVisible, total)
-  const scrollBarHeight = ScrollBarFunctions.getScrollBarSize(height, contentHeight, minimumSliderSize)
+  const scrollBarHeight = ScrollBarFunctions.getScrollBarSize(listHeight, contentHeight, minimumSliderSize)
   const updatedState = {
     ...state,
     collapsedPaths: [],

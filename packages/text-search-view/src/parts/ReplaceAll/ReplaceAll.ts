@@ -80,7 +80,7 @@ const replaceAllInFocusedFile = async (state: SearchState, fileIndex: number): P
   const total = newItems.length
   const contentHeight = total * itemHeight
   const listHeight = height - headerHeight
-  const scrollBarHeight = ScrollBarFunctions.getScrollBarSize(height, contentHeight, minimumSliderSize)
+  const scrollBarHeight = ScrollBarFunctions.getScrollBarSize(listHeight, contentHeight, minimumSliderSize)
   const finalDeltaY = Math.max(contentHeight - listHeight, 0)
   const updatedState = {
     ...state,
