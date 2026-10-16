@@ -1,9 +1,8 @@
 import type { Test } from '@lvce-editor/test-with-playwright'
 
 export const name = 'search.open-in-editor'
-export const skip = 1
 
-export const test: Test = async ({ expect, FileSystem, Locator, Search, SideBar, Workspace }) => {
+export const test: Test = async ({ Command, expect, FileSystem, Locator, Search, SideBar, Workspace }) => {
   const tmpDir = await FileSystem.getTmpDir()
   await FileSystem.setFiles([
     { content: 'needle', uri: `${tmpDir}/test-a.txt` },
@@ -15,7 +14,7 @@ export const test: Test = async ({ expect, FileSystem, Locator, Search, SideBar,
 
   await Search.setValue('needle')
 
-  const sideBarSearch = Locator('.Search')
+  const sideBarSearch = Locator('.SideBar .Search')
   const sideBarTreeItems = sideBarSearch.locator('[role="treeitem"]')
   const sideBarMessage = sideBarSearch.locator('[role="status"]')
   await expect(sideBarMessage).toHaveText('3 results in 3 files')
@@ -26,7 +25,7 @@ export const test: Test = async ({ expect, FileSystem, Locator, Search, SideBar,
 
   const searches = Locator('.Search')
   await expect(searches).toHaveCount(2)
-  const editorSearch = searches.nth(1)
+  const editorSearch = Locator('.Main .Search')
   const editorMessage = editorSearch.locator('[role="status"]')
   const editorOpenInEditor = editorSearch.locator('button[name="OpenSearchEditor"]')
   const editorSearchValue = editorSearch.locator('textarea[name="SearchValue"]')
@@ -36,4 +35,28 @@ export const test: Test = async ({ expect, FileSystem, Locator, Search, SideBar,
   await expect(editorMessage).toHaveText('3 results in 3 files')
   await expect(editorTreeItems).toHaveCount(6)
   await expect(editorOpenInEditor).toHaveCount(0)
+  const sideBarOpenInEditor = sideBarSearch.locator('button[name="OpenSearchEditor"]')
+  await expect(sideBarOpenInEditor).toBeVisible()
+
+  await Command.execute('Layout.handleResize', 600, 720)
+  await expect(editorOpenInEditor).toHaveCount(0)
+  const detailsToggle = editorSearch.locator('button[name="ToggleSearchDetails"]')
+  const expandedDetails = editorSearch.locator('.SearchHeaderDetailsExpanded')
+  await detailsToggle.click()
+  await expect(expandedDetails).toBeVisible()
+  await expect(editorOpenInEditor).toHaveCount(0)
+  await detailsToggle.click()
+  await expect(expandedDetails).toHaveCount(0)
+  await expect(editorMessage).toHaveText('3 results in 3 files')
+  await expect(editorOpenInEditor).toHaveCount(0)
+
+  await editorSearchValue.type('missing-query')
+  await expect(editorMessage).toHaveText('No results found')
+  await expect(editorTreeItems).toHaveCount(0)
+  await expect(editorOpenInEditor).toHaveCount(0)
+  await editorSearchValue.type('needle')
+  await expect(editorMessage).toHaveText('3 results in 3 files')
+  await expect(editorTreeItems).toHaveCount(6)
+  await expect(editorOpenInEditor).toHaveCount(0)
+  await expect(sideBarOpenInEditor).toBeVisible()
 }
