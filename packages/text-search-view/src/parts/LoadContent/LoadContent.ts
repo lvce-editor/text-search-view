@@ -6,6 +6,7 @@ import * as ViewletSearchHandleUpdate from '../HandleUpdate/HandleUpdate.ts'
 import * as InputSource from '../InputSource/InputSource.ts'
 import { loadPreferences } from '../LoadPreferences/LoadPreferences.ts'
 import * as RestoreState from '../RestoreState/RestoreState.ts'
+import * as SearchViewStates from '../SearchViewStates/SearchViewStates.ts'
 
 export const loadContent = async (state: SearchState, savedState: unknown, context?: unknown): Promise<SearchState> => {
   const {
@@ -18,6 +19,7 @@ export const loadContent = async (state: SearchState, savedState: unknown, conte
     searchWarningHorizontalPadding,
     searchWarningLineHeight,
     searchWarningVerticalPadding,
+    uid,
     width,
   } = state
   const restoreSource = savedState ?? context
@@ -58,15 +60,15 @@ export const loadContent = async (state: SearchState, savedState: unknown, conte
     value: savedValue,
   }
   if (savedValue) {
-    const result = await ViewletSearchHandleUpdate.handleUpdate(
-      {
-        ...state,
-        usePullBasedSearch,
-      },
-      update,
-    )
+    const searchState = {
+      ...state,
+      usePullBasedSearch,
+    }
+    const result = await ViewletSearchHandleUpdate.handleUpdate(searchState, update)
+    // Search handlers publish results directly and return their input state.
+    const restoredState = result === searchState ? (SearchViewStates.get(uid)?.newState ?? result) : result
     return {
-      ...result,
+      ...restoredState,
       initial: false,
       loaded: true,
     }
