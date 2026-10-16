@@ -452,7 +452,7 @@ test('replaceAll - replaces all matches in focused file only and updates state',
     ],
     matchCount: 1,
     message: "Replaced 1 occurrence across 1 file with 'new-text'",
-    scrollBarHeight: 20,
+    scrollBarHeight: 85,
   })
   expect(mockDialogRpc.invocations).toEqual([
     [
