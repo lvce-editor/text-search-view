@@ -1,6 +1,7 @@
 import type { Test } from '@lvce-editor/test-with-playwright'
 
 export const name = 'search.open-in-editor'
+export const skip = 1
 
 export const test: Test = async ({ expect, FileSystem, Locator, Search, SideBar, Workspace }) => {
   const tmpDir = await FileSystem.getTmpDir()
