@@ -10,6 +10,7 @@ import * as RestoreState from '../RestoreState/RestoreState.ts'
 export const loadContent = async (state: SearchState, savedState: unknown, context?: unknown): Promise<SearchState> => {
   const {
     defaultExcludes: currentDefaultExcludes,
+    isSearchEditor,
     limitHitWarning,
     messageHeight,
     searchWarningFontFamily,
@@ -21,8 +22,13 @@ export const loadContent = async (state: SearchState, savedState: unknown, conte
   } = state
   const restoreSource = savedState ?? context
   const { excludeValue, flags, includeValue, replacement, savedCollapsedPaths, savedValue, threads } = RestoreState.restoreState(restoreSource)
-  const { defaultExcludes, maxResults, showOpenInEditorLink: preferenceShowOpenInEditorLink, usePullBasedSearch } = await loadPreferences(currentDefaultExcludes)
-  const showOpenInEditorLink = preferenceShowOpenInEditorLink && !state.isSearchEditor
+  const {
+    defaultExcludes,
+    maxResults,
+    showOpenInEditorLink: preferenceShowOpenInEditorLink,
+    usePullBasedSearch,
+  } = await loadPreferences(currentDefaultExcludes)
+  const showOpenInEditorLink = preferenceShowOpenInEditorLink && !isSearchEditor
   const warningHeight = await GetSearchWarningMessageHeight.getSearchWarningMessageHeight(
     limitHitWarning,
     width,

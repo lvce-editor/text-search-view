@@ -59,8 +59,8 @@ test('create - preserves explicit optional values', () => {
     itemHeight: 18,
     platform: 7,
     replacement: 'replacement',
-    value: 'query',
     showOpenInEditorLink: false,
+    value: 'query',
   })
 })
 
