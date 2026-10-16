@@ -22,7 +22,7 @@ export const applyCollapsedPaths = async (state: SearchState, collapsedPaths: re
   const minLineY = Math.floor(deltaY / itemHeight)
   const numberOfVisible = GetNumberOfVisibleItems.getNumberOfVisibleItems(listHeight, itemHeight)
   const maxLineY = Math.min(minLineY + numberOfVisible, total)
-  const scrollBarHeight = ScrollBarFunctions.getScrollBarSize(height, contentHeight, minimumSliderSize)
+  const scrollBarHeight = ScrollBarFunctions.getScrollBarSize(listHeight, contentHeight, minimumSliderSize)
   const scrollBarY = finalDeltaY === 0 ? 0 : ScrollBarFunctions.getScrollBarY(deltaY, finalDeltaY, listHeight, scrollBarHeight)
   const updatedState = {
     ...state,
