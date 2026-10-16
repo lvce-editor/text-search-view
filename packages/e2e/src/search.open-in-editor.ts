@@ -33,4 +33,5 @@ export const test: Test = async ({ expect, FileSystem, Locator, Search, SideBar,
   await expect(editorSearchValue).toHaveValue('needle')
   await expect(editorMessage).toHaveText('3 results in 3 files')
   await expect(editorTreeItems).toHaveCount(6)
+  await expect(editorSearch.locator('button[name="OpenSearchEditor"]')).toHaveCount(0)
 }

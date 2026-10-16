@@ -124,6 +124,25 @@ test('loadContent loads enabled search exclude settings', async () => {
   ])
 })
 
+test('loadContent keeps the open in editor link hidden in a search editor', async () => {
+  using _mockRendererWorker = RendererWorker.registerMockRpc({
+    'Preferences.get'(key: string) {
+      if (key === 'Search.showOpenInEditorLink') {
+        return true
+      }
+      return undefined
+    },
+  })
+  const state = {
+    ...CreateDefaultState.createDefaultState(),
+    isSearchEditor: true,
+  }
+
+  const result = await loadContent(state, undefined)
+
+  expect(result.showOpenInEditorLink).toBe(false)
+})
+
 test('loadContent with null savedState', async () => {
   const state = CreateDefaultState.createDefaultState()
   const savedState = null

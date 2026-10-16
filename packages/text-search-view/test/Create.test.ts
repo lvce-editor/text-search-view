@@ -60,6 +60,7 @@ test('create - preserves explicit optional values', () => {
     platform: 7,
     replacement: 'replacement',
     value: 'query',
+    showOpenInEditorLink: false,
   })
 })
 
