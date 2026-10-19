@@ -90,3 +90,18 @@ test('handleClickAt delegates remove button clicks', async () => {
   const result = await handleClickAt(state, 0, 0, 'Remove')
   expect(result).toBe(state)
 })
+
+test('handleClickAt accounts for the no-workspace message above the list', async () => {
+  IconThemeWorker.registerMockRpc({
+    'IconTheme.getIcons': () => ['file-icon'],
+  })
+  const state = {
+    ...CreateDefaultState.createDefaultState(),
+    itemHeight: 20,
+    listItems: Array.from({ length: 3 }, (_, i): any => ({ text: `file${i}`, type: TextSearchResultType.File })),
+    y: 64,
+  }
+  // The extra workspace message moves the list below the measured search header.
+  const result = await handleClickAt(state, 10, 64 + 150 + 21, '', 150)
+  expect(result.listFocusedIndex).toBe(1)
+})
