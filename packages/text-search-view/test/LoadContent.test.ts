@@ -25,6 +25,10 @@ test('loadContent with saved value calls handleUpdate', async () => {
       }
     },
   })
+  using _mockRendererWorker = RendererWorker.registerMockRpc({
+    'GetActiveEditor.getOpenEditorUris': () => [],
+  })
+  using _mockTextMeasurementWorker = TextMeasurementWorker.registerMockRpc({ 'TextMeasurement.measureTextBlockHeight': () => 13 })
 
   const result = await loadContent(state, savedState)
 
@@ -40,6 +44,7 @@ test('loadContent with saved value calls handleUpdate', async () => {
 
 test('loadContent applies the configured result limit before restoring a search', async () => {
   using _mockRendererWorker = RendererWorker.registerMockRpc({
+    'GetActiveEditor.getOpenEditorUris': () => [],
     async 'Preferences.get'(key: string) {
       if (key === 'textSearch.maxResults') {
         return 15_000
@@ -55,6 +60,7 @@ test('loadContent applies the configured result limit before restoring a search'
       }
     },
   })
+  using _mockTextMeasurementWorker = TextMeasurementWorker.registerMockRpc({ 'TextMeasurement.measureTextBlockHeight': () => 13 })
   const state = CreateDefaultState.createDefaultState()
 
   const result = await loadContent(state, { value: 'restored query' })

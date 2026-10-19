@@ -4,7 +4,12 @@ import type { TextEdit } from '../TextEdit/TextEdit.ts'
 import * as JoinWorkspaceUri from '../JoinWorkspaceUri/JoinWorkspaceUri.ts'
 import * as TextSearchResultType from '../TextSearchResultType/TextSearchResultType.ts'
 
-export const getReplaceElements = (items: readonly SearchResult[], workspaceUri: string, replacement: string): readonly BulkReplacementEdit[] => {
+export const getReplaceElements = (
+  items: readonly SearchResult[],
+  workspaceUri: string,
+  replacement: string,
+  searchRootUri = workspaceUri,
+): readonly BulkReplacementEdit[] => {
   const bulkChanges: BulkReplacementEdit[] = []
   let changes: TextEdit[] = []
   // TODO simplify code by first matching files with their elements, then creating bulk edits
@@ -12,7 +17,7 @@ export const getReplaceElements = (items: readonly SearchResult[], workspaceUri:
     const { end, endColumnIndex, lineNumber, start, startColumnIndex, text, type } = match
     if (type === TextSearchResultType.File) {
       changes = []
-      const uri = JoinWorkspaceUri.joinWorkspaceUri(workspaceUri, text)
+      const uri = JoinWorkspaceUri.joinWorkspaceUri(searchRootUri, text)
       bulkChanges.push({
         changes,
         uri,

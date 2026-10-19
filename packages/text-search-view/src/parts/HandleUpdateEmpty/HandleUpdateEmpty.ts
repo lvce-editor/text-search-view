@@ -27,5 +27,6 @@ export const handleUpdateEmpty = (state: SearchState, update: Partial<SearchStat
     scrollBarY: 0,
     searchId: '',
     searchInputErrorMessage: '',
+    searchRootUri: '',
   }
 }

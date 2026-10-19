@@ -31,6 +31,7 @@ test('handleWorkspaceChange - clears search, replace, and search results', () =>
     message: '',
     minLineY: 0,
     replacement: '',
+    searchRootUri: '',
     value: '',
     workspaceUri: 'file:///new-workspace',
   })

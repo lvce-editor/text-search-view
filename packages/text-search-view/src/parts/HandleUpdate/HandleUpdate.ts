@@ -15,7 +15,7 @@ export const handleUpdate = async (state: SearchState, update: Partial<SearchSta
   const partialNewState = { ...state, ...update }
   try {
     const { flags, value, workspaceUri } = partialNewState
-    if (IsEmptyString.isEmptyString(value) || IsEmptyString.isEmptyString(workspaceUri)) {
+    if (IsEmptyString.isEmptyString(value)) {
       const newState = handleUpdateEmpty(state, update)
       const current = SearchViewStates.get(newState.uid)
       if (current) {
@@ -26,6 +26,10 @@ export const handleUpdate = async (state: SearchState, update: Partial<SearchSta
     const searchInputErrorMessage = ValidateSearchInput.validateSearchInput(value, flags)
     if (searchInputErrorMessage) {
       return handleUpdateValidationError(state, update, searchInputErrorMessage)
+    }
+    if (IsEmptyString.isEmptyString(workspaceUri)) {
+      await handleUpdateFull(state, update)
+      return SearchViewStates.get(partialNewState.uid).newState
     }
     if (incrementalSearch) {
       return await handleUpdateIncremental(state, update)

@@ -1,7 +1,8 @@
 import { expect, jest, test } from '@jest/globals'
-import { TextMeasurementWorker, TextSearchWorker } from '@lvce-editor/rpc-registry'
+import { RendererWorker, TextMeasurementWorker, TextSearchWorker } from '@lvce-editor/rpc-registry'
 import type { SearchResult } from '../src/parts/SearchResult/SearchResult.ts'
 import type { SearchState } from '../src/parts/SearchState/SearchState.ts'
+import type { TextSearchOptions } from '../src/parts/TextSearchOptions/TextSearchOptions.ts'
 import * as CreateDefaultState from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
 import { handleUpdate } from '../src/parts/HandleUpdate/HandleUpdate.ts'
 import * as SearchFlags from '../src/parts/SearchFlags/SearchFlags.ts'
@@ -44,33 +45,35 @@ test('handleUpdate - empty search value returns cleared state', async () => {
     scrollBarHeight: 0,
     searchId: '',
     searchInputErrorMessage: '',
+    searchRootUri: '',
   })
 })
 
-test('handleUpdate - empty workspace path does not search', async () => {
+test('handleUpdate - searches open editors when there is no workspace', async () => {
   const state: SearchState = {
     ...CreateDefaultState.createDefaultState(),
+    uid: 902,
     value: '',
   }
   const update = { value: 'test' }
+  SearchViewStates.set(state.uid, state, state)
 
+  using mockRendererWorker = RendererWorker.registerMockRpc({
+    'GetActiveEditor.getOpenEditorUris': () => ['file:///workspace/README.md', 'file:///workspace/src/app.ts'],
+  })
+  using _mockTextMeasurementWorker = TextMeasurementWorker.registerMockRpc({
+    'TextMeasurement.measureTextBlockHeight': () => 13,
+  })
   using mockTextSearchWorker = TextSearchWorker.registerMockRpc({
-    async 'TextSearch.search'() {
-      throw new Error('Unexpected search')
+    async 'TextSearch.search'(_root: string, _query: string, options: TextSearchOptions) {
+      expect(options.openEditorUris).toEqual(['file:///workspace/README.md', 'file:///workspace/src/app.ts'])
+      return { limitHit: false, results: [] }
     },
   })
+  await handleUpdate(state, update)
 
-  const result = await handleUpdate(state, update)
-
-  expect(result).toMatchObject({
-    items: [],
-    listItems: [],
-    matchCount: 0,
-    message: '',
-    value: 'test',
-    workspaceUri: '',
-  })
-  expect(mockTextSearchWorker.invocations).toEqual([])
+  expect(mockRendererWorker.invocations).toEqual([['GetActiveEditor.getOpenEditorUris']])
+  expect(mockTextSearchWorker.invocations[0].slice(0, 3)).toEqual(['TextSearch.search', 'file:///workspace/', 'test'])
 })
 
 test.skip('handleUpdate - performs search with valid input', async () => {

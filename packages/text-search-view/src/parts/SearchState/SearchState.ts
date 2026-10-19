@@ -6,6 +6,7 @@ export interface SearchState extends SearchHeader, SearchList {
   readonly initial: boolean
   readonly platform: number
   readonly scrollBarY: number
+  readonly searchRootUri?: string
   readonly selections: SelectionState
   readonly uid: number
 }
