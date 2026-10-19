@@ -26,3 +26,7 @@ test('getSearchRootUri - keeps the first file root when file hosts differ', () =
 test('getSearchRootUri - falls back to the first drive for files opened on different drives', () => {
   expect(GetSearchRootUri.getSearchRootUri(['file:///C:/one/a.ts', 'file:///D:/two/b.ts'])).toBe('file:///C:/')
 })
+
+test('getSearchRootUri - finds the common directory of opened virtual files', () => {
+  expect(GetSearchRootUri.getSearchRootUri(['memfs:///workspace/README.md', 'memfs:///workspace/src/app.ts'])).toBe('memfs:///workspace/')
+})

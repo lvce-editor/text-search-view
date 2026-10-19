@@ -1,23 +1,23 @@
 const WINDOWS_DRIVE_REGEX = /^[A-Za-z]:$/
 
-const getFileUrl = (uri: string): URL | undefined => {
+const getSearchableUrl = (uri: string): URL | undefined => {
   if (!URL.canParse(uri)) {
     return undefined
   }
   const url = new URL(uri)
-  return url.protocol === 'file:' ? url : undefined
+  return url.protocol === 'file:' || url.protocol === 'memfs:' ? url : undefined
 }
 
 export const getSearchRootUri = (openEditorUris: readonly string[]): string => {
-  const fileUrls = openEditorUris.map(getFileUrl).filter((url): url is URL => Boolean(url))
-  if (fileUrls.length === 0) {
+  const searchUrls = openEditorUris.map(getSearchableUrl).filter((url): url is URL => Boolean(url))
+  if (searchUrls.length === 0) {
     return 'file:///'
   }
-  const first = fileUrls[0]
+  const first = searchUrls[0]
   const firstParts = first.pathname.split('/').filter(Boolean)
   let commonDirectory = firstParts.slice(0, -1)
-  for (const url of fileUrls.slice(1)) {
-    if (url.host !== first.host) {
+  for (const url of searchUrls.slice(1)) {
+    if (url.protocol !== first.protocol || url.host !== first.host) {
       continue
     }
     const directory = url.pathname.split('/').filter(Boolean).slice(0, -1)
