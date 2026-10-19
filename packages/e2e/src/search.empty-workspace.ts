@@ -30,7 +30,7 @@ export const test: Test = async ({ expect, FileSystem, Locator, Main, Search, Si
   const searchStatus = Locator('.Search').locator('[role="status"]')
   await expect(searchStatus).toHaveText('2 results in 2 files')
   await expect(searchResults).toHaveCount(4)
-  await Search.selectIndex(1)
+  await searchResults.nth(1).click()
   const editorRow = Locator('.EditorRow')
   await expect(editorRow).toHaveText('# Auth Worker')
   const openFolderLink = message.locator('.MessageAction')
