@@ -9,6 +9,7 @@ import * as GetReplacedMessage from '../GetReplacedMessage/GetReplacedMessage.ts
 import * as GetReplaceElements from '../GetReplaceElements/GetReplaceElements.ts'
 import * as GetReplacingMessage from '../GetReplacingMessage/GetReplacingMessage.ts'
 import * as GetSearchMessageLayout from '../GetSearchMessageLayout/GetSearchMessageLayout.ts'
+import * as GetSearchWorkspaceUri from '../GetSearchWorkspaceUri/GetSearchWorkspaceUri.ts'
 import { removeItemFromItems } from '../RemoveItemFromItems/RemoveItemFromItems.ts'
 import * as ReplaceAllAndPrompt from '../ReplaceAllAndPrompt/ReplaceAllAndPrompt.ts'
 import * as ScrollBarFunctions from '../ScrollBarFunctions/ScrollBarFunctions.ts'
@@ -65,7 +66,7 @@ const replaceAllInFocusedFile = async (state: SearchState, fileIndex: number): P
   if (matchCount === 0) {
     return state
   }
-  const bulkEdits = GetReplaceElements.getReplaceElements(fileItems, workspaceUri, replacement)
+  const bulkEdits = GetReplaceElements.getReplaceElements(fileItems, workspaceUri, replacement, GetSearchWorkspaceUri.getSearchWorkspaceUri(state))
   await ApplyBulkReplacement.applyBulkReplacement(bulkEdits)
   await RendererWorker.handleWorkspaceRefresh()
 
@@ -118,7 +119,7 @@ const replaceAllConfirmed = async (state: SearchState, fileIndex: number): Promi
     return replaceAllInFocusedFile(state, fileIndex)
   }
   const { items, matchCount, replacement, workspaceUri } = state
-  const bulkEdits = GetReplaceElements.getReplaceElements(items, workspaceUri, replacement)
+  const bulkEdits = GetReplaceElements.getReplaceElements(items, workspaceUri, replacement, GetSearchWorkspaceUri.getSearchWorkspaceUri(state))
   if (bulkEdits.length > 0) {
     // TODO this function should return an error message if an error occurred during bulk edit
     await ApplyBulkReplacement.applyBulkReplacement(bulkEdits)

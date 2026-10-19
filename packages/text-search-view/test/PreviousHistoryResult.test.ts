@@ -1,13 +1,16 @@
 import { expect, test } from '@jest/globals'
+import { RendererWorker, TextMeasurementWorker, TextSearchWorker } from '@lvce-editor/rpc-registry'
 import type { SearchState } from '../src/parts/SearchState/SearchState.ts'
 import * as CreateDefaultState from '../src/parts/CreateDefaultState/CreateDefaultState.ts'
 import * as InputSource from '../src/parts/InputSource/InputSource.ts'
 import { previousHistoryResult } from '../src/parts/PreviousHistoryResult/PreviousHistoryResult.ts'
+import * as SearchViewStates from '../src/parts/SearchViewStates/SearchViewStates.ts'
 
-const createState = (history: readonly string[], historyIndex: number, value: string): SearchState => ({
+const createState = (history: readonly string[], historyIndex: number, value: string, uid = 0): SearchState => ({
   ...CreateDefaultState.createDefaultState(),
   history,
   historyIndex,
+  uid,
   value,
 })
 
@@ -17,7 +20,11 @@ test('previousHistoryResult does nothing with empty history', async () => {
 })
 
 test('previousHistoryResult recalls the newest entry from a draft input', async () => {
-  const state = createState(['first', 'second'], -1, 'draft')
+  using _mockRendererWorker = RendererWorker.registerMockRpc({ 'GetActiveEditor.getOpenEditorUris': () => [] })
+  using _mockTextSearchWorker = TextSearchWorker.registerMockRpc({ 'TextSearch.search': () => ({ limitHit: false, results: [] }) })
+  using _mockTextMeasurementWorker = TextMeasurementWorker.registerMockRpc({ 'TextMeasurement.measureTextBlockHeight': () => 13 })
+  const state = createState(['first', 'second'], -1, 'draft', 10)
+  SearchViewStates.set(state.uid, state, state)
   expect(await previousHistoryResult(state)).toMatchObject({
     historyIndex: 1,
     inputSource: InputSource.Script,
@@ -35,7 +42,11 @@ test('previousHistoryResult enters history without rerunning the current query',
 })
 
 test('previousHistoryResult moves toward older entries', async () => {
-  const state = createState(['first', 'second'], 1, 'second')
+  using _mockRendererWorker = RendererWorker.registerMockRpc({ 'GetActiveEditor.getOpenEditorUris': () => [] })
+  using _mockTextSearchWorker = TextSearchWorker.registerMockRpc({ 'TextSearch.search': () => ({ limitHit: false, results: [] }) })
+  using _mockTextMeasurementWorker = TextMeasurementWorker.registerMockRpc({ 'TextMeasurement.measureTextBlockHeight': () => 13 })
+  const state = createState(['first', 'second'], 1, 'second', 11)
+  SearchViewStates.set(state.uid, state, state)
   expect(await previousHistoryResult(state)).toMatchObject({
     historyIndex: 0,
     inputSource: InputSource.Script,

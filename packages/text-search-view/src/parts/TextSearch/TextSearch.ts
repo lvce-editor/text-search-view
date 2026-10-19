@@ -12,7 +12,7 @@ export const textSearch = async (
   searchId?: string,
   uid?: number,
 ): Promise<TextSearchCompletionResult> => {
-  if (!SearchFlags.hasOpenEditors(options.flags)) {
+  if (options.openEditorUris || (!SearchFlags.hasOpenEditors(options.flags) && Boolean(root))) {
     return TextSearchWorker.search(root, query, options, assetDir, platform, searchId, uid)
   }
   const openEditorUris = await RendererWorker.invoke('GetActiveEditor.getOpenEditorUris')

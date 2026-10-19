@@ -1,3 +1,4 @@
+import { RendererWorker } from '@lvce-editor/rpc-registry'
 import type { SearchState } from '../SearchState/SearchState.ts'
 import * as CreateListItems from '../CreateListItems/CreateListItems.ts'
 import * as GetFileIcons from '../GetFileIcons/GetFileIcons.ts'
@@ -5,6 +6,7 @@ import * as GetNumberOfVisibleItems from '../GetNumberOfVisibleItems/GetNumberOf
 import * as GetProtocol from '../GetProtocol/GetProtocol.ts'
 import * as GetSearchHeaderHeight from '../GetSearchHeaderHeight/GetSearchHeaderHeight.ts'
 import * as GetSearchMessageHeight from '../GetSearchMessageHeight/GetSearchMessageHeight.ts'
+import * as GetSearchRootUri from '../GetSearchRootUri/GetSearchRootUri.ts'
 import * as GetSearchWarningMessageHeight from '../GetSearchWarningMessageHeight/GetSearchWarningMessageHeight.ts'
 import * as GetTextSearchResultCounts from '../GetTextSearchResultCounts/GetTextSearchResultCounts.ts'
 import * as ScrollBarFunctions from '../ScrollBarFunctions/ScrollBarFunctions.ts'
@@ -42,7 +44,8 @@ export const handleUpdateFull = async (state: SearchState, update: Partial<Searc
     value,
     width,
   } = partialNewState
-  const root = workspaceUri
+  const openEditorUris = workspaceUri ? undefined : await RendererWorker.invoke('GetActiveEditor.getOpenEditorUris')
+  const root = workspaceUri || GetSearchRootUri.getSearchRootUri(openEditorUris)
   const scheme = GetProtocol.getProtocol(root)
   const isFileSearch = scheme === '' || scheme === 'file'
   const shouldUsePullBasedSearch = usePullBasedSearch && isFileSearch
@@ -63,6 +66,7 @@ export const handleUpdateFull = async (state: SearchState, update: Partial<Searc
       isCaseSensitive: Boolean(flags & SearchFlags.MatchCase),
       limit,
       matchWholeWord: Boolean(flags & SearchFlags.MatchWholeWord),
+      ...(openEditorUris && { openEditorUris }),
       query: value,
       root,
       scheme,
@@ -135,6 +139,7 @@ export const handleUpdateFull = async (state: SearchState, update: Partial<Searc
     scrollBarHeight,
     searchId,
     searchInputErrorMessage: '',
+    searchRootUri: workspaceUri ? '' : root,
     threads,
     value,
   }

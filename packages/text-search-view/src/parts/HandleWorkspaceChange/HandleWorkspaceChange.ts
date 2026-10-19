@@ -17,6 +17,7 @@ export const handleWorkspaceChange = (state: SearchState, workspaceUri: string):
     messageHeight: SearchMessageHeight.Minimum,
     minLineY: 0,
     replacement: '',
+    searchRootUri: '',
     value: '',
     workspaceUri: NormalizeWorkspaceUri.normalizeWorkspaceUri(workspaceUri),
   }
