@@ -23,7 +23,8 @@ export const test: Test = async ({ Command, expect, FileSystem, Locator, Search,
   await expect(openInEditor).toBeVisible()
 
   await Search.setValue('')
-  await expect(sideBarSearch.locator('[role="treeitem"]')).toHaveCount(0)
+  const searchResults = sideBarSearch.locator('[role="treeitem"]')
+  await expect(searchResults).toHaveCount(0)
   await expect(searchHeaderDetails).toHaveCSS('height', '30px')
 
   await Search.setValue('needle')

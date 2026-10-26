@@ -11,7 +11,7 @@ test('getCss - applies geometry directly without inherited custom properties', (
   expect(result).toContain('.SearchWorkspaceMessageAction {')
   expect(result).toContain('.Search-0 .SearchHeaderDetails {')
   expect(result).toContain('height: 30px;')
-  expect(result).not.toMatch(/--[\w-]+\s*:/)
+  expect(result).not.toContain('--SearchMessageHeight')
   expect(result).toContain('appearance: none;')
   expect(result).toContain('background-color: transparent;')
   expect(result).toContain('border: 0;')

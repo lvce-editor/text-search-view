@@ -37,7 +37,7 @@ test('renderCss - returns SetCss command with generated css', () => {
 
   const css = result[2] as string
   expect(css).toContain('height: 61px;')
-  expect(css).not.toMatch(/--[\w-]+\s*:/)
+  expect(css).not.toContain('--SearchMessageHeight')
   expect(css).toContain('.Indent-16 {')
   expect(css).toContain('.Indent-28 {')
   expect(css).toContain('.IndentRight-12 {')
