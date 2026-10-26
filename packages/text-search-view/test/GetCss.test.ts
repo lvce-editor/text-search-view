@@ -1,20 +1,17 @@
 import { expect, test } from '@jest/globals'
 import { getCss } from '../src/parts/GetCss/GetCss.ts'
 
-test('getCss - returns base css variables when there are no indents', () => {
-  const result = getCss(24, [], [], 90, 12, 0)
-  expect(result).toContain('.Search-0 {')
-  expect(result).toContain('--ScrollBarHeight: 90px;')
-  expect(result).toContain('--ScrollBarTop: 12px;')
-  expect(result).toContain('--TreeItemsTop: 24px;')
-  expect(result).toContain('--SearchMessageHeight: 30px;')
+test('getCss - applies geometry directly without inherited custom properties', () => {
+  const result = getCss([], [], 12, 0)
+  expect(result).not.toContain('.Search-0 {')
   expect(result).toContain('.TreeItemsTop-0 {')
   expect(result).toContain('top: 0px;')
   expect(result).toContain('.ScrollBarThumbTop-12 {')
   expect(result).toContain('transform: translateY(12px);')
   expect(result).toContain('.SearchWorkspaceMessageAction {')
   expect(result).toContain('.Search-0 .SearchHeaderDetails {')
-  expect(result).toContain('height: var(--SearchMessageHeight);')
+  expect(result).toContain('height: 30px;')
+  expect(result).not.toContain('--SearchMessageHeight')
   expect(result).toContain('appearance: none;')
   expect(result).toContain('background-color: transparent;')
   expect(result).toContain('border: 0;')
@@ -31,12 +28,9 @@ test('getCss - returns base css variables when there are no indents', () => {
   expect(result).toContain('.SearchWorkspaceMessageAction:focus-visible {')
 })
 
-test('getCss - returns css variables and indent rules', () => {
-  const result = getCss(0, [16, 28], [12], 44, 6, -3)
-  expect(result).toContain('.Search-0 {')
-  expect(result).toContain('--ScrollBarHeight: 44px;')
-  expect(result).toContain('--ScrollBarTop: 6px;')
-  expect(result).toContain('--TreeItemsTop: 0px;')
+test('getCss - returns indent and scrolling geometry rules', () => {
+  const result = getCss([16, 28], [12], 6, -3)
+  expect(result).not.toContain('.Search-0 {')
   expect(result).toContain('.Indent-16 {')
   expect(result).toContain('padding-left: 16px;')
   expect(result).toContain('.Indent-28 {')
@@ -50,15 +44,27 @@ test('getCss - returns css variables and indent rules', () => {
 })
 
 test('getCss - rounds subpixel scrollbar top values', () => {
-  const result = getCss(0, [], [], 44, 18.609375, 0)
+  const result = getCss([], [], 18.609375, 0)
   expect(result).toContain('.ScrollBarThumbTop-19 {')
   expect(result).toContain('transform: translateY(19px);')
 })
 
 test('getCss - scopes search layout rules to the view uid', () => {
-  const result = getCss(0, [], [], 0, 0, 0, 158, 30, 42)
-  expect(result).toContain('.Search-42 {')
+  const result = getCss([], [], 0, 0, 158, 30, 42)
+  expect(result).not.toContain('.Search-42 {')
   expect(result).toContain('.Search-42 .SearchHeader {')
   expect(result).toContain('.Search-42 .SearchHeaderDetails {')
   expect(result.split('\n')).not.toContain('.SearchHeader {')
+})
+
+test('getCss - updates header and message geometry independently', () => {
+  const before = getCss([], [], 0, 0, 61, 30, 42)
+  const headerChanged = getCss([], [], 0, 0, 77, 30, 42)
+  const messageChanged = getCss([], [], 0, 0, 61, 46, 42)
+  expect(headerChanged).not.toBe(before)
+  expect(headerChanged).toContain('height: 77px;')
+  expect(headerChanged).toContain('height: 30px;')
+  expect(messageChanged).not.toBe(before)
+  expect(messageChanged).toContain('height: 61px;')
+  expect(messageChanged).toContain('height: 46px;')
 })

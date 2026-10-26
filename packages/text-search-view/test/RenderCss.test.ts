@@ -36,7 +36,8 @@ test('renderCss - returns SetCss command with generated css', () => {
   expect(result).toEqual([ViewletCommand.SetCss, uid, expect.any(String)])
 
   const css = result[2] as string
-  expect(css).toContain('--TreeItemsTop: 0px;')
+  expect(css).toContain('height: 61px;')
+  expect(css).not.toContain('--SearchMessageHeight')
   expect(css).toContain('.Indent-16 {')
   expect(css).toContain('.Indent-28 {')
   expect(css).toContain('.IndentRight-12 {')
