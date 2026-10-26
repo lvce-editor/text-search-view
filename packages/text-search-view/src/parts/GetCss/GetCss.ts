@@ -25,10 +25,8 @@ const getScrollBarThumbTopRule = (scrollBarY: number): string => {
 }
 
 export const getCss = (
-  top: number,
   uniqueIndents: readonly number[],
   uniqueIndentRights: readonly number[],
-  scrollBarHeight: number,
   scrollBarY: number,
   treeItemsTop: number,
   headerHeight: number = 0,
@@ -36,20 +34,13 @@ export const getCss = (
   uid: number = 0,
 ): string => {
   const rules = [
-    `.Search-${uid} {
-  --ScrollBarHeight: ${scrollBarHeight}px;
-  --ScrollBarTop: ${scrollBarY}px;
-  --TreeItemsTop: ${top}px;
-  --SearchMessageHeight: ${messageHeight}px;
-}
-
-.Search-${uid} .SearchHeader {
+    `.Search-${uid} .SearchHeader {
   contain: strict;
   height: ${headerHeight}px;
 }
 
 .Search-${uid} .SearchHeaderDetails {
-  height: var(--SearchMessageHeight);
+  height: ${messageHeight}px;
 }
 
 .SearchWorkspaceMessageAction {

@@ -21,4 +21,13 @@ export const test: Test = async ({ Command, expect, FileSystem, Locator, Search,
   await expect(searchHeaderDetails).toHaveCSS('height', '39px')
   const openInEditor = sideBarSearch.locator('button[name="OpenSearchEditor"]')
   await expect(openInEditor).toBeVisible()
+
+  await Search.setValue('')
+  await expect(sideBarSearch.locator('[role="treeitem"]')).toHaveCount(0)
+  await expect(searchHeaderDetails).toHaveCSS('height', '30px')
+
+  await Search.setValue('needle')
+  await expect(sideBarMessage).toHaveText('1200 results in 100 files')
+  await expect(searchHeaderDetails).toHaveCSS('height', '39px')
+  await expect(openInEditor).toBeVisible()
 }

@@ -12,16 +12,6 @@ export const renderCss = (oldState: SearchState, newState: SearchState): readonl
   const uniqueIndents = getUniqueIndents(indents)
   const uniqueIndentRights = [TreeItemPadding.PaddingRight]
   const treeItemsTop = viewModel.itemHeight === 0 ? 0 : Math.round(-(viewModel.deltaY % viewModel.itemHeight))
-  const css = getCss(
-    0,
-    uniqueIndents,
-    uniqueIndentRights,
-    viewModel.scrollBarHeight,
-    viewModel.scrollBarY,
-    treeItemsTop,
-    headerHeight,
-    messageHeight,
-    uid,
-  )
+  const css = getCss(uniqueIndents, uniqueIndentRights, viewModel.scrollBarY, treeItemsTop, headerHeight, messageHeight, uid)
   return [ViewletCommand.SetCss, uid, css]
 }
