@@ -6,9 +6,31 @@ export const getSearchMessageLayout = async (
   message: string,
   showOpenInEditorLink?: boolean,
 ): Promise<{ readonly headerHeight: number; readonly messageHeight: number }> => {
-  const { flags, headerHeight, matchCount, messageHeight: oldMessageHeight, showOpenInEditorLink: stateShowOpenInEditorLink, width } = state
+  const {
+    flags,
+    headerHeight,
+    matchCount,
+    messageHeight: oldMessageHeight,
+    searchMessageCollapsedHorizontalSpace,
+    searchMessageExpandedHorizontalSpace,
+    searchMessageFontFamily,
+    searchMessageFontSize,
+    searchMessageLineHeight,
+    showOpenInEditorLink: stateShowOpenInEditorLink,
+    width,
+  } = state
   const shouldShowOpenInEditorLink = showOpenInEditorLink ?? (stateShowOpenInEditorLink && matchCount > 0)
-  const messageHeight = await GetSearchMessageHeight.getSearchMessageHeight(message, width, flags, shouldShowOpenInEditorLink)
+  const messageHeight = await GetSearchMessageHeight.getSearchMessageHeight(
+    message,
+    width,
+    flags,
+    searchMessageFontFamily,
+    searchMessageFontSize,
+    searchMessageLineHeight,
+    searchMessageCollapsedHorizontalSpace,
+    searchMessageExpandedHorizontalSpace,
+    shouldShowOpenInEditorLink,
+  )
   return {
     headerHeight: headerHeight + messageHeight - oldMessageHeight,
     messageHeight,

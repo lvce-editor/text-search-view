@@ -4,7 +4,7 @@ import { getSearchMessageHeight } from '../src/parts/GetSearchMessageHeight/GetS
 import * as SearchFlags from '../src/parts/SearchFlags/SearchFlags.ts'
 
 test('returns the minimum height for an empty message', async () => {
-  expect(await getSearchMessageHeight('', 200, 0)).toBe(30)
+  expect(await getSearchMessageHeight('', 200, 0, 'system-ui', 13, 13, 52, 30)).toBe(30)
 })
 
 test('measures a collapsed message using the available text width', async () => {
@@ -12,7 +12,7 @@ test('measures a collapsed message using the available text width', async () => 
     'TextMeasurement.measureTextBlockHeight': () => 52,
   })
 
-  expect(await getSearchMessageHeight('long replacement message', 200, 0)).toBe(65)
+  expect(await getSearchMessageHeight('long replacement message', 200, 0, 'system-ui', 13, 13, 52, 30)).toBe(65)
   expect(mockRpc.invocations).toEqual([['TextMeasurement.measureTextBlockHeight', 'long replacement message', 'system-ui', 13, 13, 148]])
 })
 
@@ -21,7 +21,7 @@ test('accounts for the expanded details padding', async () => {
     'TextMeasurement.measureTextBlockHeight': () => 13,
   })
 
-  expect(await getSearchMessageHeight('message', 200, SearchFlags.DetailsExpanded)).toBe(30)
+  expect(await getSearchMessageHeight('message', 200, SearchFlags.DetailsExpanded, 'system-ui', 13, 13, 52, 30)).toBe(30)
   expect(mockRpc.invocations).toEqual([['TextMeasurement.measureTextBlockHeight', 'message', 'system-ui', 13, 13, 170]])
 })
 
@@ -30,8 +30,17 @@ test('measures the open in editor link when it is rendered', async () => {
     'TextMeasurement.measureTextBlockHeight': (message: string) => (message.includes('Open in editor') ? 26 : 13),
   })
 
-  expect(await getSearchMessageHeight('645 results in 56 files', 200, 0, true)).toBe(39)
+  expect(await getSearchMessageHeight('645 results in 56 files', 200, 0, 'system-ui', 13, 13, 52, 30, true)).toBe(39)
   expect(mockRpc.invocations).toEqual([
     ['TextMeasurement.measureTextBlockHeight', '645 results in 56 files - Open in editor', 'system-ui', 13, 13, 148],
   ])
+})
+
+test('uses custom search message measurement properties', async () => {
+  using mockRpc = TextMeasurementWorker.registerMockRpc({
+    'TextMeasurement.measureTextBlockHeight': () => 40,
+  })
+
+  expect(await getSearchMessageHeight('message', 200, SearchFlags.DetailsExpanded, 'monospace', 18, 20, 80, 60)).toBe(53)
+  expect(mockRpc.invocations).toEqual([['TextMeasurement.measureTextBlockHeight', 'message', 'monospace', 18, 20, 140]])
 })

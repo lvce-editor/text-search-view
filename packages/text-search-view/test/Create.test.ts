@@ -15,6 +15,11 @@ test('create', () => {
   expect(state.contextLines).toBe(1)
   expect(state.contextLinesEnabled).toBe(false)
   expect(state.isSearchEditor).toBe(false)
+  expect(state.searchMessageCollapsedHorizontalSpace).toBe(52)
+  expect(state.searchMessageExpandedHorizontalSpace).toBe(30)
+  expect(state.searchMessageFontFamily).toBe('system-ui')
+  expect(state.searchMessageFontSize).toBe(13)
+  expect(state.searchMessageLineHeight).toBe(13)
   expect(state.searchWarningFontFamily).toBe('system-ui')
   expect(state.searchWarningFontSize).toBe(12)
   expect(state.searchWarningHorizontalPadding).toBe(10)
@@ -22,9 +27,14 @@ test('create', () => {
   expect(state.searchWarningVerticalPadding).toBe(8)
 })
 
-test('create sets the search warning layout defaults', () => {
+test('create sets the search message and warning layout defaults', () => {
   const state = create(1, 0, 0, 800, 600, '/test', '')
 
+  expect(state.searchMessageCollapsedHorizontalSpace).toBe(52)
+  expect(state.searchMessageExpandedHorizontalSpace).toBe(30)
+  expect(state.searchMessageFontFamily).toBe('system-ui')
+  expect(state.searchMessageFontSize).toBe(13)
+  expect(state.searchMessageLineHeight).toBe(13)
   expect(state.searchWarningFontFamily).toBe('system-ui')
   expect(state.searchWarningFontSize).toBe(12)
   expect(state.searchWarningHorizontalPadding).toBe(10)

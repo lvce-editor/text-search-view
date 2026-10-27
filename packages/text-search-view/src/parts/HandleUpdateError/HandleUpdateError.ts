@@ -4,7 +4,16 @@ import * as GetSearchMessageHeight from '../GetSearchMessageHeight/GetSearchMess
 export const handleUpdateError = async (state: SearchState, update: Partial<SearchState>, error: unknown): Promise<SearchState> => {
   const partialNewState = { ...state, ...update }
   const message = String(error)
-  const messageHeight = await GetSearchMessageHeight.getSearchMessageHeight(message, partialNewState.width, partialNewState.flags)
+  const messageHeight = await GetSearchMessageHeight.getSearchMessageHeight(
+    message,
+    partialNewState.width,
+    partialNewState.flags,
+    partialNewState.searchMessageFontFamily,
+    partialNewState.searchMessageFontSize,
+    partialNewState.searchMessageLineHeight,
+    partialNewState.searchMessageCollapsedHorizontalSpace,
+    partialNewState.searchMessageExpandedHorizontalSpace,
+  )
   const headerHeight = partialNewState.headerHeight + messageHeight - partialNewState.messageHeight
   return {
     ...partialNewState,
