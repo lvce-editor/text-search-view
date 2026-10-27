@@ -32,6 +32,11 @@ export const handleUpdateFull = async (state: SearchState, update: Partial<Searc
     limit,
     minimumSliderSize,
     platform,
+    searchMessageCollapsedHorizontalSpace,
+    searchMessageExpandedHorizontalSpace,
+    searchMessageFontFamily,
+    searchMessageFontSize,
+    searchMessageLineHeight,
     searchWarningFontFamily,
     searchWarningFontSize,
     searchWarningHorizontalPadding,
@@ -91,7 +96,17 @@ export const handleUpdateFull = async (state: SearchState, update: Partial<Searc
   const message = SearchStatusMessage.getStatusMessage(resultCount, fileCount)
   const limitHitWarning = limitHit ? SearchStrings.theResultSetOnlyContainsASubSetOfMatches() : ''
   const [messageHeight, warningHeight] = await Promise.all([
-    GetSearchMessageHeight.getSearchMessageHeight(message, width, flags, showOpenInEditorLink && resultCount > 0),
+    GetSearchMessageHeight.getSearchMessageHeight(
+      message,
+      width,
+      flags,
+      searchMessageFontFamily,
+      searchMessageFontSize,
+      searchMessageLineHeight,
+      searchMessageCollapsedHorizontalSpace,
+      searchMessageExpandedHorizontalSpace,
+      showOpenInEditorLink && resultCount > 0,
+    ),
     GetSearchWarningMessageHeight.getSearchWarningMessageHeight(
       limitHitWarning,
       width,

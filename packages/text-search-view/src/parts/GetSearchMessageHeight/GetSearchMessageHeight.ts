@@ -3,25 +3,29 @@ import * as SearchFlags from '../SearchFlags/SearchFlags.ts'
 import * as SearchMessageHeight from '../SearchMessageHeight/SearchMessageHeight.ts'
 import * as SearchStrings from '../SearchStrings/SearchStrings.ts'
 
-const SearchMessageFontFamily = 'system-ui'
-const SearchMessageFontSize = 13
-const SearchMessageLineHeight = 13
-const SearchMessageCollapsedHorizontalSpace = 52
-const SearchMessageExpandedHorizontalSpace = 30
-
-export const getSearchMessageHeight = async (message: string, width: number, flags: number, showOpenInEditorLink = false): Promise<number> => {
+export const getSearchMessageHeight = async (
+  message: string,
+  width: number,
+  flags: number,
+  fontFamily: string,
+  fontSize: number,
+  lineHeight: number,
+  collapsedHorizontalSpace: number,
+  expandedHorizontalSpace: number,
+  showOpenInEditorLink = false,
+): Promise<number> => {
   if (!message) {
     return SearchMessageHeight.Minimum
   }
-  const horizontalSpace = SearchFlags.hasDetailsExpanded(flags) ? SearchMessageExpandedHorizontalSpace : SearchMessageCollapsedHorizontalSpace
+  const horizontalSpace = SearchFlags.hasDetailsExpanded(flags) ? expandedHorizontalSpace : collapsedHorizontalSpace
   const availableWidth = Math.max(width - horizontalSpace, 1)
   const messageText = showOpenInEditorLink ? `${message} - ${SearchStrings.openInEditor()}` : message
   const textHeight = await TextMeasurementWorker.invoke(
     'TextMeasurement.measureTextBlockHeight',
     messageText,
-    SearchMessageFontFamily,
-    SearchMessageFontSize,
-    SearchMessageLineHeight,
+    fontFamily,
+    fontSize,
+    lineHeight,
     availableWidth,
   )
   return Math.max(textHeight + SearchMessageHeight.VerticalPadding, SearchMessageHeight.Minimum)

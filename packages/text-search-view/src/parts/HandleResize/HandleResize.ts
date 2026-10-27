@@ -17,9 +17,24 @@ export const handleResize = async (state: SearchState, x: number, y: number, wid
     message,
     messageHeight: oldMessageHeight,
     minimumSliderSize,
+    searchMessageCollapsedHorizontalSpace,
+    searchMessageExpandedHorizontalSpace,
+    searchMessageFontFamily,
+    searchMessageFontSize,
+    searchMessageLineHeight,
     showOpenInEditorLink,
   } = state
-  const messageHeight = await GetSearchMessageHeight.getSearchMessageHeight(message, width, flags, showOpenInEditorLink && matchCount > 0)
+  const messageHeight = await GetSearchMessageHeight.getSearchMessageHeight(
+    message,
+    width,
+    flags,
+    searchMessageFontFamily,
+    searchMessageFontSize,
+    searchMessageLineHeight,
+    searchMessageCollapsedHorizontalSpace,
+    searchMessageExpandedHorizontalSpace,
+    showOpenInEditorLink && matchCount > 0,
+  )
   const headerHeight = oldHeaderHeight + messageHeight - oldMessageHeight
   const total = listItems.length
   const contentHeight = total * itemHeight
